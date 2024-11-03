@@ -12,7 +12,7 @@ const colorLightGray=Color.fromRGBO(135, 142, 150, 1.0);
 const colorLight=Color.fromRGBO(211, 211, 211, 1.0);
 
 class AppColors{
-  static const wColor = Color.fromRGBO(211, 211, 211, 1.0);
+  static const wColor = Color.fromRGBO(253, 252, 252, 1.0);
   static const pColor=Color.fromRGBO(43, 154, 101, 1.0);
   static const spColor=Color.fromRGBO(105, 35, 152, 1.0);
   static const Color sdColor = Colors.black12;

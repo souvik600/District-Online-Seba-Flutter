@@ -21,7 +21,7 @@ class UsersHomeScreen extends StatelessWidget {
         key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: AppColors.pColor,
-          title: const Text(
+          title: Text(
             "আমাদের নড়াইল",
             style: TextStyle(
                 fontSize: 28,

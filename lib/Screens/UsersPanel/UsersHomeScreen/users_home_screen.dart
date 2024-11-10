@@ -1,9 +1,8 @@
-
 import 'package:district_online_service/Screens/SplashScreen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersProfileScreen/user_profile_screen.dart';
+import 'package:district_online_service/Styles/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../AppColors/AppColors.dart';
 import '../../../Styles/BackGroundStyle.dart';
 import '../../../Widgets/CustomDrawerWidget.dart';
@@ -13,7 +12,6 @@ import '../../NavigationBerScreen.dart';
 
 class UsersHomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -21,14 +19,7 @@ class UsersHomeScreen extends StatelessWidget {
         key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: AppColors.pColor,
-          title: Text(
-            "আমাদের নড়াইল",
-            style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'kalpurush',
-                color: AppColors.wColor),
-          ),
+          title: AppName(),
           leading: IconButton(
             icon: const Icon(
               Icons.menu,
@@ -41,7 +32,7 @@ class UsersHomeScreen extends StatelessWidget {
           ),
           actions: [
             InkWell(
-              child: CircleAvatar(
+              child: const CircleAvatar(
                   radius: 20,
                   backgroundImage: AssetImage('assets/images/souvik_das.png')
               ),
@@ -54,7 +45,7 @@ class UsersHomeScreen extends StatelessWidget {
                     ));
               },
             ),
-            SizedBox(width: 10,)
+            const SizedBox(width: 10,)
           ],
           elevation: 0,
           // Remove elevation for a flat AppBar
@@ -118,8 +109,8 @@ class UsersHomeScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(10.0),
                                 //child: Center(child: MovingNoticeText()),
                               ),
 

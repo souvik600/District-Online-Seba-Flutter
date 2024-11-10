@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../AppColors/AppColors.dart';
 TextStyle Head1Text(textColor){
   return TextStyle(
     color: textColor,
@@ -32,4 +34,15 @@ TextStyle Head9Text(textColor){
       fontFamily: 'poppins',
       fontWeight: FontWeight.w500
   );
+}
+Text AppName(){
+  return Text(
+    "আমাদের নড়াইল",
+    style: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'kalpurush',
+        color: AppColors.wColor),
+  );
+
 }

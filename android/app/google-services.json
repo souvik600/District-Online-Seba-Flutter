@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "974173007735",
+    "firebase_url": "https://admin-narail-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "admin-narail",
+    "storage_bucket": "admin-narail.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974173007735:android:fd7f5b0923aa418a7dbb72",
+        "android_client_info": {
+          "package_name": "com.example.district_online_service"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974173007735-mpps77jde6q18693fagn652njvpb68aq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC6U3BzTAJ69CQJu_a8dGNjVPIywbAhxw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974173007735-mpps77jde6q18693fagn652njvpb68aq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "974173007735-ci7qqk80142emp510m2fhoc4fu1rgn5r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.district_online_service"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974173007735:android:69acca8466cbdaf17dbb72",
+        "android_client_info": {
+          "package_name": "com.example.district_online_service"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974173007735-mpps77jde6q18693fagn652njvpb68aq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC6U3BzTAJ69CQJu_a8dGNjVPIywbAhxw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974173007735-mpps77jde6q18693fagn652njvpb68aq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "974173007735-ci7qqk80142emp510m2fhoc4fu1rgn5r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.district_online_service"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

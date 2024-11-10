@@ -1,3 +1,4 @@
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/common_service_category.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EducationalServiceCategory/educational_service_category.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/emargency_service_category.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/GovtE_ServiceCategory/govt_e_Service_category.dart';
@@ -23,38 +24,41 @@ class _UserCategoryScreenState extends State<UserCategoryScreen> {
         child: Stack(
           children: [
             ScreenBackground(context),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: const SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: [
-                          SizedBox(height: 8),
-                          EmargencyServiceCategory(),
-                          SizedBox(height: 16),
-                         // OtherServiceList(),
-                          SizedBox(height: 16),
-                          GovtE_ServiceCategory(),
-                          SizedBox(height: 16),
-                          EducationalServiceCategory(),
-                          SizedBox(height: 16),
-                          WorkerServiceCategory(),
-                          SizedBox(
-                            height: 180,
-                          ),
-                        ],
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: const SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 8),
+                            EmargencyServiceCategory(),
+                            SizedBox(height: 16),
+                            CommonServiceCategory(),
+                            SizedBox(height: 16),
+                            GovtE_ServiceCategory(),
+                            SizedBox(height: 16),
+                            EducationalServiceCategory(),
+                            SizedBox(height: 16),
+                            WorkerServiceCategory(),
+                            SizedBox(
+                              height: 180,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

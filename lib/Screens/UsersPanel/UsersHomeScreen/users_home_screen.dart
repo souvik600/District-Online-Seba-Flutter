@@ -1,11 +1,12 @@
-
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/admin_home_screen.dart';
 import 'package:district_online_service/Screens/SplashScreen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersProfileScreen/user_profile_screen.dart';
+import 'package:district_online_service/Styles/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../AppColors/AppColors.dart';
 import '../../../Styles/BackGroundStyle.dart';
+import '../../../Utilitys/utilitys.dart';
 import '../../../Widgets/CustomDrawerWidget.dart';
 import '../../../Widgets/emergency_service_list_widget.dart';
 import '../../../Widgets/information_category_list_widget.dart';
@@ -13,7 +14,6 @@ import '../../NavigationBerScreen.dart';
 
 class UsersHomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -21,14 +21,7 @@ class UsersHomeScreen extends StatelessWidget {
         key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: AppColors.pColor,
-          title: Text(
-            "আমাদের নড়াইল",
-            style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'kalpurush',
-                color: AppColors.wColor),
-          ),
+          title: AppName(),
           leading: IconButton(
             icon: const Icon(
               Icons.menu,
@@ -40,18 +33,29 @@ class UsersHomeScreen extends StatelessWidget {
             },
           ),
           actions: [
-            InkWell(
-              child: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage('assets/images/souvik_das.png')
-              ),
-              onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            UserProfileScreen()
-                    ));
+            FutureBuilder<String>(
+              future: loadProfileImage(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdminHomeScreen(),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage: snapshot.hasData && snapshot.data!.isNotEmpty
+                        ? NetworkImage(snapshot.data!)
+                        : const AssetImage('assets/images/default_profile.png')
+                    as ImageProvider,
+                  ),
+                );
               },
             ),
             SizedBox(width: 10,)
@@ -118,8 +122,8 @@ class UsersHomeScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(10.0),
                                 //child: Center(child: MovingNoticeText()),
                               ),
 

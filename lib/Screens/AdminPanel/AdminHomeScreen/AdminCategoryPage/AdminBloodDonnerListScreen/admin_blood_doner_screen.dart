@@ -458,7 +458,7 @@ class _AdminBloodDonorScreenState extends State<AdminBloodDonorScreen> {
                                                             25)),
                                               ),
                                               builder: (BuildContext context) {
-                                                return EditDonorFormScreen(
+                                                return EditDonarFormScreen(
                                                   donor: donor,
                                                 );
                                               },

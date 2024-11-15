@@ -9,16 +9,16 @@ import '../../../../../Styles/ElevatedBottonStyle.dart';
 import '../../../../../Styles/InputDecorationStyle.dart';
 import '../../../../../Styles/TextContainerStyle.dart';
 
-class EditDonorFormScreen extends StatefulWidget {
+class EditDonarFormScreen extends StatefulWidget {
   BloodDonorModels donor;
 
-  EditDonorFormScreen({required this.donor});
+  EditDonarFormScreen({required this.donor});
 
   @override
-  _EditDonorFormScreenState createState() => _EditDonorFormScreenState();
+  _EditDonarFormScreenState createState() => _EditDonarFormScreenState();
 }
 
-class _EditDonorFormScreenState extends State<EditDonorFormScreen> {
+class _EditDonarFormScreenState extends State<EditDonarFormScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _locationController;

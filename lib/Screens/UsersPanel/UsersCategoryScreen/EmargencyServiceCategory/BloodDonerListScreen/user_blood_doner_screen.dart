@@ -16,45 +16,6 @@ class _UserBloodDonorScreenState extends State<UserBloodDonorScreen> {
   String _searchCategory = 'name';
   List<BloodDonorModels> _donors = [];
 
-  void _deleteDonor(String id, int index) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title:
-              const Text('আপনি কি নিশ্চিত যে আপনি এই তথ্যটি মুছে ফেলতে চান?'),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('এই করার পর তথ্যটি ফিরে পাওয়া সম্ভব হবে না।'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('বাতিল করুন'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-            TextButton(
-              child: const Text('মুছে ফেলুন'),
-              onPressed: () async {
-                await FirebaseFirestore.instance
-                    .collection('blood_donors')
-                    .doc(id)
-                    .delete();
-                setState(() {
-                  _donors.removeAt(index);
-                });
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   void _showBloodDonorForm() {
     showModalBottomSheet(

@@ -1,6 +1,5 @@
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/admin_home_screen.dart';
 import 'package:district_online_service/Screens/SplashScreen.dart';
-import 'package:district_online_service/Screens/UsersPanel/UsersProfileScreen/user_profile_screen.dart';
 import 'package:district_online_service/Styles/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

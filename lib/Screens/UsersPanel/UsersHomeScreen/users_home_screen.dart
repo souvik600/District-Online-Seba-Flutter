@@ -11,6 +11,7 @@ import '../../../Widgets/CustomDrawerWidget.dart';
 import '../../../Widgets/emergency_service_list_widget.dart';
 import '../../../Widgets/information_category_list_widget.dart';
 import '../../NavigationBerScreen.dart';
+import '../../../Widgets/dummy.dart';
 
 class UsersHomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -187,7 +188,7 @@ class UsersHomeScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            SplashScreen()
+                                            PrettyButtonsExample()
                                       ));
                                 },
                                 'assets/icons/history-book.png',

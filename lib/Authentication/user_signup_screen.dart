@@ -35,7 +35,9 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
 
   Future<void> _pickImage() async {
     _imageFile = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {});
+    setState(() {
+
+    });
   }
 
   // Sign-up logic with image upload

@@ -67,7 +67,7 @@ class _UserLogInScreenState extends State<UserLogInScreen> {
       // Navigate to UserHomeScreen after successful login
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => UsersHomeScreen()),
+        MaterialPageRoute(builder: (context) => NavigationBerScreen()),
       );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login Successful')),

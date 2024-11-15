@@ -29,6 +29,7 @@ dependencies:
   #  Image Get
   image_picker: ^1.1.2
   icons_plus: ^4.0.0
+  pretty_animated_buttons: ^0.0.2
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:district_online_service/Screens/UsersPanel/UsersProfileScreen/user_blood_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -110,7 +111,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 3,  // Three tabs to match the TabBar
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -119,122 +120,139 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               fontSize: 28,
               fontWeight: FontWeight.w500,
               fontFamily: 'kalpurush',
-              color: colorWhite,
+              color: Colors.white,
             ),
           ),
           backgroundColor: AppColors.pColor,
         ),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-          child: Stack(
-            children: [
-              ScreenBackground(context),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 60),
-                    // Profile Picture with Edit Icon
-                    Stack(
-                      children: [
-                        // Profile Picture
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: profileImageUrl.isNotEmpty
-                              ? NetworkImage(profileImageUrl)
-                              : const AssetImage(
-                              'assets/images/user.png') as ImageProvider,
-                        ),
-                        // Edit Icon
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: InkWell(
-                            onTap: _pickImage,
-                            child: const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 25,
-                              child: Icon(
-                                Icons.edit,
-                                color: Colors.black,
-                                size: 30,
-                              ),
+            : Stack(
+          children: [
+            ScreenBackground(context),
+            Center(
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  // Profile Picture with Edit Icon
+                  Stack(
+                    children: [
+                      // Profile Picture
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: profileImageUrl.isNotEmpty
+                            ? NetworkImage(profileImageUrl)
+                            : const AssetImage('assets/images/user.png') as ImageProvider,
+                      ),
+                      // Edit Icon
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: InkWell(
+                          onTap: _pickImage,
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 25,
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.black,
+                              size: 30,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Name
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    const SizedBox(height: 10),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
 
-                    // Email
-                    Text(
-                      email,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
-                      ),
+                  // Name
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 10),
+                  ),
+                  const SizedBox(height: 10),
 
-                    // Location
-                    Text(
-                      location,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
-                      ),
+                  // Email
+                  Text(
+                    email,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey,
                     ),
-                    const SizedBox(height: 30),
+                  ),
+                  const SizedBox(height: 5),
 
-                    // Logout Button
-                    ElevatedButton(
+                  // Location
+                  Text(
+                    location,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Logout Button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ElevatedButton.icon(
                       onPressed: _logout,
-                      child: const Text(
-                        'Logout',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          color: AppColors.wColor,
-                        ),
-                      ),
+                      icon: const Icon(Icons.logout, color: Colors.white),
+                      label: const Text('Logout', style: TextStyle(fontSize: 18)),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 8),
-                        backgroundColor: Colors.red,
+                        backgroundColor: Colors.redAccent,
+                        minimumSize: const Size.fromHeight(50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
-
-                    // Tab Bar
-                    const SizedBox(height: 30),
-                    const TabBar(
-                      unselectedLabelColor: Colors.grey,
-                      labelColor: Colors.black,
-                      indicatorColor: Colors.black,
-                      tabs: [
-                        Tab(child: Text("Blood Donner"),),
-                        Tab(icon: Icon(Icons.video_collection)),
-                        Tab(icon: Icon(Icons.video_collection)),
+                  ),
+                  // Tab Bar
+                  const SizedBox(height: 10),
+                  const TabBar(
+                    unselectedLabelColor: Colors.grey,
+                    labelColor: Colors.black,
+                    indicatorColor: Colors.black,
+                    tabs: [
+                      Tab(child: Text("Blood Donor")),
+                      Tab(icon: Icon(Icons.video_collection)),
+                      Tab(icon: Icon(Icons.history)),
+                    ],
+                  ),
+                  // Tab Views
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        UserBloodList(),  // Blood Donor List tab view
+                        const Center(
+                          child: Text(
+                            "Videos",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const Center(
+                          child: Text(
+                            "History",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

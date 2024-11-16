@@ -21,7 +21,6 @@ class _AdminBloodDonorFormState extends State<AdminBloodDonorForm> {
   String? _name, _contact, _location, _bloodGroup;
   int? _age;
   bool _isLoading = false;
-
   List<String> _bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
   List<String> _availabilityOptions = ['Available', 'Not Available'];
   String? _availability = 'Available'; // Default to 'Available'
@@ -126,7 +125,7 @@ class _AdminBloodDonorFormState extends State<AdminBloodDonorForm> {
                     border: Border.all(color: Colors.grey),
                     image: _imageFile == null
                         ? const DecorationImage(
-                      image: AssetImage('assets/images/default_profile.png'),
+                      image: AssetImage('assets/images/user.png'),
                       fit: BoxFit.contain,
                     )
                         : DecorationImage(

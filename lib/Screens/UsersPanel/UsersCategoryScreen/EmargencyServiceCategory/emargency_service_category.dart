@@ -1,3 +1,4 @@
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminBloodDonnerListScreen/admin_blood_doner_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../AppColors/AppColors.dart';
@@ -97,7 +98,7 @@ class EmargencyServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              UserBloodDonorScreen(),
+                              AdminBloodDonorScreen(),
                         ));
                   },
                   "assets/icons/donor.png",

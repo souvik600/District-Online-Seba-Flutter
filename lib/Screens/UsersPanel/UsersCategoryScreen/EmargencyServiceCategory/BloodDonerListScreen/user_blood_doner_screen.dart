@@ -6,7 +6,6 @@ import '../../../../../AppColors/AppColors.dart';
 import '../../../../../Widgets/Custom_appBar_widgets.dart';
 import '../../../../../Widgets/calling_dialog.dart';
 import 'blood_doner_form.dart';
-
 class UserBloodDonorScreen extends StatefulWidget {
   @override
   _UserBloodDonorScreenState createState() => _UserBloodDonorScreenState();

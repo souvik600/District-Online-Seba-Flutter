@@ -1,12 +1,12 @@
-import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/BloodDonerListScreen/data_models.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pretty_animated_buttons/widgets/pretty_neumorphic_button.dart';
 import '../../../../../AppColors/AppColors.dart';
 import '../../../../../Widgets/Custom_appBar_widgets.dart';
 import '../../../../../Widgets/calling_dialog.dart';
-import '../../../../UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/BloodDonerListScreen/Edit_blood_doner.dart';
-import '../../../../UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/BloodDonerListScreen/blood_doner_form.dart';
+import 'Edit_blood_doner.dart';
+import 'blood_doner_form.dart';
+import 'data_models.dart';
 
 class AdminBloodDonorScreen extends StatefulWidget {
   @override

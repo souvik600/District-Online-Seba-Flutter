@@ -1,4 +1,6 @@
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminBloodDonnerListScreen/admin_blood_doner_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminPoliceListScreen/admin_police_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminPolliBiddutListScreen/admin_polli_biddut_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../AppColors/AppColors.dart';
@@ -36,12 +38,12 @@ class EmargencyServiceCategory extends StatelessWidget {
                     "হাসপাতাল"),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           PoliceServiceScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminPoliceScreen(),
+                        ));
                   },
                   "assets/icons/policeman.png",
                   "পুলিশ",
@@ -105,12 +107,12 @@ class EmargencyServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           PolliBiddytScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminPolliBiddutScreen(),
+                        ));
                   },
                   'assets/icons/electricity.png',
                   "পল্লী বিদ্যুৎ",

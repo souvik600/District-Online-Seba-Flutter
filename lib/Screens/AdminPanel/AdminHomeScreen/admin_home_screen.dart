@@ -4,13 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../AppColors/AppColors.dart';
 import '../../../Styles/BackGroundStyle.dart';
 import '../../../Utilitys/utilitys.dart';
+import '../../../Widgets/AdminImageSlideShowWidget.dart';
+import '../../../Widgets/AdminNoticeTextWidget.dart';
 import '../../UsersPanel/UsersCategoryScreen/EducationalServiceCategory/educational_service_category.dart';
 import '../../UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/emargency_service_category.dart';
 import '../../UsersPanel/UsersCategoryScreen/WorkerServiceCategory/worker_service_category.dart';
 import '../../UsersPanel/UsersProfileScreen/user_profile_screen.dart';
 
 class AdminHomeScreen extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +99,7 @@ class AdminHomeScreen extends StatelessWidget {
                               ),
                               borderRadius: const BorderRadius.all(Radius.circular(12)),
                             ),
-                            // child: AdminImageSlideShow(),
+                            child: AdminImageSlideShow(),
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 15, bottom: 20),
@@ -116,7 +117,7 @@ class AdminHomeScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            // child: AdminMovingNoticeText(),
+                            child: AdminMovingNoticeText(),
                           ),
                         ],
                       ),

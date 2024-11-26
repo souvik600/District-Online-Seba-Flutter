@@ -10,7 +10,6 @@ class PolliBiddutModels {
   final String designation;
   final String location;
   final String contact;
-
   bool isCall;
 
   PolliBiddutModels({

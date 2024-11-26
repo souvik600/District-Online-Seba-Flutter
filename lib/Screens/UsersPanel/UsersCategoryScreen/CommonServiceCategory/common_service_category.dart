@@ -5,6 +5,9 @@ import '../../../../AppColors/AppColors.dart';
 import '../../../../Styles/TextContainerStyle.dart';
 import '../../../../Widgets/information_category_list_widget.dart';
 import '../../../SplashScreen.dart';
+import 'DistrictHistoryScreen/district_history_screen.dart';
+import 'DistrictMapScreen/district_map_screen.dart';
+import 'NewsPaperScreen/news_paper_screen.dart';
 
 
 class CommonServiceCategory extends StatelessWidget {
@@ -29,36 +32,36 @@ class CommonServiceCategory extends StatelessWidget {
               children: [
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           DistrictHistoryScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DistrictHistoryScreen(),
+                        ));
                   },
                   'assets/icons/history-book.png',
                   'জেলার ইতিহাস',
                 ),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           MapScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              MapScreen(),
+                        ));
                   },
                   'assets/icons/map.png',
                   "মানচিত্র",
                 ),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           NewspaperScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NewspaperScreen(),
+                        ));
                   },
                   'assets/icons/newspaper.png',
                   "সংবাদপত্র",

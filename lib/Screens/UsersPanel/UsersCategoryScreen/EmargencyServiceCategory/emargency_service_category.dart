@@ -1,4 +1,6 @@
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminBloodDonnerListScreen/admin_blood_doner_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminDoctorScreen/admin_doctor_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminFireserviceScreen/admin_fire_service_screen.dart';
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminPoliceListScreen/admin_police_screen.dart';
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminPolliBiddutListScreen/admin_polli_biddut_screen.dart';
 import 'package:flutter/material.dart';
@@ -50,12 +52,12 @@ class EmargencyServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           FireServiceListScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminFireServiceScreen(),
+                        ));
                   },
                   "assets/icons/fire-station.png",
                   "ফায়ার সার্ভিস",
@@ -83,12 +85,12 @@ class EmargencyServiceCategory extends StatelessWidget {
               children: [
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           FireServiceListScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminDoctorScreen(),
+                        ));
                   },
                   "assets/icons/doctor.png",
                   "ডাক্তার",

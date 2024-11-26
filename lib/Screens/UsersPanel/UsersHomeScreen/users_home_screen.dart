@@ -1,5 +1,8 @@
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/admin_home_screen.dart';
 import 'package:district_online_service/Screens/SplashScreen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictHistoryScreen/district_history_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictMapScreen/district_map_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/BloodDonerListScreen/user_blood_doner_screen.dart';
 import 'package:district_online_service/Styles/textStyle.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +11,16 @@ import '../../../AppColors/AppColors.dart';
 import '../../../Styles/BackGroundStyle.dart';
 import '../../../Utilitys/utilitys.dart';
 import '../../../Widgets/CustomDrawerWidget.dart';
+import '../../../Widgets/ImageSlideShowWidget.dart';
+import '../../../Widgets/NoticeTextWidget.dart';
 import '../../../Widgets/emergency_service_list_widget.dart';
 import '../../../Widgets/information_category_list_widget.dart';
 import '../../NavigationBerScreen.dart';
-import '../../../Widgets/dummy.dart';
 
 class UsersHomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  UsersHomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -103,13 +109,12 @@ class UsersHomeScreen extends StatelessWidget {
                                   // bottomRight: Radius.circular(20),
                                 ),
                               ),
-                              //child: ImageSlideShow(),
+                              child: ImageSlideShow(),
                             ),
 
                             Container(
-                              margin:
-                              const EdgeInsets.only(top: 15, bottom: 20),
-                              width: MediaQuery.of(context).size.width,
+                              margin: const EdgeInsets.only(top: 16, ),
+                              width: MediaQuery.of(context).size.width, // Full width of the screen
                               height: 55,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -117,17 +122,13 @@ class UsersHomeScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: const [
                                   BoxShadow(
-                                    color: AppColors.sdColor,
+                                    color: AppColors.wColor,
                                     blurRadius: 6,
                                     spreadRadius: 3,
                                   ),
                                 ],
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(10.0),
-                                //child: Center(child: MovingNoticeText()),
-                              ),
-
+                              child: MovingNoticeText(), // Add the moving notice text here
                             ),
                           ],
                         ),
@@ -188,7 +189,7 @@ class UsersHomeScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            PrettyButtonsExample()
+                                            DistrictHistoryScreen()
                                       ));
                                 },
                                 'assets/icons/history-book.png',
@@ -198,13 +199,12 @@ class UsersHomeScreen extends StatelessWidget {
                                 width: 15,
                               ),
 
-                              //For Heart
                               AllInfromationCategoryList(
                                     () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => SplashScreen(),
+                                        builder: (context) => MapScreen(),
                                       ));
                                 },
                                 'assets/icons/map.png',
@@ -218,7 +218,7 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => SplashScreen(),
+                                        builder: (context) => NewspaperScreen(),
                                       ));
                                 },
                                 'assets/icons/newspaper.png',

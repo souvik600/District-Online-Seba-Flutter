@@ -137,7 +137,7 @@ class UsersHomeScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
                             "ক্যাটাগরি সমূহ ...",
@@ -177,7 +177,7 @@ class UsersHomeScreen extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         // dental
                         child: Container(
-                          height: 120,
+                          height: 90,
                           child: Row(
                             children: [
                               const SizedBox(

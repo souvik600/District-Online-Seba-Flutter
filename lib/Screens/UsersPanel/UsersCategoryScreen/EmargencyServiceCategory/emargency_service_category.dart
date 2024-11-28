@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../../../../AppColors/AppColors.dart';
 import '../../../../Styles/TextContainerStyle.dart';
 import '../../../../Widgets/information_category_list_widget.dart';
+import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminAmbulanceScreen/admin_ambulance_screen.dart';
 
 class EmargencyServiceCategory extends StatelessWidget {
   const EmargencyServiceCategory({super.key});
@@ -65,12 +66,12 @@ class EmargencyServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           SplashScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminAmbulanceServiceScreen(),
+                        ));
                   },
                   "assets/icons/ambulance.png",
                   "অ্যাম্বুলেন্স",

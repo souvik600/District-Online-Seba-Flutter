@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../AppColors/AppColors.dart';
 import '../../../../Styles/TextContainerStyle.dart';
 import '../../../../Widgets/information_category_list_widget.dart';
+import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminBusCounterScreen/admin_bus_counter_screen.dart';
 import '../../../SplashScreen.dart';
 import 'DistrictHistoryScreen/district_history_screen.dart';
 import 'DistrictMapScreen/district_map_screen.dart';
@@ -109,12 +110,12 @@ class CommonServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           BusCounterListApp(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminBusCounterServiceScreen(),
+                        ));
                   },
                   'assets/icons/bus_counter.png',
                   "বাস কাউন্টার",

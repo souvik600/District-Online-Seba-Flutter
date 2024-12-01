@@ -1,8 +1,12 @@
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalInstitution/admin_collage_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalInstitution/admin_madrasha_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../AppColors/AppColors.dart';
 import '../../../../Styles/TextContainerStyle.dart';
 import '../../../../Widgets/information_category_list_widget.dart';
+import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalInstitution/admin_high_school_screen.dart';
+import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalInstitution/admin_primary_school_screen.dart';
 import '../../../SplashScreen.dart';
 
 class EducationalServiceCategory extends StatelessWidget {
@@ -31,7 +35,7 @@ class EducationalServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminPrimarySchoolScreen(),
                         ));
                   },
                   'assets/icons/primary-school.png',
@@ -43,7 +47,7 @@ class EducationalServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminHighSchoolScreen(),
                         ));
                   },
                   'assets/icons/school.png',
@@ -55,7 +59,7 @@ class EducationalServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminCollegeScreen(),
                         ));
                   },
                   'assets/icons/college.png',
@@ -67,7 +71,7 @@ class EducationalServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminMadrashaScreen(),
                         ));
                   },
                   'assets/icons/mosque.png',

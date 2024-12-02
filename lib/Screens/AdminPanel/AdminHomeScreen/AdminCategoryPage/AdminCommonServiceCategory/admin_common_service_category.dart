@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../AppColors/AppColors.dart';
-import '../../../../Styles/TextContainerStyle.dart';
-import '../../../../Widgets/information_category_list_widget.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminCommonServiceCategory/AdminBusCounterScreen/admin_bus_counter_screen.dart';
-import '../../../SplashScreen.dart';
-import 'DistrictHistoryScreen/district_history_screen.dart';
-import 'DistrictMapScreen/district_map_screen.dart';
-import 'NewsPaperScreen/news_paper_screen.dart';
+import '../../../../../AppColors/AppColors.dart';
+import '../../../../../Styles/TextContainerStyle.dart';
+import '../../../../../Widgets/information_category_list_widget.dart';
+import '../../../../SplashScreen.dart';
+import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictHistoryScreen/district_history_screen.dart';
+import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictMapScreen/district_map_screen.dart';
+import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
+
+import 'AdminBusCounterScreen/admin_bus_counter_screen.dart';
 
 
-class CommonServiceCategory extends StatelessWidget {
-  const CommonServiceCategory({super.key});
+
+class AdminCommonServiceCategory extends StatelessWidget {
+  const AdminCommonServiceCategory({super.key});
 
   @override
   Widget build(BuildContext context) {

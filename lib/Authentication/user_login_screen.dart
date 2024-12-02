@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:district_online_service/Authentication/user_signup_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/admin_home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -8,7 +9,6 @@ import '../Screens/NavigationBerScreen.dart';
 import '../Styles/ElevatedBottonStyle.dart';
 import '../Styles/InputDecorationStyle.dart';
 import '../Widgets/custom_scaffold.dart';
-
 class UserLogInScreen extends StatefulWidget {
   const UserLogInScreen({super.key});
 
@@ -39,7 +39,7 @@ class _UserLogInScreenState extends State<UserLogInScreen> {
           // Navigate to AdminHomeScreen if credentials match
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => NavigationBerScreen()),
+            MaterialPageRoute(builder: (context) => AdminHomeScreen()),
           );
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Admin Login Successful')),

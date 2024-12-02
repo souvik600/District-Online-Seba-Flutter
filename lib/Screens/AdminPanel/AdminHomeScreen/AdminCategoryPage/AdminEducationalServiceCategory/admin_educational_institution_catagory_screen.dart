@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../../../AppColors/AppColors.dart';
-import '../../../../Styles/TextContainerStyle.dart';
-import '../../../../Widgets/information_category_list_widget.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/admin_collage_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/admin_high_school_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/admin_madrasha_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/admin_primary_school_screen.dart';
 
-class EducationalServiceCategory extends StatelessWidget {
-  const EducationalServiceCategory({super.key});
+import '../../../../../AppColors/AppColors.dart';
+import '../../../../../Styles/TextContainerStyle.dart';
+import '../../../../../Widgets/information_category_list_widget.dart';
+import 'AdminEducationalInstitution/admin_collage_screen.dart';
+import 'AdminEducationalInstitution/admin_high_school_screen.dart';
+import 'AdminEducationalInstitution/admin_madrasha_screen.dart';
+import 'AdminEducationalInstitution/admin_primary_school_screen.dart';
+
+class AdminEducationalServiceCategory extends StatelessWidget {
+  const AdminEducationalServiceCategory({super.key});
 
   @override
   Widget build(BuildContext context) {

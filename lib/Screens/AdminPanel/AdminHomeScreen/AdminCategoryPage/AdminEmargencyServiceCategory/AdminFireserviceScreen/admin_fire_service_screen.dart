@@ -1,51 +1,48 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../../../AppColors/AppColors.dart';
-import '../../../../../Styles/ElevatedBottonStyle.dart';
-import '../../../../../Styles/TextContainerStyle.dart';
 
-class PoliceDataModels {
-  final String id; // Add ID field
-  final String location;
+import '../../../../../../AppColors/AppColors.dart';
+import '../../../../../../Styles/TextContainerStyle.dart';
+
+class FireServiceModels{
+  final String id;
   final String name;
   final String designation;
+  final String location;
   final String contact;
-  final String email;
   bool isCall;
 
-  PoliceDataModels({
-    required this.id,
-    required this.location,
-    required this.name,
-    required this.designation,
-    required this.email,
-    required this.contact,
-    this.isCall = false,
+  FireServiceModels({
+      required this.id,
+      required this.name,
+      required this.designation,
+      required this.location,
+      required this.contact,
+      this.isCall = false,
   });
 
-  factory PoliceDataModels.fromFirestore(DocumentSnapshot doc) {
+  factory FireServiceModels.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    return PoliceDataModels(
+    return FireServiceModels(
       id: doc.id,
-      // Assign document ID
-      location: data['location'] ?? '',
       name: data['name'] ?? '',
       designation: data['designation'] ?? '',
-      email: data['email'] ?? '',
       contact: data['contact'] ?? '',
+      location: data['location'] ?? '',
     );
   }
 }
+class AdminFireServiceScreen extends StatefulWidget {
+  const AdminFireServiceScreen({super.key});
 
-class AdminPoliceScreen extends StatefulWidget {
   @override
-  _AdminPoliceScreenState createState() => _AdminPoliceScreenState();
+  State<AdminFireServiceScreen> createState() => _AdminFireServiceScreenState();
 }
 
-class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
-  final List<PoliceDataModels> allCategories = [];
-  List<PoliceDataModels> filteredCategories = [];
+class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
+  final List<FireServiceModels> allCategories = [];
+  List<FireServiceModels> filteredCategories = [];
 
   @override
   void initState() {
@@ -54,11 +51,8 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
   }
 
   void fetchCategories() async {
-    final querySnapshot =
-        await FirebaseFirestore.instance.collection('PoliceList').get();
-    final categories = querySnapshot.docs
-        .map((doc) => PoliceDataModels.fromFirestore(doc))
-        .toList();
+    final querySnapshot = await FirebaseFirestore.instance.collection('FireService').get();
+    final categories = querySnapshot.docs.map((doc) => FireServiceModels.fromFirestore(doc)).toList();
     setState(() {
       allCategories.addAll(categories);
       filteredCategories.addAll(categories);
@@ -68,8 +62,7 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
   void filterCategories(String query) {
     setState(() {
       filteredCategories = allCategories
-          .where((category) =>
-              category.location.toLowerCase().contains(query.toLowerCase()))
+          .where((category) => category.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -122,6 +115,7 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
       },
     );
   }
+
   void _makePhoneCall(String phoneNo) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: phoneNo);
     if (await canLaunch(phoneUri.toString())) {
@@ -136,8 +130,7 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:
-              const Text('আপনি কি নিশ্চিত যে আপনি এই তথ্যটি মুছে ফেলতে চান?'),
+          title: const Text('আপনি কি নিশ্চিত যে আপনি এই তথ্যটি মুছে ফেলতে চান?'),
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -155,10 +148,7 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
             TextButton(
               child: const Text('মুছে ফেলুন'),
               onPressed: () async {
-                await FirebaseFirestore.instance
-                    .collection('PoliceList')
-                    .doc(id)
-                    .delete();
+                await FirebaseFirestore.instance.collection('FireService').doc(id).delete();
                 setState(() {
                   filteredCategories.removeAt(index);
                 });
@@ -170,22 +160,20 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
       },
     );
   }
-
-  void _editCategory(PoliceDataModels category) {
+  void _editCategory(FireServiceModels category) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return PoliceForm(
+        return FireServiceForm(
           category: category,
           onSubmit: (updatedCategory) {
             setState(() {
-              int index = filteredCategories
-                  .indexWhere((cat) => cat.id == updatedCategory.id);
+              int index = filteredCategories.indexWhere((cat) => cat.id == updatedCategory.id);
               if (index != -1) {
                 filteredCategories[index] = updatedCategory;
-                allCategories[allCategories.indexWhere(
-                    (cat) => cat.id == updatedCategory.id)] = updatedCategory;
+                allCategories[allCategories.indexWhere((cat) => cat.id == updatedCategory.id)] =
+                    updatedCategory;
               }
             });
           },
@@ -199,7 +187,7 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return PoliceForm(
+        return FireServiceForm(
           onSubmit: (newCategory) {
             setState(() {
               filteredCategories.add(newCategory);
@@ -211,13 +199,14 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.pColor,
         title: const Text(
-          "Police",
+          "Fire Service",
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w500,
@@ -258,7 +247,7 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
             child: ListView.builder(
               itemCount: filteredCategories.length,
               itemBuilder: (context, index) {
-                return PiliceListItem(
+                return FireServiceListItem(
                   category: filteredCategories[index],
                   onMakeCall: () {
                     _showCallDialog(filteredCategories[index].contact);
@@ -278,20 +267,18 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
     );
   }
 }
-
-class PiliceListItem extends StatelessWidget {
-  final PoliceDataModels category;
+class FireServiceListItem extends StatelessWidget {
+  final FireServiceModels category;
   final VoidCallback onMakeCall;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
 
-  PiliceListItem({
+  FireServiceListItem({
     required this.category,
     required this.onMakeCall,
     required this.onDelete,
     required this.onEdit,
   });
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -312,7 +299,7 @@ class PiliceListItem extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        'assets/logos/PoliceLogo.png',
+                        'assets/logos/fireservicelogo.png',
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -326,43 +313,73 @@ class PiliceListItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                          child:TextContainerStyle(category.location,const Color(0xFF0E4399))
-                      ),
+                      Center(child: TextContainerStyle(category.name, Colors.deepPurple)),
                       Padding(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: const EdgeInsets.all(2.0),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              category.name,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'kalpurush',
-                              ),
-                            ),
-                            Text(
-                              category.designation,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'kalpurush',
-                              ),
-
-                            ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text(
-                                  " মোবাইল: ",
+                                  "ধরন : ",
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'kalpurush',
+                                  ),
+                                ),
+                                Text(
+                                  category.designation,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'kalpurush',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  " অবস্থান: ",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 20,
                                     fontFamily: 'kalpurush',
                                     color: Colors.black,
                                   ),
-
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    category.location,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontFamily: 'kalpurush',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  " মোবাইল: ",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20,
+                                    fontFamily: 'kalpurush',
+                                    color: Colors.black,
+                                  ),
                                 ),
                                 Text(
                                   category.contact,
@@ -370,29 +387,7 @@ class PiliceListItem extends StatelessWidget {
                                     fontSize: 19,
                                     color: Colors.black,
                                     fontFamily: 'kalpurush',
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  " ইমেইল : ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                    fontFamily: 'kalpurush',
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Text(
-                                  category.email,
-                                  style: const TextStyle(
-                                    fontSize: 19,
-                                    color: Colors.blueGrey,
-                                    fontFamily: 'kalpurush',
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                               ],
@@ -405,8 +400,8 @@ class PiliceListItem extends StatelessWidget {
                 ),
               ],
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            OverflowBar(
+              alignment: MainAxisAlignment.spaceBetween,
               children: [
                 Center(
                   child: ElevatedButton.icon(
@@ -429,6 +424,7 @@ class PiliceListItem extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+
                     ElevatedButton.icon(
                       onPressed: onDelete,
                       icon: const Icon(
@@ -463,6 +459,7 @@ class PiliceListItem extends StatelessWidget {
                     ),
                   ],
                 ),
+
               ],
             ),
           ],
@@ -471,20 +468,19 @@ class PiliceListItem extends StatelessWidget {
     );
   }
 }
+class FireServiceForm extends StatefulWidget {
+  final FireServiceModels? category;
+  final Function(FireServiceModels) onSubmit;
 
-class PoliceForm extends StatefulWidget {
-  final PoliceDataModels? category;
-  final Function(PoliceDataModels) onSubmit;
-
-  PoliceForm({this.category, required this.onSubmit});
+  FireServiceForm({this.category, required this.onSubmit});
 
   @override
-  _PoliceFormState createState() => _PoliceFormState();
+  _FireServiceFormState createState() => _FireServiceFormState();
 }
 
-class _PoliceFormState extends State<PoliceForm> {
+class _FireServiceFormState extends State<FireServiceForm> {
   final _formKey = GlobalKey<FormState>();
-  String? _name, _email, _contact, _designation, _location;
+  String? _name, _contact, _designation, _location;
   bool _isLoading = false;
 
   @override
@@ -492,7 +488,6 @@ class _PoliceFormState extends State<PoliceForm> {
     super.initState();
     if (widget.category != null) {
       _name = widget.category!.name;
-      _email = widget.category!.email;
       _contact = widget.category!.contact;
       _designation = widget.category!.designation;
       _location = widget.category!.location;
@@ -507,40 +502,32 @@ class _PoliceFormState extends State<PoliceForm> {
       });
 
       if (widget.category == null) {
-        DocumentReference docRef =
-            await FirebaseFirestore.instance.collection('PoliceList').add({
+        DocumentReference docRef = await FirebaseFirestore.instance.collection('FireService').add({
           'name': _name,
-          'email': _email,
+          'designation': _designation,
           'contact': _contact,
           'location': _location,
-          'designation': _designation,
         });
-        widget.onSubmit(PoliceDataModels(
+        widget.onSubmit(FireServiceModels(
           id: docRef.id,
           name: _name!,
           designation: _designation!,
           contact: _contact!,
           location: _location!,
-          email: _email!,
         ));
       } else {
-        await FirebaseFirestore.instance
-            .collection('PoliceList')
-            .doc(widget.category!.id)
-            .update({
+        await FirebaseFirestore.instance.collection('FireService').doc(widget.category!.id).update({
           'name': _name,
-          'email': _email,
+          'designation': _designation,
           'contact': _contact,
           'location': _location,
-          'designation': _designation,
         });
-        widget.onSubmit(PoliceDataModels(
+        widget.onSubmit(FireServiceModels(
           id: widget.category!.id,
           name: _name!,
           designation: _designation!,
           contact: _contact!,
           location: _location!,
-          email: _email!,
         ));
       }
 
@@ -581,79 +568,59 @@ class _PoliceFormState extends State<PoliceForm> {
           ),
           child: Form(
             key: _formKey,
-            child: SingleChildScrollView(
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.pColor, width: 2),
-                  borderRadius: BorderRadius.circular(8),
+            child: Column(
+              children: [
+                const SizedBox(height: 5),
+                TextContainerStyle("FillUp Polli Biddut Form", AppColors.pColor),
+                const SizedBox(height: 10),
+                TextFormField(
+                  initialValue: _name,
+                  decoration: _inputDecoration('Heading Name'),
+                  validator: (value) {
+                    if (value!.isEmpty) return 'Please enter your heading name';
+                    return null;
+                  },
+                  onSaved: (value) => _name = value,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 5),
-                      TextContainerStyle(
-                          "FillUp Police Form", AppColors.pColor),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        initialValue: _name,
-                        decoration: _inputDecoration('Name'),
-                        validator: (value) {
-                          if (value!.isEmpty) return 'Please enter your name';
-                          return null;
-                        },
-                        onSaved: (value) => _name = value,
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        initialValue: _designation,
-                        decoration: _inputDecoration('Designation'),
-                        onSaved: (value) => _designation = value,
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        initialValue: _email,
-                        decoration: _inputDecoration('Email'),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value!.isEmpty) return 'Please enter your email';
-                          return null;
-                        },
-                        onSaved: (value) => _email = value,
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        initialValue: _contact,
-                        decoration: _inputDecoration('Contact'),
-                        validator: (value) {
-                          if (value!.isEmpty) return 'Please enter contact';
-                          return null;
-                        },
-                        onSaved: (value) => _contact = value,
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        initialValue: _location,
-                        decoration: _inputDecoration('Location'),
-                        validator: (value) {
-                          if (value!.isEmpty)
-                            return 'Please enter your location';
-                          return null;
-                        },
-                        onSaved: (value) => _location = value,
-                      ),
-                      const SizedBox(height: 20),
-                      _isLoading
-                          ? const CircularProgressIndicator()
-                          : ElevatedButtonStyle(
-                              text: "Submit", onPressed: _submitForm),
-                      const SizedBox(
-                        height: 10,
-                      )
-                    ],
+                const SizedBox(height: 10),
+                TextFormField(
+                  initialValue: _designation,
+                  decoration: _inputDecoration('Designation'),
+                  onSaved: (value) => _designation = value,
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  initialValue: _contact,
+                  decoration: _inputDecoration('Contact'),
+                  validator: (value) {
+                    if (value!.isEmpty) return 'Please enter contact';
+                    return null;
+                  },
+                  onSaved: (value) => _contact = value,
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  initialValue: _location,
+                  decoration: _inputDecoration('Location'),
+                  validator: (value) {
+                    if (value!.isEmpty) return 'Please enter location';
+                    return null;
+                  },
+                  onSaved: (value) => _location = value,
+                ),
+                const SizedBox(height: 20),
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                  onPressed: _submitForm,
+                  child: const Text("Submit"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.pColor,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                   ),
                 ),
-              ),
+                const SizedBox(height: 10),
+              ],
             ),
           ),
         ),
@@ -661,3 +628,4 @@ class _PoliceFormState extends State<PoliceForm> {
     );
   }
 }
+

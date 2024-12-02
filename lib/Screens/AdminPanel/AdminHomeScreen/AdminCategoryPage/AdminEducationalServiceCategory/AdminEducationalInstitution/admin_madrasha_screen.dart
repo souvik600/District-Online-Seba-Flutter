@@ -1,21 +1,22 @@
 import 'dart:io';
 import 'package:district_online_service/AppColors/AppColors.dart';
-import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalInstitution/school_details_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/school_details_screen.dart';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../../Styles/BackGroundStyle.dart';
 
-class AdminHighSchoolScreen extends StatefulWidget {
+import '../../../../../../Styles/BackGroundStyle.dart';
+
+
+class AdminMadrashaScreen extends StatefulWidget {
   @override
-  _AdminHighSchoolScreenState createState() =>
-      _AdminHighSchoolScreenState();
+  _AdminMadrashaScreenState createState() => _AdminMadrashaScreenState();
 }
 
-class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
+class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
@@ -33,8 +34,8 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
 
   XFile? _selectedImage;
 
-  // Add school
-  Future<void> _addSchool() async {
+  // Add madrasha
+  Future<void> _addMadrasha() async {
     final data = {
       'name': _nameController.text.trim(),
       'location': _locationController.text.trim(),
@@ -45,7 +46,7 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
       'establishedYear': _establishedYearController.text.trim(),
     };
 
-    final docRef = await _firestore.collection('highSchool').add(data);
+    final docRef = await _firestore.collection('madrasha').add(data);
     if (_selectedImage != null) {
       final imageUrl = await _uploadImage(docRef.id);
       await docRef.update({'image': imageUrl});
@@ -54,8 +55,8 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
     Navigator.of(context).pop(); // Close bottom sheet
   }
 
-  // Update school
-  Future<void> _updateSchool(String id) async {
+  // Update madrasha
+  Future<void> _updateMadrasha(String id) async {
     final data = {
       'name': _nameController.text.trim(),
       'location': _locationController.text.trim(),
@@ -66,14 +67,11 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
       'establishedYear': _establishedYearController.text.trim(),
     };
 
-    await _firestore.collection('highSchool').doc(id).update(data);
+    await _firestore.collection('madrasha').doc(id).update(data);
 
     if (_selectedImage != null) {
       final imageUrl = await _uploadImage(id);
-      await _firestore
-          .collection('highSchool')
-          .doc(id)
-          .update({'image': imageUrl});
+      await _firestore.collection('madrasha').doc(id).update({'image': imageUrl});
     }
 
     Navigator.of(context).pop(); // Close bottom sheet
@@ -81,7 +79,7 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
 
   // Upload image
   Future<String> _uploadImage(String id) async {
-    final ref = _storage.ref().child('high_school_images/$id.jpg');
+    final ref = _storage.ref().child('madrasha_images/$id.jpg');
     await ref.putFile(File(_selectedImage!.path));
     return await ref.getDownloadURL();
   }
@@ -95,13 +93,13 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
     });
   }
 
-  // Delete school
-  Future<void> _deleteSchool(String id) async {
-    await _firestore.collection('highSchool').doc(id).delete();
+  // Delete madrasha
+  Future<void> _deleteMadrasha(String id) async {
+    await _firestore.collection('madrasha').doc(id).delete();
   }
 
-  // Show form for adding/editing school
-  void _showSchoolForm({String? id, Map<String, dynamic>? data}) {
+  // Show form for adding/editing madrasha
+  void _showMadrashaForm({String? id, Map<String, dynamic>? data}) {
     if (data == null) {
       _nameController.clear();
       _locationController.clear();
@@ -134,7 +132,7 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    data == null ? 'Add School' : 'Edit School',
+                    data == null ? 'Add Madrasha' : 'Edit Madrasha',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16.0),
@@ -167,12 +165,12 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _nameController,
-                    decoration: AppInputDecoration('School Name'),
+                    decoration: AppInputDecoration('Madrasha Name'),
                   ),
                   const SizedBox(height: 8.0),
                   TextField(
                     controller: _locationController,
-                    decoration: AppInputDecoration('School Location'),
+                    decoration: AppInputDecoration('Madrasha Location'),
                   ),
                   const SizedBox(height: 8.0),
                   TextField(
@@ -202,16 +200,15 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
                     decoration: AppInputDecoration('Email'),
                     keyboardType: TextInputType.emailAddress,
                   ),
-
                   const SizedBox(height: 16.0),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
                         if (data == null) {
-                          _addSchool();
+                          _addMadrasha();
                         } else {
-                          _updateSchool(id!);
+                          _updateMadrasha(id!);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -222,7 +219,7 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
                         ),
                       ),
                       child: Text(
-                        data == null ? 'Add School' : 'Update School',
+                        data == null ? 'Add Madrasha' : 'Update Madrasha',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -238,21 +235,16 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
       },
     );
   }
-  void _openDetailsScreen(Map<String, dynamic> data) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => SchoolDetailsScreen(data: data)));
-  }
 
-  // Search function
-  // void _onSearchChanged(String query) {
-  //   setState(() {
-  //     _searchQuery = query;
-  //   });
-  // }
+  void _openDetailsScreen(Map<String, dynamic> data) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => SchoolDetailsScreen(data: data)));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('High School'),
+      appBar: CustomAppBar('Madrasha'),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -264,7 +256,7 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search School by Name ',
+                    hintText: 'Search Madrasha by Name ',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -279,7 +271,7 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
               Expanded(
                 child: StreamBuilder(
                   stream: _firestore
-                      .collection('highSchool')
+                      .collection('madrasha')
                       .where('name',
                       isGreaterThanOrEqualTo: _searchQuery)
                       .where('name',
@@ -287,88 +279,39 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
-                    final schools = snapshot.data!.docs;
+                    final docs = snapshot.data!.docs;
                     return ListView.builder(
-                      itemCount: schools.length,
+                      itemCount: docs.length,
                       itemBuilder: (context, index) {
-                        final data = schools[index].data();
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Stack(
+                        final data = docs[index].data();
+                        return ListTile(
+                          onTap: () => _openDetailsScreen(data),
+                          leading: CircleAvatar(
+                            backgroundImage: data['image'] != null
+                                ? NetworkImage(data['image'])
+                                : const AssetImage(
+                                'assets/images/user.png') as ImageProvider,
+                          ),
+                          title: Text(data['name'] ?? ''),
+                          subtitle: Text(data['location'] ?? ''),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              // Background Image
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Center(
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      image: const DecorationImage(
-                                        image:
-                                        AssetImage('assets/icons/high-school.png'),
-                                        fit: BoxFit.contain,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                  ),
-                                ),
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () =>
+                                    _showMadrashaForm(id: docs[index].id, data: data),
                               ),
-                              // Card with transparent background
-                              Card(
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                color: Colors.white.withOpacity(0.85), // Semi-transparent background
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: AppColors.pColor, width: 1.5),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      ListTile(
-                                        leading: data['image'] != null
-                                            ? Image.network(
-                                          data['image'],
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.cover,
-                                        )
-                                            : const Icon(Icons.local_hospital, size: 50),
-                                        title: Text(data['name'],style: TextStyle(fontSize: 18,color: AppColors.pColor,fontWeight: FontWeight.w500),),
-                                        subtitle: Row(
-                                          children: [
-                                            const Icon(Icons.location_on_outlined,color: Colors.red,),
-                                            Text(data['location']),
-                                          ],
-                                        ),
-                                        onTap: () => _openDetailsScreen(data),
-                                        trailing: const Icon(Icons.arrow_forward_ios_sharp),
-                                      ),
-                                      Row(
-                                        children: [
-                                          TextButton(
-                                            onPressed: () => _showSchoolForm(id: schools[index].id, data: data),
-                                            child: const Text('Edit'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () => _deleteSchool(schools[index].id),
-                                            child: const Text('Delete', style: TextStyle(color: Colors.red)),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () => _deleteMadrasha(docs[index].id),
                               ),
                             ],
                           ),
-
                         );
                       },
                     );
@@ -380,12 +323,10 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showSchoolForm(),
-        backgroundColor: AppColors.pColor,
+        onPressed: () => _showMadrashaForm(),
+        backgroundColor: AppColors.pColor.withOpacity(0.8),
         child: const Icon(Icons.add),
       ),
     );
   }
 }
-
-

@@ -6,104 +6,107 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../../../AppColors/AppColors.dart';
 
-class BusCounterDataModel {
+import '../../../../../../AppColors/AppColors.dart';
+
+class AmbulanceDataModel {
   final String id;
-  final String counterName;
+  final String serviceName;
   final String contact;
+  final bool isAvailable;
   final String location;
-  final String destination;
   final String imageUrl;
-  final String webLink; // Add web link to the model
+  final String ambulanceType;
+  final String driverName;
 
-  BusCounterDataModel({
+  AmbulanceDataModel({
     required this.id,
-    required this.counterName,
+    required this.serviceName,
     required this.contact,
-    required this.destination,
+    required this.isAvailable,
     required this.location,
     required this.imageUrl,
-    required this.webLink, // Add web link to constructor
+    required this.ambulanceType,
+    required this.driverName,
   });
 
-  factory BusCounterDataModel.fromFirestore(DocumentSnapshot doc) {
+  factory AmbulanceDataModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    return BusCounterDataModel(
+    return AmbulanceDataModel(
       id: doc.id,
-      counterName: data['serviceName'] ?? '',
+      serviceName: data['serviceName'] ?? '',
       contact: data['contact'] ?? '',
+      isAvailable: data['isAvailable'] ?? false,
       location: data['location'] ?? '',
-      destination: data['destination'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
-      webLink: data['webLink'] ?? '', // Get web link from Firestore
+      ambulanceType: data['ambulanceType'] ?? '',
+      driverName: data['driverName'] ?? '',
     );
   }
 }
 
-class AdminBusCounterServiceScreen extends StatefulWidget {
+class AdminAmbulanceServiceScreen extends StatefulWidget {
   @override
-  _AdminBusCounterServiceScreenState createState() =>
-      _AdminBusCounterServiceScreenState();
+  _AdminAmbulanceServiceScreenState createState() =>
+      _AdminAmbulanceServiceScreenState();
 }
 
-class _AdminBusCounterServiceScreenState
-    extends State<AdminBusCounterServiceScreen> {
-  final List<BusCounterDataModel> allBusCounter = [];
-  List<BusCounterDataModel> filteredBusCounter = [];
+class _AdminAmbulanceServiceScreenState
+    extends State<AdminAmbulanceServiceScreen> {
+  final List<AmbulanceDataModel> allAmbulances = [];
+  List<AmbulanceDataModel> filteredAmbulances = [];
 
   @override
   void initState() {
     super.initState();
-    fetchBusCounter();
+    fetchAmbulances();
   }
 
-  void fetchBusCounter() async {
+  void fetchAmbulances() async {
     final querySnapshot =
-        await FirebaseFirestore.instance.collection('BusCounterList').get();
-    final busCounter = querySnapshot.docs
-        .map((doc) => BusCounterDataModel.fromFirestore(doc))
+        await FirebaseFirestore.instance.collection('AmbulanceList').get();
+    final ambulances = querySnapshot.docs
+        .map((doc) => AmbulanceDataModel.fromFirestore(doc))
         .toList();
     setState(() {
-      allBusCounter.addAll(busCounter);
-      filteredBusCounter.addAll(busCounter);
+      allAmbulances.addAll(ambulances);
+      filteredAmbulances.addAll(ambulances);
     });
   }
 
-  void filterBusCounter(String query) {
+  void filterAmbulances(String query) {
     setState(() {
-      filteredBusCounter = allBusCounter
-          .where((busCounter) => busCounter.counterName
-              .toLowerCase()
-              .contains(query.toLowerCase()))
+      filteredAmbulances = allAmbulances
+          .where((ambulance) =>
+              ambulance.serviceName.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
 
-  void _deleteBusCounter(String id, int index) async {
+  void _deleteAmbulance(String id, int index) async {
     await FirebaseFirestore.instance
-        .collection('BusCounterList')
+        .collection('AmbulanceList')
         .doc(id)
         .delete();
     setState(() {
-      filteredBusCounter.removeAt(index);
+      filteredAmbulances.removeAt(index);
     });
   }
 
-  void _editBusCounter(BusCounterDataModel ambulance) {
+  void _editAmbulance(AmbulanceDataModel ambulance) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return BusCounterForm(
-          busCounter: ambulance,
+        return AmbulanceForm(
+          ambulance: ambulance,
           onSubmit: (updatedAmbulance) {
             setState(() {
-              int index = filteredBusCounter
+              int index = filteredAmbulances
                   .indexWhere((a) => a.id == updatedAmbulance.id);
               if (index != -1) {
-                filteredBusCounter[index] = updatedAmbulance;
-                allBusCounter[allBusCounter.indexWhere(
+                filteredAmbulances[index] = updatedAmbulance;
+                allAmbulances[allAmbulances.indexWhere(
                     (a) => a.id == updatedAmbulance.id)] = updatedAmbulance;
               }
             });
@@ -113,16 +116,16 @@ class _AdminBusCounterServiceScreenState
     );
   }
 
-  void _addBusCounter() {
+  void _addAmbulance() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return BusCounterForm(
+        return AmbulanceForm(
           onSubmit: (newAmbulance) {
             setState(() {
-              filteredBusCounter.add(newAmbulance);
-              allBusCounter.add(newAmbulance);
+              filteredAmbulances.add(newAmbulance);
+              allAmbulances.add(newAmbulance);
             });
           },
         );
@@ -137,19 +140,13 @@ class _AdminBusCounterServiceScreenState
     );
     await launchUrl(launchUri);
   }
-  void _openBookingUrl(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      throw 'Could not launch $url';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Bus Counter'),
+      appBar: CustomAppBar('Ambulance Services'),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addBusCounter,
+        onPressed: _addAmbulance,
         child: const Icon(Icons.add),
         backgroundColor: Colors.teal,
       ),
@@ -158,9 +155,9 @@ class _AdminBusCounterServiceScreenState
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              onChanged: filterBusCounter,
+              onChanged: filterAmbulances,
               decoration: InputDecoration(
-                hintText: "Search Bus Counter...",
+                hintText: "Search Ambulance Services...",
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -170,9 +167,9 @@ class _AdminBusCounterServiceScreenState
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: filteredBusCounter.length,
+              itemCount: filteredAmbulances.length,
               itemBuilder: (context, index) {
-                final busCounter = filteredBusCounter[index];
+                final ambulance = filteredAmbulances[index];
 
                 return Stack(
                   children: [
@@ -184,7 +181,7 @@ class _AdminBusCounterServiceScreenState
                           height: 150,
                           decoration: BoxDecoration(
                             image: const DecorationImage(
-                              image: AssetImage('assets/icons/bus_counter.png'),
+                              image: AssetImage('assets/icons/ambulance.png'),
                               fit: BoxFit.contain,
                             ),
                             borderRadius: BorderRadius.circular(8.0),
@@ -219,7 +216,7 @@ class _AdminBusCounterServiceScreenState
                                 children: [
                                   Center(
                                     child: Text(
-                                      busCounter.counterName,
+                                      ambulance.serviceName,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
@@ -235,7 +232,7 @@ class _AdminBusCounterServiceScreenState
                                         color: AppColors.pColor,
                                       ),
                                       Text(
-                                        busCounter.location,
+                                        ambulance.location,
                                         style: const TextStyle(
                                             color: Colors.black54),
                                       ),
@@ -255,12 +252,12 @@ class _AdminBusCounterServiceScreenState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // Image Section
-                                  busCounter.imageUrl.isNotEmpty
+                                  ambulance.imageUrl.isNotEmpty
                                       ? ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                           child: Image.network(
-                                            busCounter.imageUrl,
+                                            ambulance.imageUrl,
                                             fit: BoxFit.cover,
                                             width: 80,
                                             height: 80,
@@ -286,19 +283,40 @@ class _AdminBusCounterServiceScreenState
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        Text(
+                                          "Driver: ${ambulance.driverName}",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
                                         const SizedBox(
                                           height: 2,
                                         ),
                                         Text(
-                                          "ফোন: ${busCounter.contact}",
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          "গন্তব্যস্থান: ${busCounter.destination}",
+                                          "Type: ${ambulance.ambulanceType}",
                                           style: const TextStyle(fontSize: 15),
+                                        ),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                          "Phone: ${ambulance.contact}",
+                                          style: const TextStyle(fontSize: 15),
+                                        ),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                          ambulance.isAvailable
+                                              ? "Available"
+                                              : "Not Available",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: ambulance.isAvailable
+                                                ? Colors.green
+                                                : Colors.red,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -314,11 +332,11 @@ class _AdminBusCounterServiceScreenState
                                   color: AppColors.pColor.withOpacity(.1)),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   ElevatedButton.icon(
                                     onPressed: () =>
-                                        _makeCall(busCounter.contact),
+                                        _makeCall(ambulance.contact),
                                     icon: const Icon(Icons.call,
                                         color: Colors.white),
                                     label: const Text("Call"),
@@ -328,29 +346,16 @@ class _AdminBusCounterServiceScreenState
                                           horizontal: 16.0),
                                     ),
                                   ),
-                                  ElevatedButton.icon(
-                                    onPressed: () =>
-                                        _openBookingUrl(busCounter.webLink),
-                                    icon: const Icon(Icons.language,
-                                        color: Colors.white),
-                                    label: const Text("Online Book"),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                    ),
-                                  ),
                                   IconButton(
                                     icon: const Icon(Icons.edit,
                                         color: Colors.blue),
-                                    onPressed: () =>
-                                        _editBusCounter(busCounter),
+                                    onPressed: () => _editAmbulance(ambulance),
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.delete,
                                         color: Colors.red),
                                     onPressed: () =>
-                                        _deleteBusCounter(busCounter.id, index),
+                                        _deleteAmbulance(ambulance.id, index),
                                   ),
                                 ],
                               ),
@@ -370,20 +375,25 @@ class _AdminBusCounterServiceScreenState
   }
 }
 
-class BusCounterForm extends StatefulWidget {
-  final BusCounterDataModel? busCounter;
-  final Function(BusCounterDataModel) onSubmit;
+class AmbulanceForm extends StatefulWidget {
+  final AmbulanceDataModel? ambulance;
+  final Function(AmbulanceDataModel) onSubmit;
 
-  BusCounterForm({this.busCounter, required this.onSubmit});
+  AmbulanceForm({this.ambulance, required this.onSubmit});
 
   @override
-  _BusCounterFormState createState() => _BusCounterFormState();
+  _AmbulanceFormState createState() => _AmbulanceFormState();
 }
 
-class _BusCounterFormState extends State<BusCounterForm> {
+class _AmbulanceFormState extends State<AmbulanceForm> {
   final _formKey = GlobalKey<FormState>();
-  String? _serviceName, _contact, _location, _destination, _webLink, _imageUrl;
-
+  String? _serviceName,
+      _contact,
+      _location,
+      _imageUrl,
+      _ambulanceType,
+      _driverName;
+  bool _isAvailable = false;
   final ImagePicker _picker = ImagePicker();
   XFile? _selectedImage;
   bool _isLoading = false;
@@ -401,7 +411,7 @@ class _BusCounterFormState extends State<BusCounterForm> {
     try {
       final ref = FirebaseStorage.instance
           .ref()
-          .child('bus_counter_images')
+          .child('ambulance_images')
           .child('${DateTime.now().toIso8601String()}.jpg');
       await ref.putFile(File(image.path));
       return await ref.getDownloadURL();
@@ -424,43 +434,46 @@ class _BusCounterFormState extends State<BusCounterForm> {
           imageUrl = await _uploadImage(_selectedImage!);
         }
 
-        final busCounterData = {
+        final ambulanceData = {
           'serviceName': _serviceName!,
           'contact': _contact!,
+          'isAvailable': _isAvailable,
           'location': _location!,
           'imageUrl': imageUrl ?? '',
-          'destination': _destination!,
-          'webLink': _webLink!,
+          'ambulanceType': _ambulanceType!,
+          'driverName': _driverName!,
         };
 
-        if (widget.busCounter != null) {
+        if (widget.ambulance != null) {
           // Update existing ambulance
           await FirebaseFirestore.instance
-              .collection('BusCounterList')
-              .doc(widget.busCounter!.id)
-              .update(busCounterData);
-          widget.onSubmit(BusCounterDataModel(
-            id: widget.busCounter!.id,
-            counterName: _serviceName!,
+              .collection('AmbulanceList')
+              .doc(widget.ambulance!.id)
+              .update(ambulanceData);
+          widget.onSubmit(AmbulanceDataModel(
+            id: widget.ambulance!.id,
+            serviceName: _serviceName!,
             contact: _contact!,
+            isAvailable: _isAvailable,
             location: _location!,
             imageUrl: imageUrl ?? '',
-            destination: _destination!,
-            webLink: _webLink!,
+            ambulanceType: _ambulanceType!,
+            driverName: _driverName!,
           ));
         } else {
           // Add new ambulance
           final docRef = await FirebaseFirestore.instance
-              .collection('BusCounterList')
-              .add(busCounterData);
-          widget.onSubmit(BusCounterDataModel(
+              .collection('AmbulanceList')
+              .add(ambulanceData);
+          widget.onSubmit(AmbulanceDataModel(
             id: docRef.id,
-            counterName: _serviceName!,
+            serviceName: _serviceName!,
             contact: _contact!,
+            isAvailable: _isAvailable,
             location: _location!,
             imageUrl: imageUrl ?? '',
-            destination: _destination!,
-            webLink: _webLink!,
+            ambulanceType: _ambulanceType!,
+            driverName: _driverName!,
           ));
         }
         Navigator.of(context).pop();
@@ -491,49 +504,46 @@ class _BusCounterFormState extends State<BusCounterForm> {
               if (_isLoading) const CircularProgressIndicator(),
               if (!_isLoading) ...[
                 TextFormField(
-                  initialValue: widget.busCounter?.counterName,
+                  initialValue: widget.ambulance?.serviceName,
                   decoration: AppInputDecoration('Ambulance Name'),
                   validator: (value) =>
                       value!.isEmpty ? 'Please enter a Ambulance name' : null,
                   onSaved: (value) => _serviceName = value,
                 ),
-                SizedBox(
-                  height: 5,
-                ),
                 TextFormField(
-                  initialValue: widget.busCounter?.contact,
+                  initialValue: widget.ambulance?.contact,
                   decoration: AppInputDecoration('Contact'),
                   validator: (value) =>
                       value!.isEmpty ? 'Please enter a contact number' : null,
                   onSaved: (value) => _contact = value,
                 ),
-                SizedBox(
-                  height: 5,
-                ),
                 TextFormField(
-                  initialValue: widget.busCounter?.destination,
-                  decoration: AppInputDecoration('Destination'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter Destination' : null,
-                  onSaved: (value) => _destination = value,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                TextFormField(
-                  initialValue: widget.busCounter?.location,
+                  initialValue: widget.ambulance?.location,
                   decoration: AppInputDecoration('Location'),
                   validator: (value) =>
                       value!.isEmpty ? 'Please enter a location' : null,
                   onSaved: (value) => _location = value,
                 ),
-                const SizedBox(height: 8),
                 TextFormField(
-                  initialValue: widget.busCounter?.webLink,
-                  decoration: AppInputDecoration('Booking URL'),
+                  initialValue: widget.ambulance?.ambulanceType,
+                  decoration: AppInputDecoration('Ambulance Type'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter the booking URL' : null,
-                  onSaved: (value) => _webLink = value,
+                      value!.isEmpty ? 'Please enter ambulance type' : null,
+                  onSaved: (value) => _ambulanceType = value,
+                ),
+                TextFormField(
+                  initialValue: widget.ambulance?.driverName,
+                  decoration: AppInputDecoration('Driver Name'),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Please enter driver name' : null,
+                  onSaved: (value) => _driverName = value,
+                ),
+                SwitchListTile(
+                  title: const Text("Available"),
+                  value: _isAvailable,
+                  onChanged: (value) => setState(() {
+                    _isAvailable = value;
+                  }),
                 ),
                 const SizedBox(height: 8),
                 _selectedImage != null
@@ -541,10 +551,10 @@ class _BusCounterFormState extends State<BusCounterForm> {
                         File(_selectedImage!.path),
                         height: 150,
                       )
-                    : widget.busCounter?.imageUrl != null &&
-                            widget.busCounter!.imageUrl.isNotEmpty
+                    : widget.ambulance?.imageUrl != null &&
+                            widget.ambulance!.imageUrl.isNotEmpty
                         ? Image.network(
-                            widget.busCounter!.imageUrl,
+                            widget.ambulance!.imageUrl,
                             height: 150,
                           )
                         : const Icon(Icons.image, size: 100),
@@ -559,14 +569,13 @@ class _BusCounterFormState extends State<BusCounterForm> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.pColor.withOpacity(.8),
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      // Padding for the button
+                      padding: const EdgeInsets.symmetric(vertical: 12.0), // Padding for the button
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                     onPressed: _submitForm,
-                    child: Text(widget.busCounter != null ? "Update" : "Add"),
+                    child: Text(widget.ambulance != null ? "Update" : "Add"),
                   ),
                 ),
               ],

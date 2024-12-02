@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../../../AppColors/AppColors.dart';
-import '../../../../Styles/TextContainerStyle.dart';
-import '../../../../Widgets/information_category_list_widget.dart';
+import '../../../../../AppColors/AppColors.dart';
+import '../../../../../Styles/TextContainerStyle.dart';
+import '../../../../../Widgets/information_category_list_widget.dart';
+import 'AdminAmbulanceScreen/admin_ambulance_screen.dart';
+import 'AdminAnimalDoctorScreen/admin_animal_doctor_screen.dart';
+import 'AdminBloodDonnerListScreen/admin_blood_doner_screen.dart';
+import 'AdminDoctorScreen/admin_doctor_screen.dart';
+import 'AdminFireserviceScreen/admin_fire_service_screen.dart';
+import 'AdminHospitalScreen/admin_hospital_screen.dart';
+import 'AdminPoliceListScreen/admin_police_screen.dart';
+import 'AdminPolliBiddutListScreen/admin_polli_biddut_screen.dart';
 
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEmargencyServiceCategory/AdminAmbulanceScreen/admin_ambulance_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEmargencyServiceCategory/AdminAnimalDoctorScreen/admin_animal_doctor_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEmargencyServiceCategory/AdminBloodDonnerListScreen/admin_blood_doner_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEmargencyServiceCategory/AdminDoctorScreen/admin_doctor_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEmargencyServiceCategory/AdminFireserviceScreen/admin_fire_service_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEmargencyServiceCategory/AdminHospitalScreen/admin_hospital_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEmargencyServiceCategory/AdminPoliceListScreen/admin_police_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEmargencyServiceCategory/AdminPolliBiddutListScreen/admin_polli_biddut_screen.dart';
-
-class EmargencyServiceCategory extends StatelessWidget {
-  const EmargencyServiceCategory({super.key});
+class AdminEmargencyServiceCategory extends StatelessWidget {
+  const AdminEmargencyServiceCategory({super.key});
 
   @override
   Widget build(BuildContext context) {

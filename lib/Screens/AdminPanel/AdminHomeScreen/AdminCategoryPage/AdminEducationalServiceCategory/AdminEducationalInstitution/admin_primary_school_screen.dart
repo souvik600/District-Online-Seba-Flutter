@@ -1,13 +1,15 @@
 import 'dart:io';
 import 'package:district_online_service/AppColors/AppColors.dart';
-import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalInstitution/school_details_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/school_details_screen.dart';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../../Styles/BackGroundStyle.dart';
+
+import '../../../../../../Styles/BackGroundStyle.dart';
+
 
 class AdminPrimarySchoolScreen extends StatefulWidget {
   @override

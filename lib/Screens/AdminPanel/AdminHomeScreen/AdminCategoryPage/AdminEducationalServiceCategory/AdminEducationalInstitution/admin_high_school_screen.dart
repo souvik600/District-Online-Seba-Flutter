@@ -1,20 +1,23 @@
 import 'dart:io';
 import 'package:district_online_service/AppColors/AppColors.dart';
-import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalInstitution/school_details_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/school_details_screen.dart';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../../Styles/BackGroundStyle.dart';
 
-class AdminCollegeScreen extends StatefulWidget {
+import '../../../../../../Styles/BackGroundStyle.dart';
+
+
+class AdminHighSchoolScreen extends StatefulWidget {
   @override
-  _AdminCollegeScreenState createState() => _AdminCollegeScreenState();
+  _AdminHighSchoolScreenState createState() =>
+      _AdminHighSchoolScreenState();
 }
 
-class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
+class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
@@ -32,8 +35,8 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
 
   XFile? _selectedImage;
 
-  // Add college
-  Future<void> _addCollege() async {
+  // Add school
+  Future<void> _addSchool() async {
     final data = {
       'name': _nameController.text.trim(),
       'location': _locationController.text.trim(),
@@ -44,7 +47,7 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
       'establishedYear': _establishedYearController.text.trim(),
     };
 
-    final docRef = await _firestore.collection('college').add(data);
+    final docRef = await _firestore.collection('highSchool').add(data);
     if (_selectedImage != null) {
       final imageUrl = await _uploadImage(docRef.id);
       await docRef.update({'image': imageUrl});
@@ -53,8 +56,8 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
     Navigator.of(context).pop(); // Close bottom sheet
   }
 
-  // Update college
-  Future<void> _updateCollege(String id) async {
+  // Update school
+  Future<void> _updateSchool(String id) async {
     final data = {
       'name': _nameController.text.trim(),
       'location': _locationController.text.trim(),
@@ -65,11 +68,14 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
       'establishedYear': _establishedYearController.text.trim(),
     };
 
-    await _firestore.collection('college').doc(id).update(data);
+    await _firestore.collection('highSchool').doc(id).update(data);
 
     if (_selectedImage != null) {
       final imageUrl = await _uploadImage(id);
-      await _firestore.collection('college').doc(id).update({'image': imageUrl});
+      await _firestore
+          .collection('highSchool')
+          .doc(id)
+          .update({'image': imageUrl});
     }
 
     Navigator.of(context).pop(); // Close bottom sheet
@@ -77,7 +83,7 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
 
   // Upload image
   Future<String> _uploadImage(String id) async {
-    final ref = _storage.ref().child('college_images/$id.jpg');
+    final ref = _storage.ref().child('high_school_images/$id.jpg');
     await ref.putFile(File(_selectedImage!.path));
     return await ref.getDownloadURL();
   }
@@ -91,13 +97,13 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
     });
   }
 
-  // Delete college
-  Future<void> _deleteCollege(String id) async {
-    await _firestore.collection('college').doc(id).delete();
+  // Delete school
+  Future<void> _deleteSchool(String id) async {
+    await _firestore.collection('highSchool').doc(id).delete();
   }
 
-  // Show form for adding/editing college
-  void _showCollegeForm({String? id, Map<String, dynamic>? data}) {
+  // Show form for adding/editing school
+  void _showSchoolForm({String? id, Map<String, dynamic>? data}) {
     if (data == null) {
       _nameController.clear();
       _locationController.clear();
@@ -130,7 +136,7 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    data == null ? 'Add College' : 'Edit College',
+                    data == null ? 'Add School' : 'Edit School',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16.0),
@@ -163,12 +169,12 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _nameController,
-                    decoration: AppInputDecoration('College Name'),
+                    decoration: AppInputDecoration('School Name'),
                   ),
                   const SizedBox(height: 8.0),
                   TextField(
                     controller: _locationController,
-                    decoration: AppInputDecoration('College Location'),
+                    decoration: AppInputDecoration('School Location'),
                   ),
                   const SizedBox(height: 8.0),
                   TextField(
@@ -198,15 +204,16 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
                     decoration: AppInputDecoration('Email'),
                     keyboardType: TextInputType.emailAddress,
                   ),
+
                   const SizedBox(height: 16.0),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
                         if (data == null) {
-                          _addCollege();
+                          _addSchool();
                         } else {
-                          _updateCollege(id!);
+                          _updateSchool(id!);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -217,7 +224,7 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
                         ),
                       ),
                       child: Text(
-                        data == null ? 'Add College' : 'Update College',
+                        data == null ? 'Add School' : 'Update School',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -233,16 +240,21 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
       },
     );
   }
-
   void _openDetailsScreen(Map<String, dynamic> data) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => SchoolDetailsScreen(data: data)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => SchoolDetailsScreen(data: data)));
   }
+
+  // Search function
+  // void _onSearchChanged(String query) {
+  //   setState(() {
+  //     _searchQuery = query;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('College'),
+      appBar: CustomAppBar('High School'),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -254,7 +266,7 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search College by Name ',
+                    hintText: 'Search School by Name ',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -269,7 +281,7 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
               Expanded(
                 child: StreamBuilder(
                   stream: _firestore
-                      .collection('college')
+                      .collection('highSchool')
                       .where('name',
                       isGreaterThanOrEqualTo: _searchQuery)
                       .where('name',
@@ -277,39 +289,88 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const Center(child: CircularProgressIndicator());
                     }
-                    final docs = snapshot.data!.docs;
+                    final schools = snapshot.data!.docs;
                     return ListView.builder(
-                      itemCount: docs.length,
+                      itemCount: schools.length,
                       itemBuilder: (context, index) {
-                        final data = docs[index].data();
-                        return ListTile(
-                          onTap: () => _openDetailsScreen(data),
-                          leading: CircleAvatar(
-                            backgroundImage: data['image'] != null
-                                ? NetworkImage(data['image'])
-                                : const AssetImage(
-                                'assets/images/user.png') as ImageProvider,
-                          ),
-                          title: Text(data['name'] ?? ''),
-                          subtitle: Text(data['location'] ?? ''),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
+                        final data = schools[index].data();
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Stack(
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () =>
-                                    _showCollegeForm(id: docs[index].id, data: data),
+                              // Background Image
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Center(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      image: const DecorationImage(
+                                        image:
+                                        AssetImage('assets/icons/high-school.png'),
+                                        fit: BoxFit.contain,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () => _deleteCollege(docs[index].id),
+                              // Card with transparent background
+                              Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                color: Colors.white.withOpacity(0.85), // Semi-transparent background
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.pColor, width: 1.5),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        leading: data['image'] != null
+                                            ? Image.network(
+                                          data['image'],
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        )
+                                            : const Icon(Icons.local_hospital, size: 50),
+                                        title: Text(data['name'],style: TextStyle(fontSize: 18,color: AppColors.pColor,fontWeight: FontWeight.w500),),
+                                        subtitle: Row(
+                                          children: [
+                                            const Icon(Icons.location_on_outlined,color: Colors.red,),
+                                            Text(data['location']),
+                                          ],
+                                        ),
+                                        onTap: () => _openDetailsScreen(data),
+                                        trailing: const Icon(Icons.arrow_forward_ios_sharp),
+                                      ),
+                                      Row(
+                                        children: [
+                                          TextButton(
+                                            onPressed: () => _showSchoolForm(id: schools[index].id, data: data),
+                                            child: const Text('Edit'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () => _deleteSchool(schools[index].id),
+                                            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),
+
                         );
                       },
                     );
@@ -321,10 +382,12 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showCollegeForm(),
-        backgroundColor: AppColors.pColor.withOpacity(0.8),
+        onPressed: () => _showSchoolForm(),
+        backgroundColor: AppColors.pColor,
         child: const Icon(Icons.add),
       ),
     );
   }
 }
+
+

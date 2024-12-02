@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../../../AppColors/AppColors.dart';
-import '../../../../Styles/TextContainerStyle.dart';
-import '../../../../Widgets/information_category_list_widget.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/admin_collage_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/admin_high_school_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/admin_madrasha_screen.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/admin_primary_school_screen.dart';
+import '../../../../../AppColors/AppColors.dart';
+import '../../../../../Styles/TextContainerStyle.dart';
+import '../../../../../Widgets/information_category_list_widget.dart';
+import '../../../../SplashScreen.dart';
 
-class EducationalServiceCategory extends StatelessWidget {
-  const EducationalServiceCategory({super.key});
+
+
+class WorkerServiceCategory extends StatelessWidget {
+  const WorkerServiceCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,7 @@ class EducationalServiceCategory extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 8),
         child: Column(
           children: [
-            TextContainerStyle("শিক্ষা প্রতিষ্ঠান...",AppColors.pColor),
+            TextContainerStyle("মিস্ত্রি/শ্র‌মিক...",AppColors.pColor),
             Row(
               mainAxisAlignment:
               MainAxisAlignment.spaceAround,
@@ -33,11 +32,11 @@ class EducationalServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              AdminPrimarySchoolScreen(),
+                              SplashScreen(),
                         ));
                   },
-                  'assets/icons/primary-school.png',
-                  'প্রাইমারী-স্কুল',
+                  'assets/icons/electrician(1).png',
+                  'ইলেকট্রিশিয়ান',
                 ),
                 AllInfromationCategoryList(
                       () {
@@ -45,11 +44,11 @@ class EducationalServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              AdminHighSchoolScreen(),
+                              SplashScreen(),
                         ));
                   },
-                  'assets/icons/school.png',
-                  "উচ্চ বিদ্যালয়",
+                  'assets/icons/plumber.png',
+                  "প্লাম্বার",
                 ),
                 AllInfromationCategoryList(
                       () {
@@ -57,11 +56,11 @@ class EducationalServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              AdminCollegeScreen(),
+                              SplashScreen(),
                         ));
                   },
-                  'assets/icons/college.png',
-                  "কলেজ",
+                  'assets/icons/bricklayer.png',
+                  "রাজ মিস্ত্রি",
                 ),
                 AllInfromationCategoryList(
                       () {
@@ -69,11 +68,11 @@ class EducationalServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              AdminMadrashaScreen(),
+                              SplashScreen(),
                         ));
                   },
-                  'assets/icons/mosque.png',
-                  "মাদ্রাসা",
+                  'assets/icons/chisel.png',
+                  "কাঠমিস্ত্রি",
                 ),
               ],
             ),

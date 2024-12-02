@@ -1,46 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../../../AppColors/AppColors.dart';
-import '../../../../../Styles/TextContainerStyle.dart';
 
-class PolliBiddutModels {
-  final String id;
-  final String headingName;
-  final String designation;
+import '../../../../../../AppColors/AppColors.dart';
+import '../../../../../../Styles/ElevatedBottonStyle.dart';
+import '../../../../../../Styles/TextContainerStyle.dart';
+
+class PoliceDataModels {
+  final String id; // Add ID field
   final String location;
+  final String name;
+  final String designation;
   final String contact;
+  final String email;
   bool isCall;
 
-  PolliBiddutModels({
+  PoliceDataModels({
     required this.id,
-    required this.headingName,
-    required this.designation,
     required this.location,
+    required this.name,
+    required this.designation,
+    required this.email,
     required this.contact,
     this.isCall = false,
   });
 
-  factory PolliBiddutModels.fromFirestore(DocumentSnapshot doc) {
+  factory PoliceDataModels.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    return PolliBiddutModels(
+    return PoliceDataModels(
       id: doc.id,
-      headingName: data['name'] ?? '',
-      designation: data['designation'] ?? '',
-      contact: data['contact'] ?? '',
+      // Assign document ID
       location: data['location'] ?? '',
+      name: data['name'] ?? '',
+      designation: data['designation'] ?? '',
+      email: data['email'] ?? '',
+      contact: data['contact'] ?? '',
     );
   }
 }
 
-class AdminPolliBiddutScreen extends StatefulWidget {
+class AdminPoliceScreen extends StatefulWidget {
   @override
-  _AdminPolliBiddutScreenState createState() => _AdminPolliBiddutScreenState();
+  _AdminPoliceScreenState createState() => _AdminPoliceScreenState();
 }
 
-class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
-  final List<PolliBiddutModels> allCategories = [];
-  List<PolliBiddutModels> filteredCategories = [];
+class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
+  final List<PoliceDataModels> allCategories = [];
+  List<PoliceDataModels> filteredCategories = [];
 
   @override
   void initState() {
@@ -49,8 +55,11 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
   }
 
   void fetchCategories() async {
-    final querySnapshot = await FirebaseFirestore.instance.collection('PolliBiddut').get();
-    final categories = querySnapshot.docs.map((doc) => PolliBiddutModels.fromFirestore(doc)).toList();
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('PoliceList').get();
+    final categories = querySnapshot.docs
+        .map((doc) => PoliceDataModels.fromFirestore(doc))
+        .toList();
     setState(() {
       allCategories.addAll(categories);
       filteredCategories.addAll(categories);
@@ -60,7 +69,8 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
   void filterCategories(String query) {
     setState(() {
       filteredCategories = allCategories
-          .where((category) => category.headingName.toLowerCase().contains(query.toLowerCase()))
+          .where((category) =>
+              category.location.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -113,7 +123,6 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
       },
     );
   }
-
   void _makePhoneCall(String phoneNo) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: phoneNo);
     if (await canLaunch(phoneUri.toString())) {
@@ -128,7 +137,8 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('আপনি কি নিশ্চিত যে আপনি এই তথ্যটি মুছে ফেলতে চান?'),
+          title:
+              const Text('আপনি কি নিশ্চিত যে আপনি এই তথ্যটি মুছে ফেলতে চান?'),
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -146,7 +156,10 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
             TextButton(
               child: const Text('মুছে ফেলুন'),
               onPressed: () async {
-                await FirebaseFirestore.instance.collection('PolliBiddut').doc(id).delete();
+                await FirebaseFirestore.instance
+                    .collection('PoliceList')
+                    .doc(id)
+                    .delete();
                 setState(() {
                   filteredCategories.removeAt(index);
                 });
@@ -159,20 +172,21 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
     );
   }
 
-  void _editCategory(PolliBiddutModels category) {
+  void _editCategory(PoliceDataModels category) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return PolliBiddutForm(
+        return PoliceForm(
           category: category,
           onSubmit: (updatedCategory) {
             setState(() {
-              int index = filteredCategories.indexWhere((cat) => cat.id == updatedCategory.id);
+              int index = filteredCategories
+                  .indexWhere((cat) => cat.id == updatedCategory.id);
               if (index != -1) {
                 filteredCategories[index] = updatedCategory;
-                allCategories[allCategories.indexWhere((cat) => cat.id == updatedCategory.id)] =
-                    updatedCategory;
+                allCategories[allCategories.indexWhere(
+                    (cat) => cat.id == updatedCategory.id)] = updatedCategory;
               }
             });
           },
@@ -186,7 +200,7 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return PolliBiddutForm(
+        return PoliceForm(
           onSubmit: (newCategory) {
             setState(() {
               filteredCategories.add(newCategory);
@@ -204,7 +218,7 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.pColor,
         title: const Text(
-          "Polli Biddut",
+          "Police",
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w500,
@@ -245,7 +259,7 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
             child: ListView.builder(
               itemCount: filteredCategories.length,
               itemBuilder: (context, index) {
-                return PolliBiddutListItem(
+                return PiliceListItem(
                   category: filteredCategories[index],
                   onMakeCall: () {
                     _showCallDialog(filteredCategories[index].contact);
@@ -266,13 +280,13 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
   }
 }
 
-class PolliBiddutListItem extends StatelessWidget {
-  final PolliBiddutModels category;
+class PiliceListItem extends StatelessWidget {
+  final PoliceDataModels category;
   final VoidCallback onMakeCall;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
 
-  PolliBiddutListItem({
+  PiliceListItem({
     required this.category,
     required this.onMakeCall,
     required this.onDelete,
@@ -299,7 +313,7 @@ class PolliBiddutListItem extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        'assets/logos/pollibiddutLogo.png',
+                        'assets/logos/PoliceLogo.png',
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -313,73 +327,43 @@ class PolliBiddutListItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(child: TextContainerStyle(category.headingName, Colors.deepPurple)),
+                      Center(
+                          child:TextContainerStyle(category.location,const Color(0xFF0E4399))
+                      ),
                       Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "ধরন : ",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'kalpurush',
-                                  ),
-                                ),
-                                Text(
-                                  category.designation,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'kalpurush',
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              category.name,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'kalpurush',
+                              ),
+                            ),
+                            Text(
+                              category.designation,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'kalpurush',
+                              ),
+
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  " অবস্থান: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 20,
-                                    fontFamily: 'kalpurush',
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Text(
-                                    category.location,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontFamily: 'kalpurush',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text(
                                   " মোবাইল: ",
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                     fontSize: 20,
                                     fontFamily: 'kalpurush',
                                     color: Colors.black,
                                   ),
+
                                 ),
                                 Text(
                                   category.contact,
@@ -387,7 +371,29 @@ class PolliBiddutListItem extends StatelessWidget {
                                     fontSize: 19,
                                     color: Colors.black,
                                     fontFamily: 'kalpurush',
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text(
+                                  " ইমেইল : ",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                    fontFamily: 'kalpurush',
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  category.email,
+                                  style: const TextStyle(
+                                    fontSize: 19,
+                                    color: Colors.blueGrey,
+                                    fontFamily: 'kalpurush',
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
@@ -400,8 +406,8 @@ class PolliBiddutListItem extends StatelessWidget {
                 ),
               ],
             ),
-            OverflowBar(
-              alignment: MainAxisAlignment.spaceBetween,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Center(
                   child: ElevatedButton.icon(
@@ -424,7 +430,6 @@ class PolliBiddutListItem extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-
                     ElevatedButton.icon(
                       onPressed: onDelete,
                       icon: const Icon(
@@ -459,7 +464,6 @@ class PolliBiddutListItem extends StatelessWidget {
                     ),
                   ],
                 ),
-
               ],
             ),
           ],
@@ -469,26 +473,27 @@ class PolliBiddutListItem extends StatelessWidget {
   }
 }
 
-class PolliBiddutForm extends StatefulWidget {
-  final PolliBiddutModels? category;
-  final Function(PolliBiddutModels) onSubmit;
+class PoliceForm extends StatefulWidget {
+  final PoliceDataModels? category;
+  final Function(PoliceDataModels) onSubmit;
 
-  PolliBiddutForm({this.category, required this.onSubmit});
+  PoliceForm({this.category, required this.onSubmit});
 
   @override
-  _PolliBiddutFormState createState() => _PolliBiddutFormState();
+  _PoliceFormState createState() => _PoliceFormState();
 }
 
-class _PolliBiddutFormState extends State<PolliBiddutForm> {
+class _PoliceFormState extends State<PoliceForm> {
   final _formKey = GlobalKey<FormState>();
-  String? _headingName, _contact, _designation, _location;
+  String? _name, _email, _contact, _designation, _location;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     if (widget.category != null) {
-      _headingName = widget.category!.headingName;
+      _name = widget.category!.name;
+      _email = widget.category!.email;
       _contact = widget.category!.contact;
       _designation = widget.category!.designation;
       _location = widget.category!.location;
@@ -503,32 +508,40 @@ class _PolliBiddutFormState extends State<PolliBiddutForm> {
       });
 
       if (widget.category == null) {
-        DocumentReference docRef = await FirebaseFirestore.instance.collection('PolliBiddut').add({
-          'name': _headingName,
-          'designation': _designation,
+        DocumentReference docRef =
+            await FirebaseFirestore.instance.collection('PoliceList').add({
+          'name': _name,
+          'email': _email,
           'contact': _contact,
           'location': _location,
+          'designation': _designation,
         });
-        widget.onSubmit(PolliBiddutModels(
+        widget.onSubmit(PoliceDataModels(
           id: docRef.id,
-          headingName: _headingName!,
+          name: _name!,
           designation: _designation!,
           contact: _contact!,
           location: _location!,
+          email: _email!,
         ));
       } else {
-        await FirebaseFirestore.instance.collection('PolliBiddut').doc(widget.category!.id).update({
-          'name': _headingName,
-          'designation': _designation,
+        await FirebaseFirestore.instance
+            .collection('PoliceList')
+            .doc(widget.category!.id)
+            .update({
+          'name': _name,
+          'email': _email,
           'contact': _contact,
           'location': _location,
+          'designation': _designation,
         });
-        widget.onSubmit(PolliBiddutModels(
+        widget.onSubmit(PoliceDataModels(
           id: widget.category!.id,
-          headingName: _headingName!,
+          name: _name!,
           designation: _designation!,
           contact: _contact!,
           location: _location!,
+          email: _email!,
         ));
       }
 
@@ -569,59 +582,79 @@ class _PolliBiddutFormState extends State<PolliBiddutForm> {
           ),
           child: Form(
             key: _formKey,
-            child: Column(
-              children: [
-                const SizedBox(height: 5),
-                TextContainerStyle("FillUp Polli Biddut Form", AppColors.pColor),
-                const SizedBox(height: 10),
-                TextFormField(
-                  initialValue: _headingName,
-                  decoration: _inputDecoration('Heading Name'),
-                  validator: (value) {
-                    if (value!.isEmpty) return 'Please enter your heading name';
-                    return null;
-                  },
-                  onSaved: (value) => _headingName = value,
+            child: SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.pColor, width: 2),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  initialValue: _designation,
-                  decoration: _inputDecoration('Designation'),
-                  onSaved: (value) => _designation = value,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  initialValue: _contact,
-                  decoration: _inputDecoration('Contact'),
-                  validator: (value) {
-                    if (value!.isEmpty) return 'Please enter contact';
-                    return null;
-                  },
-                  onSaved: (value) => _contact = value,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  initialValue: _location,
-                  decoration: _inputDecoration('Location'),
-                  validator: (value) {
-                    if (value!.isEmpty) return 'Please enter location';
-                    return null;
-                  },
-                  onSaved: (value) => _location = value,
-                ),
-                const SizedBox(height: 20),
-                _isLoading
-                    ? const CircularProgressIndicator()
-                    : ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text("Submit"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.pColor,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 5),
+                      TextContainerStyle(
+                          "FillUp Police Form", AppColors.pColor),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        initialValue: _name,
+                        decoration: _inputDecoration('Name'),
+                        validator: (value) {
+                          if (value!.isEmpty) return 'Please enter your name';
+                          return null;
+                        },
+                        onSaved: (value) => _name = value,
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        initialValue: _designation,
+                        decoration: _inputDecoration('Designation'),
+                        onSaved: (value) => _designation = value,
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        initialValue: _email,
+                        decoration: _inputDecoration('Email'),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) return 'Please enter your email';
+                          return null;
+                        },
+                        onSaved: (value) => _email = value,
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        initialValue: _contact,
+                        decoration: _inputDecoration('Contact'),
+                        validator: (value) {
+                          if (value!.isEmpty) return 'Please enter contact';
+                          return null;
+                        },
+                        onSaved: (value) => _contact = value,
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        initialValue: _location,
+                        decoration: _inputDecoration('Location'),
+                        validator: (value) {
+                          if (value!.isEmpty)
+                            return 'Please enter your location';
+                          return null;
+                        },
+                        onSaved: (value) => _location = value,
+                      ),
+                      const SizedBox(height: 20),
+                      _isLoading
+                          ? const CircularProgressIndicator()
+                          : ElevatedButtonStyle(
+                              text: "Submit", onPressed: _submitForm),
+                      const SizedBox(
+                        height: 10,
+                      )
+                    ],
                   ),
                 ),
-                const SizedBox(height: 10),
-              ],
+              ),
             ),
           ),
         ),

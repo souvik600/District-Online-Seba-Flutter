@@ -1,47 +1,48 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../../../AppColors/AppColors.dart';
-import '../../../../../Styles/TextContainerStyle.dart';
 
-class FireServiceModels{
+import '../../../../../../AppColors/AppColors.dart';
+import '../../../../../../Styles/TextContainerStyle.dart';
+
+
+class PolliBiddutModels {
   final String id;
-  final String name;
+  final String headingName;
   final String designation;
   final String location;
   final String contact;
   bool isCall;
 
-  FireServiceModels({
-      required this.id,
-      required this.name,
-      required this.designation,
-      required this.location,
-      required this.contact,
-      this.isCall = false,
+  PolliBiddutModels({
+    required this.id,
+    required this.headingName,
+    required this.designation,
+    required this.location,
+    required this.contact,
+    this.isCall = false,
   });
 
-  factory FireServiceModels.fromFirestore(DocumentSnapshot doc) {
+  factory PolliBiddutModels.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    return FireServiceModels(
+    return PolliBiddutModels(
       id: doc.id,
-      name: data['name'] ?? '',
+      headingName: data['name'] ?? '',
       designation: data['designation'] ?? '',
       contact: data['contact'] ?? '',
       location: data['location'] ?? '',
     );
   }
 }
-class AdminFireServiceScreen extends StatefulWidget {
-  const AdminFireServiceScreen({super.key});
 
+class AdminPolliBiddutScreen extends StatefulWidget {
   @override
-  State<AdminFireServiceScreen> createState() => _AdminFireServiceScreenState();
+  _AdminPolliBiddutScreenState createState() => _AdminPolliBiddutScreenState();
 }
 
-class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
-  final List<FireServiceModels> allCategories = [];
-  List<FireServiceModels> filteredCategories = [];
+class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
+  final List<PolliBiddutModels> allCategories = [];
+  List<PolliBiddutModels> filteredCategories = [];
 
   @override
   void initState() {
@@ -50,8 +51,8 @@ class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
   }
 
   void fetchCategories() async {
-    final querySnapshot = await FirebaseFirestore.instance.collection('FireService').get();
-    final categories = querySnapshot.docs.map((doc) => FireServiceModels.fromFirestore(doc)).toList();
+    final querySnapshot = await FirebaseFirestore.instance.collection('PolliBiddut').get();
+    final categories = querySnapshot.docs.map((doc) => PolliBiddutModels.fromFirestore(doc)).toList();
     setState(() {
       allCategories.addAll(categories);
       filteredCategories.addAll(categories);
@@ -61,7 +62,7 @@ class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
   void filterCategories(String query) {
     setState(() {
       filteredCategories = allCategories
-          .where((category) => category.name.toLowerCase().contains(query.toLowerCase()))
+          .where((category) => category.headingName.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -147,7 +148,7 @@ class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
             TextButton(
               child: const Text('মুছে ফেলুন'),
               onPressed: () async {
-                await FirebaseFirestore.instance.collection('FireService').doc(id).delete();
+                await FirebaseFirestore.instance.collection('PolliBiddut').doc(id).delete();
                 setState(() {
                   filteredCategories.removeAt(index);
                 });
@@ -159,12 +160,13 @@ class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
       },
     );
   }
-  void _editCategory(FireServiceModels category) {
+
+  void _editCategory(PolliBiddutModels category) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return FireServiceForm(
+        return PolliBiddutForm(
           category: category,
           onSubmit: (updatedCategory) {
             setState(() {
@@ -186,7 +188,7 @@ class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return FireServiceForm(
+        return PolliBiddutForm(
           onSubmit: (newCategory) {
             setState(() {
               filteredCategories.add(newCategory);
@@ -198,14 +200,13 @@ class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.pColor,
         title: const Text(
-          "Fire Service",
+          "Polli Biddut",
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w500,
@@ -246,7 +247,7 @@ class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
             child: ListView.builder(
               itemCount: filteredCategories.length,
               itemBuilder: (context, index) {
-                return FireServiceListItem(
+                return PolliBiddutListItem(
                   category: filteredCategories[index],
                   onMakeCall: () {
                     _showCallDialog(filteredCategories[index].contact);
@@ -266,18 +267,20 @@ class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
     );
   }
 }
-class FireServiceListItem extends StatelessWidget {
-  final FireServiceModels category;
+
+class PolliBiddutListItem extends StatelessWidget {
+  final PolliBiddutModels category;
   final VoidCallback onMakeCall;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
 
-  FireServiceListItem({
+  PolliBiddutListItem({
     required this.category,
     required this.onMakeCall,
     required this.onDelete,
     required this.onEdit,
   });
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -298,7 +301,7 @@ class FireServiceListItem extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        'assets/logos/fireservicelogo.png',
+                        'assets/logos/pollibiddutLogo.png',
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -312,7 +315,7 @@ class FireServiceListItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(child: TextContainerStyle(category.name, Colors.deepPurple)),
+                      Center(child: TextContainerStyle(category.headingName, Colors.deepPurple)),
                       Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Column(
@@ -467,26 +470,27 @@ class FireServiceListItem extends StatelessWidget {
     );
   }
 }
-class FireServiceForm extends StatefulWidget {
-  final FireServiceModels? category;
-  final Function(FireServiceModels) onSubmit;
 
-  FireServiceForm({this.category, required this.onSubmit});
+class PolliBiddutForm extends StatefulWidget {
+  final PolliBiddutModels? category;
+  final Function(PolliBiddutModels) onSubmit;
+
+  PolliBiddutForm({this.category, required this.onSubmit});
 
   @override
-  _FireServiceFormState createState() => _FireServiceFormState();
+  _PolliBiddutFormState createState() => _PolliBiddutFormState();
 }
 
-class _FireServiceFormState extends State<FireServiceForm> {
+class _PolliBiddutFormState extends State<PolliBiddutForm> {
   final _formKey = GlobalKey<FormState>();
-  String? _name, _contact, _designation, _location;
+  String? _headingName, _contact, _designation, _location;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     if (widget.category != null) {
-      _name = widget.category!.name;
+      _headingName = widget.category!.headingName;
       _contact = widget.category!.contact;
       _designation = widget.category!.designation;
       _location = widget.category!.location;
@@ -501,29 +505,29 @@ class _FireServiceFormState extends State<FireServiceForm> {
       });
 
       if (widget.category == null) {
-        DocumentReference docRef = await FirebaseFirestore.instance.collection('FireService').add({
-          'name': _name,
+        DocumentReference docRef = await FirebaseFirestore.instance.collection('PolliBiddut').add({
+          'name': _headingName,
           'designation': _designation,
           'contact': _contact,
           'location': _location,
         });
-        widget.onSubmit(FireServiceModels(
+        widget.onSubmit(PolliBiddutModels(
           id: docRef.id,
-          name: _name!,
+          headingName: _headingName!,
           designation: _designation!,
           contact: _contact!,
           location: _location!,
         ));
       } else {
-        await FirebaseFirestore.instance.collection('FireService').doc(widget.category!.id).update({
-          'name': _name,
+        await FirebaseFirestore.instance.collection('PolliBiddut').doc(widget.category!.id).update({
+          'name': _headingName,
           'designation': _designation,
           'contact': _contact,
           'location': _location,
         });
-        widget.onSubmit(FireServiceModels(
+        widget.onSubmit(PolliBiddutModels(
           id: widget.category!.id,
-          name: _name!,
+          headingName: _headingName!,
           designation: _designation!,
           contact: _contact!,
           location: _location!,
@@ -573,13 +577,13 @@ class _FireServiceFormState extends State<FireServiceForm> {
                 TextContainerStyle("FillUp Polli Biddut Form", AppColors.pColor),
                 const SizedBox(height: 10),
                 TextFormField(
-                  initialValue: _name,
+                  initialValue: _headingName,
                   decoration: _inputDecoration('Heading Name'),
                   validator: (value) {
                     if (value!.isEmpty) return 'Please enter your heading name';
                     return null;
                   },
-                  onSaved: (value) => _name = value,
+                  onSaved: (value) => _headingName = value,
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
@@ -627,4 +631,3 @@ class _FireServiceFormState extends State<FireServiceForm> {
     );
   }
 }
-

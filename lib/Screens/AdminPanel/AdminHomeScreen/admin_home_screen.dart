@@ -1,4 +1,3 @@
-import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/common_service_category.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../AppColors/AppColors.dart';
@@ -6,10 +5,11 @@ import '../../../Styles/BackGroundStyle.dart';
 import '../../../Utilitys/utilitys.dart';
 import '../../../Widgets/AdminImageSlideShowWidget.dart';
 import '../../../Widgets/AdminNoticeTextWidget.dart';
-import '../../UsersPanel/UsersCategoryScreen/EducationalServiceCategory/educational_service_category.dart';
-import '../../UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/emargency_service_category.dart';
 import '../../UsersPanel/UsersCategoryScreen/WorkerServiceCategory/worker_service_category.dart';
 import '../../UsersPanel/UsersProfileScreen/user_profile_screen.dart';
+import 'AdminCategoryPage/AdminCommonServiceCategory/admin_common_service_category.dart';
+import 'AdminCategoryPage/AdminEducationalServiceCategory/admin_educational_institution_catagory_screen.dart';
+import 'AdminCategoryPage/AdminEmargencyServiceCategory/admin_emargency_service_category.dart';
 
 class AdminHomeScreen extends StatelessWidget {
 
@@ -128,11 +128,11 @@ class AdminHomeScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 8),
-                          EmargencyServiceCategory(),
+                          AdminEmargencyServiceCategory(),
                           SizedBox(height: 16),
-                          CommonServiceCategory(),
+                          AdminCommonServiceCategory(),
                           SizedBox(height: 16),
-                          EducationalServiceCategory(),
+                          AdminEducationalServiceCategory(),
                           SizedBox(height: 16),
                           WorkerServiceCategory(),
                         ],

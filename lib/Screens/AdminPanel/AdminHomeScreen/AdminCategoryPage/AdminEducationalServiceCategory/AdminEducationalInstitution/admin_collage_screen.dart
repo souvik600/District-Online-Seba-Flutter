@@ -1,20 +1,22 @@
 import 'dart:io';
 import 'package:district_online_service/AppColors/AppColors.dart';
-import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalInstitution/school_details_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEducationalServiceCategory/AdminEducationalInstitution/school_details_screen.dart';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../../Styles/BackGroundStyle.dart';
 
-class AdminMadrashaScreen extends StatefulWidget {
+import '../../../../../../Styles/BackGroundStyle.dart';
+
+
+class AdminCollegeScreen extends StatefulWidget {
   @override
-  _AdminMadrashaScreenState createState() => _AdminMadrashaScreenState();
+  _AdminCollegeScreenState createState() => _AdminCollegeScreenState();
 }
 
-class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
+class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
@@ -32,8 +34,8 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
 
   XFile? _selectedImage;
 
-  // Add madrasha
-  Future<void> _addMadrasha() async {
+  // Add college
+  Future<void> _addCollege() async {
     final data = {
       'name': _nameController.text.trim(),
       'location': _locationController.text.trim(),
@@ -44,7 +46,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
       'establishedYear': _establishedYearController.text.trim(),
     };
 
-    final docRef = await _firestore.collection('madrasha').add(data);
+    final docRef = await _firestore.collection('college').add(data);
     if (_selectedImage != null) {
       final imageUrl = await _uploadImage(docRef.id);
       await docRef.update({'image': imageUrl});
@@ -53,8 +55,8 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
     Navigator.of(context).pop(); // Close bottom sheet
   }
 
-  // Update madrasha
-  Future<void> _updateMadrasha(String id) async {
+  // Update college
+  Future<void> _updateCollege(String id) async {
     final data = {
       'name': _nameController.text.trim(),
       'location': _locationController.text.trim(),
@@ -65,11 +67,11 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
       'establishedYear': _establishedYearController.text.trim(),
     };
 
-    await _firestore.collection('madrasha').doc(id).update(data);
+    await _firestore.collection('college').doc(id).update(data);
 
     if (_selectedImage != null) {
       final imageUrl = await _uploadImage(id);
-      await _firestore.collection('madrasha').doc(id).update({'image': imageUrl});
+      await _firestore.collection('college').doc(id).update({'image': imageUrl});
     }
 
     Navigator.of(context).pop(); // Close bottom sheet
@@ -77,7 +79,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
 
   // Upload image
   Future<String> _uploadImage(String id) async {
-    final ref = _storage.ref().child('madrasha_images/$id.jpg');
+    final ref = _storage.ref().child('college_images/$id.jpg');
     await ref.putFile(File(_selectedImage!.path));
     return await ref.getDownloadURL();
   }
@@ -91,13 +93,13 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
     });
   }
 
-  // Delete madrasha
-  Future<void> _deleteMadrasha(String id) async {
-    await _firestore.collection('madrasha').doc(id).delete();
+  // Delete college
+  Future<void> _deleteCollege(String id) async {
+    await _firestore.collection('college').doc(id).delete();
   }
 
-  // Show form for adding/editing madrasha
-  void _showMadrashaForm({String? id, Map<String, dynamic>? data}) {
+  // Show form for adding/editing college
+  void _showCollegeForm({String? id, Map<String, dynamic>? data}) {
     if (data == null) {
       _nameController.clear();
       _locationController.clear();
@@ -130,7 +132,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    data == null ? 'Add Madrasha' : 'Edit Madrasha',
+                    data == null ? 'Add College' : 'Edit College',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16.0),
@@ -163,12 +165,12 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _nameController,
-                    decoration: AppInputDecoration('Madrasha Name'),
+                    decoration: AppInputDecoration('College Name'),
                   ),
                   const SizedBox(height: 8.0),
                   TextField(
                     controller: _locationController,
-                    decoration: AppInputDecoration('Madrasha Location'),
+                    decoration: AppInputDecoration('College Location'),
                   ),
                   const SizedBox(height: 8.0),
                   TextField(
@@ -204,9 +206,9 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (data == null) {
-                          _addMadrasha();
+                          _addCollege();
                         } else {
-                          _updateMadrasha(id!);
+                          _updateCollege(id!);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -217,7 +219,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
                         ),
                       ),
                       child: Text(
-                        data == null ? 'Add Madrasha' : 'Update Madrasha',
+                        data == null ? 'Add College' : 'Update College',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -242,7 +244,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Madrasha'),
+      appBar: CustomAppBar('College'),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -254,7 +256,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search Madrasha by Name ',
+                    hintText: 'Search College by Name ',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -269,7 +271,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
               Expanded(
                 child: StreamBuilder(
                   stream: _firestore
-                      .collection('madrasha')
+                      .collection('college')
                       .where('name',
                       isGreaterThanOrEqualTo: _searchQuery)
                       .where('name',
@@ -302,11 +304,11 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
                               IconButton(
                                 icon: const Icon(Icons.edit),
                                 onPressed: () =>
-                                    _showMadrashaForm(id: docs[index].id, data: data),
+                                    _showCollegeForm(id: docs[index].id, data: data),
                               ),
                               IconButton(
                                 icon: const Icon(Icons.delete),
-                                onPressed: () => _deleteMadrasha(docs[index].id),
+                                onPressed: () => _deleteCollege(docs[index].id),
                               ),
                             ],
                           ),
@@ -321,7 +323,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showMadrashaForm(),
+        onPressed: () => _showCollegeForm(),
         backgroundColor: AppColors.pColor.withOpacity(0.8),
         child: const Icon(Icons.add),
       ),

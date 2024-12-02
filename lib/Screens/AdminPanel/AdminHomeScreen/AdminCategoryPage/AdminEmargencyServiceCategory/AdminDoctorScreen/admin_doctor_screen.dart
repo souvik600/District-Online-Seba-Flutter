@@ -4,9 +4,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../../AppColors/AppColors.dart';
-import '../../../../../Styles/ElevatedBottonStyle.dart';
-import '../../../../../Styles/TextContainerStyle.dart';
+import '../../../../../../AppColors/AppColors.dart';
+import '../../../../../../Styles/ElevatedBottonStyle.dart';
+import '../../../../../../Styles/TextContainerStyle.dart';
 
 class DoctorDataModels {
   final String id;
@@ -41,12 +41,12 @@ class DoctorDataModels {
   }
 }
 
-class AdminAnimalDoctorScreen extends StatefulWidget {
+class AdminDoctorScreen extends StatefulWidget {
   @override
-  _AdminAnimalDoctorScreenState createState() => _AdminAnimalDoctorScreenState();
+  _AdminDoctorScreenState createState() => _AdminDoctorScreenState();
 }
 
-class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
+class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
   final List<DoctorDataModels> allDoctors = [];
   List<DoctorDataModels> filteredDoctors = [];
 
@@ -58,7 +58,7 @@ class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
 
   void fetchDoctors() async {
     final querySnapshot =
-    await FirebaseFirestore.instance.collection('AnimalDoctorList').get();
+    await FirebaseFirestore.instance.collection('DoctorList').get();
     final doctors = querySnapshot.docs
         .map((doc) => DoctorDataModels.fromFirestore(doc))
         .toList();
@@ -79,7 +79,7 @@ class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
   }
 
   void _deleteDoctor(String id, int index) async {
-    await FirebaseFirestore.instance.collection('AnimalDoctorList').doc(id).delete();
+    await FirebaseFirestore.instance.collection('DoctorList').doc(id).delete();
     setState(() {
       filteredDoctors.removeAt(index);
     });
@@ -129,7 +129,7 @@ class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Animal Doctors"),
+        title: const Text("Doctors"),
         backgroundColor: AppColors.pColor,
       ),
       floatingActionButton: FloatingActionButton(
@@ -199,7 +199,7 @@ class DoctorListItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     image:
-                    AssetImage('assets/icons/medical.png'),
+                    AssetImage('assets/icons/doctor.png'),
                     fit: BoxFit.contain,
                   ),
                   borderRadius: BorderRadius.circular(8.0),
@@ -207,177 +207,169 @@ class DoctorListItem extends StatelessWidget {
               ),
             ),
           ),
-          Card(
-            elevation: 5,
-            color: AppColors.wColor.withOpacity(.8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
+         Card(
+          elevation: 5,
+          color: AppColors.wColor.withOpacity(.8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: AppColors.pColor, width: 1.5),
+              borderRadius: BorderRadius.circular(5),
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color: AppColors.pColor, width: 1.5),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Image Section
-                    Column(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Image Section
+                  Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: AppColors.pColor,
+                              width: 2.0),
+                          borderRadius:
+                          BorderRadius.circular(8),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: doctor.imageUrl.isNotEmpty
+                              ? Image.network(
+                            doctor.imageUrl,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          )
+                              : Image.asset(
+                            'assets/images/user.png',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 4,),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          backgroundColor: Colors.teal,
+                        ),
+                        icon: const Icon(Icons.send, size: 16, color: Colors.white),
+                        label: const Text(
+                          "Email",
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                        ),
+                        onPressed: onSendEmail,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 12.0),
+                  // Details Section
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.pColor,
-                                width: 2.0),
-                            borderRadius:
-                            BorderRadius.circular(8),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: doctor.imageUrl.isNotEmpty
-                                ? Image.network(
-                              doctor.imageUrl,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            )
-                                : Image.asset(
-                              'assets/images/user.png',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            ),
+                        // Name and Specialization
+                        Text(
+                          doctor.name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
                           ),
                         ),
-                        SizedBox(height: 4,),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            backgroundColor: Colors.teal,
+                        const SizedBox(height: 4),
+                        Text(
+                          doctor.specialization,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
                           ),
-                          icon: const Icon(Icons.call, size: 16, color: Colors.white),
-                          label: const Text(
-                            "Call",
-                            style: TextStyle(fontSize: 12, color: Colors.white),
-                          ),
-                          onPressed: onSendEmail,
                         ),
+                        const Divider(),
+                        // Contact Information
+                        Row(
+                          children: [
+                            const Icon(Icons.phone, size: 16, color: Colors.blue),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                doctor.contact,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.email, size: 16, color: Colors.orange),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                doctor.email,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.location_on, size: 16, color: Colors.green),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                doctor.location,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Action Buttons Section
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              tooltip: "Edit",
+                              onPressed: onEdit,
+                            ),
+                            SizedBox(width: 30,),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              tooltip: "Delete",
+                              onPressed: onDelete,
+                            ),
+
+                          ],
+                        ),
+
                       ],
                     ),
-                    const SizedBox(width: 12.0),
-                    // Details Section
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Name and Specialization
-                          Row(
-                            children: [
-                              const Icon(Icons.person, size: 16, color: Colors.blue),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  doctor.name,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            doctor.specialization,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black45,
-                            ),
-                          ),
-                          const Divider(),
-                          // Contact Information
-                          Row(
-                            children: [
-                              const Icon(Icons.phone, size: 16, color: Colors.blue),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  doctor.contact,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              const Icon(Icons.email, size: 16, color: Colors.orange),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  doctor.email,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on, size: 16, color: Colors.green),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  doctor.location,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          // Action Buttons Section
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.blue),
-                                tooltip: "Edit",
-                                onPressed: onEdit,
-                              ),
-                              SizedBox(width: 30,),
-                              IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
-                                tooltip: "Delete",
-                                onPressed: onDelete,
-                              ),
-
-                            ],
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 10.0),
+                ],
               ),
             ),
           ),
+        ),
         ],
       ),
     );
@@ -416,7 +408,7 @@ class _DoctorFormState extends State<DoctorForm> {
     try {
       final ref = FirebaseStorage.instance
           .ref()
-          .child('animal_doctor_images')
+          .child('doctor_images')
           .child('${DateTime.now().toIso8601String()}.jpg');
       await ref.putFile(File(image.path));
       return await ref.getDownloadURL();
@@ -452,7 +444,7 @@ class _DoctorFormState extends State<DoctorForm> {
         if (widget.doctor == null) {
           // Add new doctor
           final docRef = await FirebaseFirestore.instance
-              .collection('AnimalDoctorList')
+              .collection('DoctorList')
               .add(doctorData);
           widget.onSubmit(
             DoctorDataModels(
@@ -468,7 +460,7 @@ class _DoctorFormState extends State<DoctorForm> {
         } else {
           // Update existing doctor
           await FirebaseFirestore.instance
-              .collection('AnimalDoctorList')
+              .collection('DoctorList')
               .doc(widget.doctor!.id)
               .update(doctorData);
           widget.onSubmit(
@@ -510,7 +502,7 @@ class _DoctorFormState extends State<DoctorForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 5),
-                TextContainerStyle("Fill Up Animal Doctor Form", AppColors.pColor),
+                TextContainerStyle("Fill Up Doctor Form", AppColors.pColor),
                 const SizedBox(height: 10),
                 Container(
                   width: 100,
@@ -555,7 +547,7 @@ class _DoctorFormState extends State<DoctorForm> {
                 SizedBox(height: 6,),
                 TextFormField(
                   initialValue: widget.doctor?.contact,
-                  decoration: AppInputDecoration('Contact'),
+                 decoration: AppInputDecoration('Contact'),
                   onSaved: (value) => _contact = value,
                   validator: (value) =>
                   value == null || value.isEmpty ? "Contact is required" : null,

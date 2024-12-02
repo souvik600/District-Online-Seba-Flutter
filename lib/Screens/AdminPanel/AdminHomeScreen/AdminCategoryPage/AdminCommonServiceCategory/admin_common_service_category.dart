@@ -10,6 +10,7 @@ import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/Distric
 import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
 
 import 'AdminBusCounterScreen/admin_bus_counter_screen.dart';
+import 'AdminCurierServiceScreen/admin_curier_service_screen.dart';
 
 
 
@@ -145,12 +146,12 @@ class AdminCommonServiceCategory extends StatelessWidget {
               children: [
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           CourierServiceScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminCourierServiceScreen(),
+                        ));
                   },
                   'assets/icons/cargo-truck.png',
                   "কুরিয়ার",

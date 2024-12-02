@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../../../AppColors/AppColors.dart';
 
 class BusCounterDataModel {
@@ -91,21 +90,21 @@ class _AdminBusCounterServiceScreenState
     });
   }
 
-  void _editBusCounter(BusCounterDataModel ambulance) {
+  void _editBusCounter(BusCounterDataModel BusCounter) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
         return BusCounterForm(
-          busCounter: ambulance,
-          onSubmit: (updatedAmbulance) {
+          busCounter: BusCounter,
+          onSubmit: (updatedBusCounter) {
             setState(() {
               int index = filteredBusCounter
-                  .indexWhere((a) => a.id == updatedAmbulance.id);
+                  .indexWhere((a) => a.id == updatedBusCounter.id);
               if (index != -1) {
-                filteredBusCounter[index] = updatedAmbulance;
+                filteredBusCounter[index] = updatedBusCounter;
                 allBusCounter[allBusCounter.indexWhere(
-                    (a) => a.id == updatedAmbulance.id)] = updatedAmbulance;
+                    (a) => a.id == updatedBusCounter.id)] = updatedBusCounter;
               }
             });
           },
@@ -120,10 +119,10 @@ class _AdminBusCounterServiceScreenState
       isScrollControlled: true,
       builder: (context) {
         return BusCounterForm(
-          onSubmit: (newAmbulance) {
+          onSubmit: (newBusCounter) {
             setState(() {
-              filteredBusCounter.add(newAmbulance);
-              allBusCounter.add(newAmbulance);
+              filteredBusCounter.add(newBusCounter);
+              allBusCounter.add(newBusCounter);
             });
           },
         );
@@ -466,7 +465,7 @@ class _BusCounterFormState extends State<BusCounterForm> {
         }
         Navigator.of(context).pop();
       } catch (e) {
-        print("Error saving ambulance: $e");
+        print("Error saving bus Counter: $e");
       } finally {
         setState(() {
           _isLoading = false;

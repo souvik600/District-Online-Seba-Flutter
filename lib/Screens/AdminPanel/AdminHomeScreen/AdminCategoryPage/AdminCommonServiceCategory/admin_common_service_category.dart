@@ -10,7 +10,11 @@ import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/Distric
 import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
 
 import 'AdminBusCounterScreen/admin_bus_counter_screen.dart';
+import 'AdminCarRentServiceScreen/admin_car_rent_service_screen.dart';
 import 'AdminCurierServiceScreen/admin_curier_service_screen.dart';
+import 'AdminLawyerScreen/admin_lawyer_screen.dart';
+import 'AdminRepoterScreen/admin_repoter_screen.dart';
+import 'AdminTruckRentServiceScreen/admin_truck_rent_service_screen.dart';
 
 
 
@@ -158,12 +162,12 @@ class AdminCommonServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           SplashScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminCarRentServiceScreen(),
+                        ));
                   },
                   'assets/icons/rent-a-car.png',
                   "গাড়ী ভাড়া",
@@ -174,7 +178,7 @@ class AdminCommonServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminTruckRentServiceScreen(),
                         ));
                   },
                   'assets/icons/shipment.png',
@@ -219,7 +223,7 @@ class AdminCommonServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminLawyerScreen(),
                         ));
                   },
                   'assets/icons/lawyer.png',
@@ -231,7 +235,7 @@ class AdminCommonServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminReporterScreen(),
                         ));
                   },
                   'assets/icons/commentator.png',

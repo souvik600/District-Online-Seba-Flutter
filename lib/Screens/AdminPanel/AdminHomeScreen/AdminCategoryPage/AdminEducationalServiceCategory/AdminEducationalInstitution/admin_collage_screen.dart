@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../../../../Styles/BackGroundStyle.dart';
-
 
 class AdminCollegeScreen extends StatefulWidget {
   @override
@@ -283,35 +281,86 @@ class _AdminCollegeScreenState extends State<AdminCollegeScreen> {
                         child: CircularProgressIndicator(),
                       );
                     }
-                    final docs = snapshot.data!.docs;
+                    final collage = snapshot.data!.docs;
                     return ListView.builder(
-                      itemCount: docs.length,
+                      itemCount: collage.length,
                       itemBuilder: (context, index) {
-                        final data = docs[index].data();
-                        return ListTile(
-                          onTap: () => _openDetailsScreen(data),
-                          leading: CircleAvatar(
-                            backgroundImage: data['image'] != null
-                                ? NetworkImage(data['image'])
-                                : const AssetImage(
-                                'assets/images/user.png') as ImageProvider,
-                          ),
-                          title: Text(data['name'] ?? ''),
-                          subtitle: Text(data['location'] ?? ''),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
+                        final data = collage[index].data();
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Stack(
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () =>
-                                    _showCollegeForm(id: docs[index].id, data: data),
+                              // Background Image
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Center(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      image: const DecorationImage(
+                                        image:
+                                        AssetImage('assets/icons/high-school.png'),
+                                        fit: BoxFit.contain,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () => _deleteCollege(docs[index].id),
+                              // Card with transparent background
+                              Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                color: Colors.white.withOpacity(0.85), // Semi-transparent background
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.pColor, width: 1.5),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        leading: data['image'] != null
+                                            ? Image.network(
+                                          data['image'],
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        )
+                                            : const Icon(Icons.local_hospital, size: 50),
+                                        title: Text(data['name'],style: TextStyle(fontSize: 18,color: AppColors.pColor,fontWeight: FontWeight.w500),),
+                                        subtitle: Row(
+                                          children: [
+                                            const Icon(Icons.location_on_outlined,color: Colors.red,),
+                                            Text(data['location']),
+                                          ],
+                                        ),
+                                        onTap: () => _openDetailsScreen(data),
+                                        trailing: const Icon(Icons.arrow_forward_ios_sharp),
+                                      ),
+                                      Row(
+                                        children: [
+                                          TextButton(
+                                            onPressed: () => _showCollegeForm(id: collage[index].id, data: data),
+                                            child: const Text('Edit'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () => _deleteCollege(collage[index].id),
+                                            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),
+
                         );
                       },
                     );

@@ -1,6 +1,7 @@
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminCommonServiceCategory/AdminBankScreen/admin_bank_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminCommonServiceCategory/AdminHostelScreen/admin_hostel_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../../AppColors/AppColors.dart';
 import '../../../../../Styles/TextContainerStyle.dart';
 import '../../../../../Widgets/information_category_list_widget.dart';
@@ -8,14 +9,13 @@ import '../../../../SplashScreen.dart';
 import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictHistoryScreen/district_history_screen.dart';
 import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictMapScreen/district_map_screen.dart';
 import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
-
 import 'AdminBusCounterScreen/admin_bus_counter_screen.dart';
 import 'AdminCarRentServiceScreen/admin_car_rent_service_screen.dart';
 import 'AdminCurierServiceScreen/admin_curier_service_screen.dart';
 import 'AdminLawyerScreen/admin_lawyer_screen.dart';
 import 'AdminRepoterScreen/admin_repoter_screen.dart';
+import 'AdminRestarurantScreen/admin_restarurent_screen.dart';
 import 'AdminTruckRentServiceScreen/admin_truck_rent_service_screen.dart';
-
 
 
 class AdminCommonServiceCategory extends StatelessWidget {
@@ -129,12 +129,12 @@ class AdminCommonServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           SplashScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminBankScreen(),
+                        ));
                   },
                   'assets/icons/bank.png',
                   "ব্যাংক",
@@ -190,7 +190,7 @@ class AdminCommonServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminHostelScreen(),
                         ));
                   },
                   'assets/icons/hotel.png',
@@ -211,7 +211,7 @@ class AdminCommonServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminRestaurantScreen(),
                         ));
                   },
                   'assets/icons/burger.png',

@@ -1,11 +1,12 @@
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminCommonServiceCategory/AdminBankScreen/admin_bank_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminCommonServiceCategory/AdminHistoricalPlaceScreen/admin_historicalplace_screen.dart';
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminCommonServiceCategory/AdminHostelScreen/admin_hostel_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminCommonServiceCategory/AdminParkResortScreen/admin_park_resort_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../AppColors/AppColors.dart';
 import '../../../../../Styles/TextContainerStyle.dart';
 import '../../../../../Widgets/information_category_list_widget.dart';
-import '../../../../SplashScreen.dart';
 import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictHistoryScreen/district_history_screen.dart';
 import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictMapScreen/district_map_screen.dart';
 import '../../../../UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
@@ -76,12 +77,12 @@ class AdminCommonServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           HistricalPlaceScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminHistoricalPlaceScreen(),
+                        ));
                   },
                   'assets/icons/history-place.png',
                   "দর্শনীয় স্থান",
@@ -97,12 +98,12 @@ class AdminCommonServiceCategory extends StatelessWidget {
               children: [
                 AllInfromationCategoryList(
                       () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           ParkResortScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdminParkResortScreen(),
+                        ));
                   },
                   'assets/icons/bungalow.png',
                   'পার্ক রিসোর্ট',

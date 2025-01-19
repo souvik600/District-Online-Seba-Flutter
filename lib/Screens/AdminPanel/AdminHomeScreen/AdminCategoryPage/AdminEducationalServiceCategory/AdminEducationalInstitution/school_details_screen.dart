@@ -1,36 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../../../../../Utilitys/utilitys.dart';
 
 class SchoolDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> data;
 
   SchoolDetailsScreen({required this.data});
 
-  Future<void> _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  Future<void> _callPhone(String phone) async {
-    final url = 'tel:$phone';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not place call';
-    }
-  }
-
-  Future<void> _sendEmail(String email) async {
-    final url = 'mailto:$email';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not send email';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +35,7 @@ class SchoolDetailsScreen extends StatelessWidget {
             const SizedBox(height: 15),
             _buildHospitalNameAndLocation(),
             const SizedBox(height: 15),
-            _buildContactCard(),
+            _buildContactCard(context),
             const SizedBox(height: 15),
             _buildDescriptionCard(),
           ],
@@ -170,7 +145,7 @@ class SchoolDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContactCard() {
+  Widget _buildContactCard(BuildContext context) {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(
@@ -191,25 +166,29 @@ class SchoolDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             _buildContactItem(Icons.phone, 'Phone', data['contact']),
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
             _buildContactItem(Icons.email, 'Email', data['email']),
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
             GestureDetector(
-              onTap: () => _launchURL(data['website']),
-              child: _buildContactItem(Icons.language, 'Website', data['website']),
+              onTap: () => launchWebsite(data['website'],context),
+              child:
+              _buildContactItem(Icons.language, 'Website', data['website']),
             ),
             const SizedBox(height: 20),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildContactButton(
-                    Icons.phone, 'Call', () => _callPhone(data['contact']), Colors.green),
-                _buildContactButton(
-                    Icons.email, 'Email', () => _sendEmail(data['email']), Colors.blue),
-                _buildContactButton(Icons.language, 'Website',
-                        () => _launchURL(data['website']), Colors.blueAccent),
+                _buildContactButton(Icons.phone, 'Call', () {
+                  showCallDialog(data['contact'],context);
+                }, Colors.green),
+                _buildContactButton(Icons.email, 'Email', () {
+                  sendEmail(data['email'], context);
+                }, Colors.blue),
+                _buildContactButton(Icons.language, 'Website', () {
+                  launchWebsite(data['website'], context);
+                }, Colors.blueAccent),
               ],
             ),
           ],

@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../../../AppColors/AppColors.dart';
 import '../../../../../../Styles/ElevatedBottonStyle.dart';
 import '../../../../../../Styles/TextContainerStyle.dart';
+import '../../../../../../Utilitys/utilitys.dart';
 
 
 class DoctorDataModels {
@@ -162,7 +163,6 @@ class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
                   doctor: filteredDoctors[index],
                   onDelete: () => _deleteDoctor(filteredDoctors[index].id, index),
                   onEdit: () => _editDoctor(filteredDoctors[index]),
-                  onSendEmail: () {  },
                 );
               },
             ),
@@ -177,13 +177,12 @@ class DoctorListItem extends StatelessWidget {
   final DoctorDataModels doctor;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
-  final VoidCallback onSendEmail;
 
   DoctorListItem({
     required this.doctor,
     required this.onDelete,
     required this.onEdit,
-    required this.onSendEmail,
+
   });
 
   @override
@@ -268,7 +267,8 @@ class DoctorListItem extends StatelessWidget {
                             "Call",
                             style: TextStyle(fontSize: 12, color: Colors.white),
                           ),
-                          onPressed: onSendEmail,
+                          onPressed: () =>
+                              showCallDialog(doctor.contact, context),
                         ),
                       ],
                     ),

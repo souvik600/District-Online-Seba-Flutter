@@ -7,29 +7,42 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
   RestaurantDetailsScreen({required this.data});
 
-  Future<void> _launchURL(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+  Future<void> _launchURL(String? url) async {
+    if (url == null || url.isEmpty) {
+      debugPrint("Invalid URL");
+      return;
+    }
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      throw 'Could not launch $url';
+      debugPrint("Could not launch $url");
     }
   }
 
-  Future<void> _callPhone(String phone) async {
-    final url = 'tel:$phone';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+  Future<void> _callPhone(String? phone) async {
+    if (phone == null || phone.isEmpty) {
+      debugPrint("Invalid phone number");
+      return;
+    }
+    final uri = Uri.parse('tel:$phone');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
-      throw 'Could not place call';
+      debugPrint("Could not place call to $phone");
     }
   }
 
-  Future<void> _sendEmail(String email) async {
-    final url = 'mailto:$email';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+  Future<void> _sendEmail(String? email) async {
+    if (email == null || email.isEmpty) {
+      debugPrint("Invalid email address");
+      return;
+    }
+    final uri = Uri.parse('mailto:$email');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
-      throw 'Could not send email';
+      debugPrint("Could not send email to $email");
     }
   }
 
@@ -158,7 +171,9 @@ class RestaurantDetailsScreen extends StatelessWidget {
             _buildContactRow(Icons.email, 'Email', data['email'], _sendEmail),
             const SizedBox(height: 10),
             _buildContactRow(Icons.language, 'Website', data['website'], _launchURL),
+
           ],
+
         ),
       ),
     );

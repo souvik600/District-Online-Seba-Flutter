@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../AppColors/AppColors.dart';
 import '../Styles/TextContainerStyle.dart';
+import '../Utilitys/utilitys.dart';
 
 class CustomDrawerWidget extends StatelessWidget {
   const CustomDrawerWidget({Key? key}) : super(key: key);
@@ -72,7 +73,7 @@ class CustomDrawerWidget extends StatelessWidget {
                 leading: IconButton(
                   icon: Image.asset("assets/icons/whatsapp.png", height: 30, width: 30),
                   onPressed: () {
-                    _launchURL('https://wa.me/+8801902200052');
+                    launchURL('https://wa.me/+8801902200052');
                   },
                 ),
                 title: const Text(
@@ -84,14 +85,14 @@ class CustomDrawerWidget extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  _launchURL('https://wa.me/+8801902200052');
+                  launchURL('https://wa.me/+8801902200052');
                 },
               ),
               ListTile(
                 leading: IconButton(
                   icon: Image.asset("assets/icons/gmail.png", height: 20, width: 20),
                   onPressed: () {
-                    _launchURL('mailto:souvikdas0600@gmail.com');
+                    launchURL('mailto:souvikdas0600@gmail.com');
                   },
                 ),
                 title: const Text(
@@ -103,7 +104,7 @@ class CustomDrawerWidget extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  _launchURL('mailto:souvikdas0600@gmail.com');
+                  launchURL('mailto:souvikdas0600@gmail.com');
                 },
               ),
               ListTile(
@@ -114,7 +115,7 @@ class CustomDrawerWidget extends StatelessWidget {
                     size: 30,
                   ),
                   onPressed: () {
-                    _launchURL('https://www.facebook.com/profile.php?id=100050430698557');
+                    launchURL('https://www.facebook.com/profile.php?id=100050430698557');
                   },
                 ),
                 title: const Text(
@@ -126,7 +127,7 @@ class CustomDrawerWidget extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  _launchURL('https://www.facebook.com/profile.php?id=100050430698557');
+                  launchURL('https://www.facebook.com/profile.php?id=100050430698557');
                 },
               ),
               ListTile(
@@ -137,7 +138,7 @@ class CustomDrawerWidget extends StatelessWidget {
                     width: 25,
                   ),
                   onPressed: () {
-                    _launchURL('https://www.linkedin.com/in/souvik-das-239592250');
+                    launchURL('https://www.linkedin.com/in/souvik-das-239592250');
                   },
                 ),
                 title: const Text(
@@ -149,7 +150,7 @@ class CustomDrawerWidget extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  _launchURL('https://www.linkedin.com/in/souvik-das-239592250');
+                  launchURL('https://www.linkedin.com/in/souvik-das-239592250');
                 },
               ),
               ListTile(
@@ -160,7 +161,7 @@ class CustomDrawerWidget extends StatelessWidget {
                     width: 25,
                   ),
                   onPressed: () {
-                    _launchURL('https://github.com/souvik600');
+                    launchURL('https://github.com/souvik600');
                   },
                 ),
                 title: const Text(
@@ -172,7 +173,7 @@ class CustomDrawerWidget extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  _launchURL('https://github.com/souvik600');
+                  launchURL('https://github.com/souvik600');
                 },
               ),
             ],
@@ -183,10 +184,10 @@ class CustomDrawerWidget extends StatelessWidget {
     );
   }
 
-  void _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      throw 'Could not launch $url';
-    }
-  }
+  // void _launchURL(String url) async {
+  //   final Uri uri = Uri.parse(url);
+  //   if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 }

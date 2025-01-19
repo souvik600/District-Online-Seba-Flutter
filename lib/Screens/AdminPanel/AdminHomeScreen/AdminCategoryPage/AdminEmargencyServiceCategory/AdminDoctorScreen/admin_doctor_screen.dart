@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
+import 'package:district_online_service/Utilitys/utilitys.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -160,7 +161,6 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
                   doctor: filteredDoctors[index],
                   onDelete: () => _deleteDoctor(filteredDoctors[index].id, index),
                   onEdit: () => _editDoctor(filteredDoctors[index]),
-                  onSendEmail: () {  },
                 );
               },
             ),
@@ -175,13 +175,12 @@ class DoctorListItem extends StatelessWidget {
   final DoctorDataModels doctor;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
-  final VoidCallback onSendEmail;
 
   DoctorListItem({
     required this.doctor,
     required this.onDelete,
     required this.onEdit,
-    required this.onSendEmail,
+
   });
 
   @override
@@ -266,8 +265,10 @@ class DoctorListItem extends StatelessWidget {
                           "Email",
                           style: TextStyle(fontSize: 12, color: Colors.white),
                         ),
-                        onPressed: onSendEmail,
+                        onPressed: () =>
+                            sendEmail(doctor.email, context),
                       ),
+
                     ],
                   ),
                   const SizedBox(width: 12.0),

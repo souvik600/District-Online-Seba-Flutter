@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
+import 'package:district_online_service/Utilitys/utilitys.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -130,14 +131,6 @@ class _AdminTruckRentServiceScreenState
         );
       },
     );
-  }
-
-  Future<void> _makeCall(String contact) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: contact,
-    );
-    await launchUrl(launchUri);
   }
 
   @override
@@ -328,7 +321,7 @@ class _AdminTruckRentServiceScreenState
                                 children: [
                                   ElevatedButton.icon(
                                     onPressed: () =>
-                                        _makeCall(truck.contact),
+                                        showCallDialog(truck.contact, context),
                                     icon: const Icon(Icons.call,
                                         color: Colors.white),
                                     label: const Text("Call"),

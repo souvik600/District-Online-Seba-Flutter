@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
+import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../../../AppColors/AppColors.dart';
 import '../../../../../../Styles/ElevatedBottonStyle.dart';
 import '../../../../../../Styles/TextContainerStyle.dart';
+import '../../../../../../Utilitys/utilitys.dart';
 
 
 class LawyerDataModels {
@@ -129,10 +131,7 @@ class _AdminLawyerScreenState extends State<AdminLawyerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Lawyer"),
-        backgroundColor: AppColors.pColor,
-      ),
+      appBar:CustomAppBar("lawyer"),
       floatingActionButton: FloatingActionButton(
         onPressed: _addLawyer,
         child: const Icon(Icons.add),
@@ -161,7 +160,6 @@ class _AdminLawyerScreenState extends State<AdminLawyerScreen> {
                   lawyer: filteredLawyers[index],
                   onDelete: () => _deleteLawyer(filteredLawyers[index].id, index),
                   onEdit: () => _editLawyer(filteredLawyers[index]),
-                  onSendEmail: () {},
                 );
               },
             ),
@@ -177,13 +175,11 @@ class LawyerListItem extends StatelessWidget {
   final LawyerDataModels lawyer;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
-  final VoidCallback onSendEmail;
 
   LawyerListItem({
     required this.lawyer,
     required this.onDelete,
     required this.onEdit,
-    required this.onSendEmail,
   });
 
   @override
@@ -267,7 +263,8 @@ class LawyerListItem extends StatelessWidget {
                             "Call",
                             style: TextStyle(fontSize: 12, color: Colors.white),
                           ),
-                          onPressed: onSendEmail,
+                          onPressed: () =>
+                              showCallDialog(lawyer.contact, context),
                         ),
                       ],
                     ),

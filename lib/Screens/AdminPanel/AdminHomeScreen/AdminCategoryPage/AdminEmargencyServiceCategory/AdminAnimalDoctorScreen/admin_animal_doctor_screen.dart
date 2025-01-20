@@ -1,15 +1,15 @@
 import 'dart:io';
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
+import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../../../../AppColors/AppColors.dart';
 import '../../../../../../Styles/ElevatedBottonStyle.dart';
 import '../../../../../../Styles/TextContainerStyle.dart';
 import '../../../../../../Utilitys/utilitys.dart';
-
 
 class DoctorDataModels {
   final String id;
@@ -46,7 +46,8 @@ class DoctorDataModels {
 
 class AdminAnimalDoctorScreen extends StatefulWidget {
   @override
-  _AdminAnimalDoctorScreenState createState() => _AdminAnimalDoctorScreenState();
+  _AdminAnimalDoctorScreenState createState() =>
+      _AdminAnimalDoctorScreenState();
 }
 
 class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
@@ -61,7 +62,7 @@ class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
 
   void fetchDoctors() async {
     final querySnapshot =
-    await FirebaseFirestore.instance.collection('AnimalDoctorList').get();
+        await FirebaseFirestore.instance.collection('AnimalDoctorList').get();
     final doctors = querySnapshot.docs
         .map((doc) => DoctorDataModels.fromFirestore(doc))
         .toList();
@@ -75,14 +76,17 @@ class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
     setState(() {
       filteredDoctors = allDoctors
           .where((doctor) =>
-      doctor.name.toLowerCase().contains(query.toLowerCase()) ||
-          doctor.specialization.toLowerCase().contains(query.toLowerCase()))
+              doctor.name.toLowerCase().contains(query.toLowerCase()) ||
+              doctor.specialization.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
 
   void _deleteDoctor(String id, int index) async {
-    await FirebaseFirestore.instance.collection('AnimalDoctorList').doc(id).delete();
+    await FirebaseFirestore.instance
+        .collection('AnimalDoctorList')
+        .doc(id)
+        .delete();
     setState(() {
       filteredDoctors.removeAt(index);
     });
@@ -98,11 +102,11 @@ class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
           onSubmit: (updatedDoctor) {
             setState(() {
               int index =
-              filteredDoctors.indexWhere((d) => d.id == updatedDoctor.id);
+                  filteredDoctors.indexWhere((d) => d.id == updatedDoctor.id);
               if (index != -1) {
                 filteredDoctors[index] = updatedDoctor;
-                allDoctors[allDoctors.indexWhere((d) => d.id == updatedDoctor.id)] =
-                    updatedDoctor;
+                allDoctors[allDoctors.indexWhere(
+                    (d) => d.id == updatedDoctor.id)] = updatedDoctor;
               }
             });
           },
@@ -131,41 +135,44 @@ class _AdminAnimalDoctorScreenState extends State<AdminAnimalDoctorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Animal Doctors"),
-        backgroundColor: AppColors.pColor,
-      ),
+      appBar: CustomAppBar('পশু চিকিৎসক'),
       floatingActionButton: FloatingActionButton(
         onPressed: _addDoctor,
         child: const Icon(Icons.add),
         backgroundColor: AppColors.pColor,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: filterDoctors,
-              decoration: InputDecoration(
-                hintText: "Search Doctors...",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+          ScreenBackground(context),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: filterDoctors,
+                  decoration: InputDecoration(
+                    hintText: "Search Doctors...",
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredDoctors.length,
-              itemBuilder: (context, index) {
-                return DoctorListItem(
-                  doctor: filteredDoctors[index],
-                  onDelete: () => _deleteDoctor(filteredDoctors[index].id, index),
-                  onEdit: () => _editDoctor(filteredDoctors[index]),
-                );
-              },
-            ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredDoctors.length,
+                  itemBuilder: (context, index) {
+                    return DoctorListItem(
+                      doctor: filteredDoctors[index],
+                      onDelete: () =>
+                          _deleteDoctor(filteredDoctors[index].id, index),
+                      onEdit: () => _editDoctor(filteredDoctors[index]),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -182,7 +189,6 @@ class DoctorListItem extends StatelessWidget {
     required this.doctor,
     required this.onDelete,
     required this.onEdit,
-
   });
 
   @override
@@ -199,8 +205,7 @@ class DoctorListItem extends StatelessWidget {
                 height: 150,
                 decoration: BoxDecoration(
                   image: const DecorationImage(
-                    image:
-                    AssetImage('assets/icons/medical.png'),
+                    image: AssetImage('assets/icons/medical.png'),
                     fit: BoxFit.contain,
                   ),
                   borderRadius: BorderRadius.circular(8.0),
@@ -216,8 +221,7 @@ class DoctorListItem extends StatelessWidget {
             ),
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                    color: AppColors.pColor, width: 1.5),
+                border: Border.all(color: AppColors.pColor, width: 1.5),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Padding(
@@ -230,39 +234,41 @@ class DoctorListItem extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.pColor,
-                                width: 2.0),
-                            borderRadius:
-                            BorderRadius.circular(8),
+                            border:
+                                Border.all(color: AppColors.pColor, width: 2.0),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
                             child: doctor.imageUrl.isNotEmpty
                                 ? Image.network(
-                              doctor.imageUrl,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            )
+                                    doctor.imageUrl,
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  )
                                 : Image.asset(
-                              'assets/images/user.png',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            ),
+                                    'assets/images/user.png',
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
-                        SizedBox(height: 4,),
+                        SizedBox(
+                          height: 4,
+                        ),
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10.0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             backgroundColor: Colors.teal,
                           ),
-                          icon: const Icon(Icons.call, size: 16, color: Colors.white),
+                          icon: const Icon(Icons.call,
+                              size: 16, color: Colors.white),
                           label: const Text(
                             "Call",
                             style: TextStyle(fontSize: 12, color: Colors.white),
@@ -281,7 +287,8 @@ class DoctorListItem extends StatelessWidget {
                           // Name and Specialization
                           Row(
                             children: [
-                              const Icon(Icons.person, size: 16, color: Colors.blue),
+                              const Icon(Icons.person,
+                                  size: 16, color: Colors.blue),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -307,7 +314,8 @@ class DoctorListItem extends StatelessWidget {
                           // Contact Information
                           Row(
                             children: [
-                              const Icon(Icons.phone, size: 16, color: Colors.blue),
+                              const Icon(Icons.phone,
+                                  size: 16, color: Colors.blue),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -323,7 +331,8 @@ class DoctorListItem extends StatelessWidget {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              const Icon(Icons.email, size: 16, color: Colors.orange),
+                              const Icon(Icons.email,
+                                  size: 16, color: Colors.orange),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -339,7 +348,8 @@ class DoctorListItem extends StatelessWidget {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              const Icon(Icons.location_on, size: 16, color: Colors.green),
+                              const Icon(Icons.location_on,
+                                  size: 16, color: Colors.green),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -357,20 +367,22 @@ class DoctorListItem extends StatelessWidget {
                           Row(
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.blue),
                                 tooltip: "Edit",
                                 onPressed: onEdit,
                               ),
-                              SizedBox(width: 30,),
+                              SizedBox(
+                                width: 30,
+                              ),
                               IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
                                 tooltip: "Delete",
                                 onPressed: onDelete,
                               ),
-
                             ],
                           ),
-
                         ],
                       ),
                     ),
@@ -385,8 +397,6 @@ class DoctorListItem extends StatelessWidget {
     );
   }
 }
-
-
 
 class DoctorForm extends StatefulWidget {
   final DoctorDataModels? doctor;
@@ -512,7 +522,8 @@ class _DoctorFormState extends State<DoctorForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 5),
-                TextContainerStyle("Fill Up Animal Doctor Form", AppColors.pColor),
+                TextContainerStyle(
+                    "Fill Up Animal Doctor Form", AppColors.pColor),
                 const SizedBox(height: 10),
                 Container(
                   width: 100,
@@ -522,30 +533,36 @@ class _DoctorFormState extends State<DoctorForm> {
                     border: Border.all(color: Colors.grey),
                     image: _selectedImage == null
                         ? const DecorationImage(
-                      image: AssetImage('assets/images/user.png'),
-                      fit: BoxFit.contain,
-                    )
+                            image: AssetImage('assets/images/user.png'),
+                            fit: BoxFit.contain,
+                          )
                         : DecorationImage(
-                      image: FileImage(File(_selectedImage!.path)),
-                      fit: BoxFit.cover,
-                    ),
+                            image: FileImage(File(_selectedImage!.path)),
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   child: _selectedImage == null
                       ? IconButton(
-                    icon: const Icon(Icons.add, size: 50, color: Colors.grey),
-                    onPressed: _pickImage,
-                  )
+                          icon: const Icon(Icons.add,
+                              size: 50, color: Colors.grey),
+                          onPressed: _pickImage,
+                        )
                       : null,
                 ),
-                SizedBox(height: 8,),
+                SizedBox(
+                  height: 8,
+                ),
                 TextFormField(
                   initialValue: widget.doctor?.name,
                   decoration: AppInputDecoration('Name'),
                   onSaved: (value) => _name = value,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Name is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Name is required"
+                      : null,
                 ),
-                SizedBox(height: 6,),
+                SizedBox(
+                  height: 6,
+                ),
                 TextFormField(
                   initialValue: widget.doctor?.specialization,
                   decoration: AppInputDecoration('Specialization'),
@@ -554,15 +571,20 @@ class _DoctorFormState extends State<DoctorForm> {
                       ? "Specialization is required"
                       : null,
                 ),
-                SizedBox(height: 6,),
+                SizedBox(
+                  height: 6,
+                ),
                 TextFormField(
                   initialValue: widget.doctor?.contact,
                   decoration: AppInputDecoration('Contact'),
                   onSaved: (value) => _contact = value,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Contact is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Contact is required"
+                      : null,
                 ),
-                SizedBox(height: 6,),
+                SizedBox(
+                  height: 6,
+                ),
                 TextFormField(
                   initialValue: widget.doctor?.email,
                   decoration: AppInputDecoration('Email'),
@@ -571,7 +593,9 @@ class _DoctorFormState extends State<DoctorForm> {
                       ? "Email is required"
                       : null,
                 ),
-                SizedBox(height: 6,),
+                SizedBox(
+                  height: 6,
+                ),
                 TextFormField(
                   initialValue: widget.doctor?.location,
                   decoration: AppInputDecoration('Location'),
@@ -583,7 +607,8 @@ class _DoctorFormState extends State<DoctorForm> {
                 const SizedBox(height: 20),
                 _isLoading
                     ? CircularProgressIndicator()
-                    : ElevatedButtonStyle(text: "Submit", onPressed: _submitForm),
+                    : ElevatedButtonStyle(
+                        text: "Submit", onPressed: _submitForm),
                 const SizedBox(height: 10),
               ],
             ),
@@ -593,4 +618,3 @@ class _DoctorFormState extends State<DoctorForm> {
     );
   }
 }
-

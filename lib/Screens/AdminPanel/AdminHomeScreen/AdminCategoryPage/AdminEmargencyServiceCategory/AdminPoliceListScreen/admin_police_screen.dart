@@ -4,6 +4,7 @@ import '../../../../../../AppColors/AppColors.dart';
 import '../../../../../../Styles/ElevatedBottonStyle.dart';
 import '../../../../../../Styles/TextContainerStyle.dart';
 import '../../../../../../Utilitys/utilitys.dart';
+import '../../../../../../Widgets/Custom_appBar_widgets.dart';
 
 
 class PoliceDataModels {
@@ -22,8 +23,7 @@ class PoliceDataModels {
     required this.designation,
     required this.email,
     required this.contact,
-    this.isCall = false,
-  });
+    this.isCall = false,  });
 
   factory PoliceDataModels.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -159,23 +159,7 @@ class _AdminPoliceScreenState extends State<AdminPoliceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.pColor,
-        title: const Text(
-          "Police",
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w500,
-            fontFamily: 'kalpurush',
-            color: Colors.white,
-          ),
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(20),
-          ),
-        ),
-      ),
+      appBar:CustomAppBar("পুলিশ"),
       floatingActionButton: FloatingActionButton(
         onPressed: _addCategory,
         backgroundColor: AppColors.pColor,

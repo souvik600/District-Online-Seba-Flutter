@@ -3,6 +3,7 @@ import 'package:district_online_service/Utilitys/utilitys.dart';
 import 'package:flutter/material.dart';
 import '../../../../../../AppColors/AppColors.dart';
 import '../../../../../../Styles/TextContainerStyle.dart';
+import '../../../../../../Widgets/Custom_appBar_widgets.dart';
 
 class FireServiceModels{
   final String id;
@@ -144,23 +145,7 @@ class _AdminFireServiceScreenState extends State<AdminFireServiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.pColor,
-        title: const Text(
-          "Fire Service",
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w500,
-            fontFamily: 'kalpurush',
-            color: Colors.white,
-          ),
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(20),
-          ),
-        ),
-      ),
+      appBar:CustomAppBar("ফায়ার সার্ভিস"),
       floatingActionButton: FloatingActionButton(
         onPressed: _addCategory,
         backgroundColor: AppColors.pColor,

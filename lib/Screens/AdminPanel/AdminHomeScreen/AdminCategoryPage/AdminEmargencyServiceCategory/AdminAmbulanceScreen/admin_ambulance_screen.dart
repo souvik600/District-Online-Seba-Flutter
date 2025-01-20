@@ -138,7 +138,7 @@ class _AdminAmbulanceServiceScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Ambulance Services'),
+      appBar: CustomAppBar('অ্যাম্বুলেন্স'),
       floatingActionButton: FloatingActionButton(
         onPressed: _addAmbulance,
         child: const Icon(Icons.add),

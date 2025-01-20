@@ -1,11 +1,10 @@
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
+import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../../../AppColors/AppColors.dart';
 import '../../../../../../Styles/TextContainerStyle.dart';
 import '../../../../../../Utilitys/utilitys.dart';
-
 
 class PolliBiddutModels {
   final String id;
@@ -52,8 +51,11 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
   }
 
   void fetchCategories() async {
-    final querySnapshot = await FirebaseFirestore.instance.collection('PolliBiddut').get();
-    final categories = querySnapshot.docs.map((doc) => PolliBiddutModels.fromFirestore(doc)).toList();
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('PolliBiddut').get();
+    final categories = querySnapshot.docs
+        .map((doc) => PolliBiddutModels.fromFirestore(doc))
+        .toList();
     setState(() {
       allCategories.addAll(categories);
       filteredCategories.addAll(categories);
@@ -63,19 +65,19 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
   void filterCategories(String query) {
     setState(() {
       filteredCategories = allCategories
-          .where((category) => category.headingName.toLowerCase().contains(query.toLowerCase()))
+          .where((category) =>
+              category.headingName.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
-
-
 
   void _deleteCategory(String id, int index) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('আপনি কি নিশ্চিত যে আপনি এই তথ্যটি মুছে ফেলতে চান?'),
+          title:
+              const Text('আপনি কি নিশ্চিত যে আপনি এই তথ্যটি মুছে ফেলতে চান?'),
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -93,7 +95,10 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
             TextButton(
               child: const Text('মুছে ফেলুন'),
               onPressed: () async {
-                await FirebaseFirestore.instance.collection('PolliBiddut').doc(id).delete();
+                await FirebaseFirestore.instance
+                    .collection('PolliBiddut')
+                    .doc(id)
+                    .delete();
                 setState(() {
                   filteredCategories.removeAt(index);
                 });
@@ -115,11 +120,12 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
           category: category,
           onSubmit: (updatedCategory) {
             setState(() {
-              int index = filteredCategories.indexWhere((cat) => cat.id == updatedCategory.id);
+              int index = filteredCategories
+                  .indexWhere((cat) => cat.id == updatedCategory.id);
               if (index != -1) {
                 filteredCategories[index] = updatedCategory;
-                allCategories[allCategories.indexWhere((cat) => cat.id == updatedCategory.id)] =
-                    updatedCategory;
+                allCategories[allCategories.indexWhere(
+                    (cat) => cat.id == updatedCategory.id)] = updatedCategory;
               }
             });
           },
@@ -148,64 +154,54 @@ class _AdminPolliBiddutScreenState extends State<AdminPolliBiddutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.pColor,
-        title: const Text(
-          "Polli Biddut",
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w500,
-            fontFamily: 'kalpurush',
-            color: Colors.white,
-          ),
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(20),
-          ),
-        ),
-      ),
+      appBar: CustomAppBar('পল্লী বিদ্যুৎ'),
       floatingActionButton: FloatingActionButton(
         onPressed: _addCategory,
         backgroundColor: AppColors.pColor,
         child: const Icon(Icons.add),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: filterCategories,
-              decoration: InputDecoration(
-                hintText: "তথ্য খুঁজুন...",
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+          ScreenBackground(context),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: filterCategories,
+                  decoration: InputDecoration(
+                    hintText: "তথ্য খুঁজুন...",
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: EdgeInsets.zero,
+                  ),
                 ),
-                contentPadding: EdgeInsets.zero,
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredCategories.length,
-              itemBuilder: (context, index) {
-                return PolliBiddutListItem(
-                  category: filteredCategories[index],
-                  onMakeCall: () {
-                    showCallDialog(filteredCategories[index].contact, context);
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredCategories.length,
+                  itemBuilder: (context, index) {
+                    return PolliBiddutListItem(
+                      category: filteredCategories[index],
+                      onMakeCall: () {
+                        showCallDialog(
+                            filteredCategories[index].contact, context);
+                      },
+                      onDelete: () {
+                        _deleteCategory(filteredCategories[index].id, index);
+                      },
+                      onEdit: () {
+                        _editCategory(filteredCategories[index]);
+                      },
+                    );
                   },
-                  onDelete: () {
-                    _deleteCategory(filteredCategories[index].id, index);
-                  },
-                  onEdit: () {
-                    _editCategory(filteredCategories[index]);
-                  },
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -260,7 +256,9 @@ class PolliBiddutListItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(child: TextContainerStyle(category.headingName, Colors.deepPurple)),
+                      Center(
+                          child: TextContainerStyle(
+                              category.headingName, Colors.deepPurple)),
                       Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Column(
@@ -371,7 +369,6 @@ class PolliBiddutListItem extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-
                     ElevatedButton.icon(
                       onPressed: onDelete,
                       icon: const Icon(
@@ -406,7 +403,6 @@ class PolliBiddutListItem extends StatelessWidget {
                     ),
                   ],
                 ),
-
               ],
             ),
           ],
@@ -450,7 +446,8 @@ class _PolliBiddutFormState extends State<PolliBiddutForm> {
       });
 
       if (widget.category == null) {
-        DocumentReference docRef = await FirebaseFirestore.instance.collection('PolliBiddut').add({
+        DocumentReference docRef =
+            await FirebaseFirestore.instance.collection('PolliBiddut').add({
           'name': _headingName,
           'designation': _designation,
           'contact': _contact,
@@ -464,7 +461,10 @@ class _PolliBiddutFormState extends State<PolliBiddutForm> {
           location: _location!,
         ));
       } else {
-        await FirebaseFirestore.instance.collection('PolliBiddut').doc(widget.category!.id).update({
+        await FirebaseFirestore.instance
+            .collection('PolliBiddut')
+            .doc(widget.category!.id)
+            .update({
           'name': _headingName,
           'designation': _designation,
           'contact': _contact,
@@ -519,7 +519,8 @@ class _PolliBiddutFormState extends State<PolliBiddutForm> {
             child: Column(
               children: [
                 const SizedBox(height: 5),
-                TextContainerStyle("FillUp Polli Biddut Form", AppColors.pColor),
+                TextContainerStyle(
+                    "FillUp Polli Biddut Form", AppColors.pColor),
                 const SizedBox(height: 10),
                 TextFormField(
                   initialValue: _headingName,
@@ -560,13 +561,14 @@ class _PolliBiddutFormState extends State<PolliBiddutForm> {
                 _isLoading
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text("Submit"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.pColor,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  ),
-                ),
+                        onPressed: _submitForm,
+                        child: const Text("Submit"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.pColor,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 32, vertical: 16),
+                        ),
+                      ),
                 const SizedBox(height: 10),
               ],
             ),

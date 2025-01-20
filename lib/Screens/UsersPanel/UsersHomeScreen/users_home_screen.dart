@@ -3,8 +3,13 @@ import 'package:district_online_service/Screens/SplashScreen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictHistoryScreen/district_history_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictMapScreen/district_map_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserAnimalDoctorScreen/user_animal_doctor_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserDoctorScreen/user_doctor_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserFireServiceScreen/user_fire_service_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserHospitalScreen/user_hospital_screen.dart';
-
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserPoliceListScreen/user_police_list_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserPolliBiddutListScreen/user_polli_biddut_list_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/userAmbulanceScreen/user_ambulance_screen.dart';
 import 'package:district_online_service/Styles/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -252,7 +257,7 @@ class UsersHomeScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            SplashScreen(),
+                                            UserPolliBiddutScreen(),
                                       ));
                                 },
                                 'assets/icons/electricity.png',
@@ -267,7 +272,7 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => SplashScreen(),
+                                        builder: (context) => UserAnimalDoctorScreen(),
                                       ));
                                 },
                                 'assets/icons/medical.png',
@@ -341,7 +346,7 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SplashScreen(),
+                                      builder: (context) => UserPoliceScreen(),
                                     ),
                                   );
                                 }, "assets/images/police.jpg", "পুলিশ"),
@@ -350,7 +355,7 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SplashScreen(),
+                                      builder: (context) => UserFireServiceScreen(),
                                     ),
                                   );
                                 }, "assets/images/fireservice.png",
@@ -365,7 +370,7 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SplashScreen(),
+                                      builder: (context) => UserAmbulanceServiceScreen(),
                                     ),
                                   );
                                 }, "assets/images/ambulance.jpg",
@@ -375,7 +380,7 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SplashScreen(),
+                                      builder: (context) => UserDoctorScreen(),
                                     ),
                                   );
                                 }, "assets/images/doctor1.jpg", "ডাক্তার"),

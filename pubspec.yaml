@@ -37,6 +37,7 @@ dependencies:
 
 #  State Management GetX
   get: ^4.6.6
+  intl: ^0.20.1
 
 dev_dependencies:
   flutter_test:

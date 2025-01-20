@@ -10,6 +10,8 @@ import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/E
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserPoliceListScreen/user_police_list_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserPolliBiddutListScreen/user_polli_biddut_list_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/userAmbulanceScreen/user_ambulance_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersHomeScreen/user_comment_screen.dart';
+import 'package:district_online_service/Styles/ElevatedBottonStyle.dart';
 import 'package:district_online_service/Styles/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,6 +30,7 @@ class UsersHomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   UsersHomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -64,22 +67,25 @@ class UsersHomeScreen extends StatelessWidget {
                   },
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundImage: snapshot.hasData && snapshot.data!.isNotEmpty
+                    backgroundImage: snapshot.hasData &&
+                            snapshot.data!.isNotEmpty
                         ? NetworkImage(snapshot.data!)
                         : const AssetImage('assets/images/default_profile.png')
-                    as ImageProvider,
+                            as ImageProvider,
                   ),
                 );
               },
             ),
-            SizedBox(width: 10,)
+            const SizedBox(
+              width: 10,
+            )
           ],
           elevation: 0,
           // Remove elevation for a flat AppBar
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom:
-              Radius.circular(20), // Adjust the radius for circular edges
+                  Radius.circular(20), // Adjust the radius for circular edges
             ),
           ),
         ),
@@ -111,17 +117,20 @@ class UsersHomeScreen extends StatelessWidget {
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
                                 ),
-                                borderRadius: const BorderRadius.all(Radius.circular(20)
-                                  // bottomLeft: Radius.circular(20),
-                                  // bottomRight: Radius.circular(20),
-                                ),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20)
+                                        // bottomLeft: Radius.circular(20),
+                                        // bottomRight: Radius.circular(20),
+                                        ),
                               ),
                               child: ImageSlideShow(),
                             ),
-
                             Container(
-                              margin: const EdgeInsets.only(top: 16, ),
-                              width: MediaQuery.of(context).size.width, // Full width of the screen
+                              margin: const EdgeInsets.only(
+                                top: 16,
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              // Full width of the screen
                               height: 55,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -135,7 +144,8 @@ class UsersHomeScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              child: MovingNoticeText(), // Add the moving notice text here
+                              child:
+                                  MovingNoticeText(), // Add the moving notice text here
                             ),
                           ],
                         ),
@@ -191,13 +201,12 @@ class UsersHomeScreen extends StatelessWidget {
                                 width: 5,
                               ),
                               AllInfromationCategoryList(
-                                    () {
+                                () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            DistrictHistoryScreen()
-                                      ));
+                                          builder: (context) =>
+                                              DistrictHistoryScreen()));
                                 },
                                 'assets/icons/history-book.png',
                                 'জেলার ইতিহাস',
@@ -207,7 +216,7 @@ class UsersHomeScreen extends StatelessWidget {
                               ),
 
                               AllInfromationCategoryList(
-                                    () {
+                                () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -221,7 +230,7 @@ class UsersHomeScreen extends StatelessWidget {
                                 width: 15,
                               ),
                               AllInfromationCategoryList(
-                                    () {
+                                () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -237,12 +246,11 @@ class UsersHomeScreen extends StatelessWidget {
 
                               //Brain
                               AllInfromationCategoryList(
-                                    () {
+                                () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            SplashScreen(),
+                                        builder: (context) => SplashScreen(),
                                       ));
                                 },
                                 'assets/icons/history-place.png',
@@ -252,7 +260,7 @@ class UsersHomeScreen extends StatelessWidget {
                                 width: 15,
                               ),
                               AllInfromationCategoryList(
-                                    () {
+                                () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -268,11 +276,12 @@ class UsersHomeScreen extends StatelessWidget {
                               ),
 
                               AllInfromationCategoryList(
-                                    () {
+                                () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => UserAnimalDoctorScreen(),
+                                        builder: (context) =>
+                                            UserAnimalDoctorScreen(),
                                       ));
                                 },
                                 'assets/icons/medical.png',
@@ -282,7 +291,7 @@ class UsersHomeScreen extends StatelessWidget {
                                 width: 15,
                               ),
                               AllInfromationCategoryList(
-                                    () {
+                                () {
                                   launch('https://www.narail.gov.bd/');
                                 },
                                 'assets/e-seba-icon/select-all.png',
@@ -292,7 +301,7 @@ class UsersHomeScreen extends StatelessWidget {
                                 width: 15,
                               ),
                               AllInfromationCategoryList(
-                                    () {
+                                () {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -337,7 +346,8 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => UserHospitalScreen(),
+                                      builder: (context) =>
+                                          UserHospitalScreen(),
                                     ),
                                   );
                                 }, "assets/images/haspital.jpg", "হাসপাতাল"),
@@ -355,7 +365,8 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => UserFireServiceScreen(),
+                                      builder: (context) =>
+                                          const UserFireServiceScreen(),
                                     ),
                                   );
                                 }, "assets/images/fireservice.png",
@@ -370,7 +381,8 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => UserAmbulanceServiceScreen(),
+                                      builder: (context) =>
+                                          UserAmbulanceServiceScreen(),
                                     ),
                                   );
                                 }, "assets/images/ambulance.jpg",
@@ -389,12 +401,33 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => UserBloodDonorScreen(),
+                                      builder: (context) =>
+                                          UserBloodDonorScreen(),
                                     ),
                                   );
                                 }, "assets/images/bloodDoner.jpg", "রক্তদান"),
                               ],
                             ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text(
+                              "আপনার মতামত দেন",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'kalpurush',
+                                fontSize: 26,
+                              ),
+                            ),
+                            ElevatedButtonStyle(
+                                text: "Comment here..",
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (e) => CommentScreen()),
+                                  );
+                                }),
                             const SizedBox(
                               height: 80,
                             ),

@@ -80,14 +80,14 @@ class _AdminCourierServiceScreenState extends State<AdminCourierServiceScreen> {
         filteredCourierServices.removeAt(index);
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Courier service deleted successfully!"),
           backgroundColor: Colors.green,
         ),
       );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Failed to delete courier service."),
           backgroundColor: Colors.red,
         ),
@@ -100,16 +100,16 @@ class _AdminCourierServiceScreenState extends State<AdminCourierServiceScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Delete Courier Service"),
-          content: Text("Are you sure you want to delete this service?"),
+          title: const Text("Delete Courier Service"),
+          content: const Text("Are you sure you want to delete this service?"),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false), // Cancel
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true), // Confirm
-              child: Text("Delete", style: TextStyle(color: Colors.red)),
+              child: const Text("Delete", style: TextStyle(color: Colors.red)),
             ),
           ],
         );

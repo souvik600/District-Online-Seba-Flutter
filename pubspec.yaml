@@ -35,6 +35,9 @@ dependencies:
 #  path provider
   path_provider: ^2.1.5
 
+#  State Management GetX
+  get: ^4.6.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

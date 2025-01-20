@@ -3,7 +3,8 @@ import 'package:district_online_service/Screens/SplashScreen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictHistoryScreen/district_history_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictMapScreen/district_map_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
-import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/BloodDonerListScreen/user_blood_doner_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserHospitalScreen/user_hospital_screen.dart';
+
 import 'package:district_online_service/Styles/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,6 +17,7 @@ import '../../../Widgets/NoticeTextWidget.dart';
 import '../../../Widgets/emergency_service_list_widget.dart';
 import '../../../Widgets/information_category_list_widget.dart';
 import '../../NavigationBerScreen.dart';
+import '../UsersCategoryScreen/EmargencyServiceCategory/UserBloodDonerListScreen/user_blood_doner_screen.dart';
 
 class UsersHomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -330,7 +332,7 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SplashScreen(),
+                                      builder: (context) => UserHospitalScreen(),
                                     ),
                                   );
                                 }, "assets/images/haspital.jpg", "হাসপাতাল"),

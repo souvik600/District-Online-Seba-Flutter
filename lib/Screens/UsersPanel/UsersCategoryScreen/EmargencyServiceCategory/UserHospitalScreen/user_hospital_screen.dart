@@ -1,269 +1,24 @@
-import 'dart:io';
-import 'package:district_online_service/AppColors/AppColors.dart';
-import 'package:district_online_service/Styles/InputDecorationStyle.dart';
-import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
-import '../../../../../../Styles/BackGroundStyle.dart';
-import '../../../../../../Utilitys/utilitys.dart';
+import '../../../../../AppColors/AppColors.dart';
+import '../../../../../Styles/BackGroundStyle.dart';
+import '../../../../../Utilitys/utilitys.dart';
+import '../../../../../Widgets/Custom_appBar_widgets.dart';
 
-class AdminHospitalScreen extends StatefulWidget {
+class UserHospitalScreen extends StatefulWidget {
   @override
-  _AdminHospitalScreenState createState() => _AdminHospitalScreenState();
+  _UserHospitalScreenState createState() => _UserHospitalScreenState();
 }
 
-class _AdminHospitalScreenState extends State<AdminHospitalScreen> {
+class _UserHospitalScreenState extends State<UserHospitalScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _websiteController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
 
-  XFile? _selectedImage;
-
-  // Add hospital
-  Future<void> _addHospital() async {
-    final data = {
-      'name': _nameController.text.trim(),
-      'location': _locationController.text.trim(),
-      'contact': _contactController.text.trim(),
-      'description': _descriptionController.text.trim(),
-      'website': _websiteController.text.trim(),
-      'email': _emailController.text.trim(),
-    };
-
-    final docRef = await _firestore.collection('hospitals').add(data);
-    if (_selectedImage != null) {
-      final imageUrl = await _uploadImage(docRef.id);
-      await docRef.update({'image': imageUrl});
-    }
-
-    Navigator.of(context).pop(); // Close bottom sheet
-  }
-
-  // Update hospital
-  Future<void> _updateHospital(String id) async {
-    final data = {
-      'name': _nameController.text.trim(),
-      'location': _locationController.text.trim(),
-      'contact': _contactController.text.trim(),
-      'description': _descriptionController.text.trim(),
-      'website': _websiteController.text.trim(),
-      'email': _emailController.text.trim(),
-    };
-
-    // Update the existing hospital with new data
-    await _firestore.collection('hospitals').doc(id).update(data);
-
-    // If image was changed, upload it and update the image field
-    if (_selectedImage != null) {
-      final imageUrl = await _uploadImage(id);
-      await _firestore
-          .collection('hospitals')
-          .doc(id)
-          .update({'image': imageUrl});
-    }
-
-    Navigator.of(context).pop(); // Close bottom sheet
-  }
-
-  // Upload image
-  Future<String> _uploadImage(String id) async {
-    final ref = _storage.ref().child('hospital_images/$id.jpg');
-    await ref.putFile(File(_selectedImage!.path));
-    return await ref.getDownloadURL();
-  }
-
-  // Pick image from gallery
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
+  void _onSearchChanged(String query) {
     setState(() {
-      _selectedImage = image;
+      _searchQuery = query;
     });
-  }
-
-  Future<void> _deleteHospital(String id) async {
-    try {
-      await FirebaseFirestore.instance.collection('hospitals').doc(id).delete();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Hospital deleted successfully!"),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Failed to delete hospital."),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  Future<void> _confirmDeleteHospital(String id) async {
-    bool? confirmed = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Delete Hospital"),
-          content: Text("Are you sure you want to delete this hospital?"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              // Cancel action
-              child: Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              // Confirm action
-              child: Text(
-                "Delete",
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirmed == true) {
-      await _deleteHospital(id); // Call the delete function
-    }
-  }
-
-  // Show form for adding or editing hospital
-  void _showHospitalForm({String? id, Map<String, dynamic>? data}) {
-    // Reset form fields if no data
-    if (data == null) {
-      _nameController.clear();
-      _locationController.clear();
-      _contactController.clear();
-      _descriptionController.clear();
-      _websiteController.clear();
-      _emailController.clear();
-      _selectedImage = null;
-    } else {
-      // Pre-fill form with existing data
-      _nameController.text = data['name'];
-      _locationController.text = data['location'];
-      _contactController.text = data['contact'];
-      _descriptionController.text = data['description'];
-      _websiteController.text = data['website'];
-      _emailController.text = data['email'];
-      if (data['image'] != null) {
-        _selectedImage = null; // Reset image if updating (optional)
-      }
-    }
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) {
-        return Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    data == null ? 'Add Hospital' : 'Edit Hospital',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 16.0),
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.grey),
-                        image: DecorationImage(
-                          image: _selectedImage != null
-                              ? FileImage(File(_selectedImage!.path))
-                              : (data != null && data['image'] != null
-                                      ? NetworkImage(data['image'])
-                                      : const AssetImage(
-                                          'assets/images/user.png'))
-                                  as ImageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: _selectedImage == null &&
-                              (data == null || data['image'] == null)
-                          ? const Icon(Icons.add_a_photo,
-                              size: 50, color: Colors.grey)
-                          : null,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextField(
-                      controller: _nameController,
-                      decoration: AppInputDecoration('Hospital Name')),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _locationController,
-                      decoration: AppInputDecoration('Hospital Location')),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _contactController,
-                      decoration: AppInputDecoration('Contact Number'),
-                      keyboardType: TextInputType.phone),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _descriptionController,
-                      decoration: AppInputDecoration("Description")),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _websiteController,
-                      decoration: AppInputDecoration('Website')),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _emailController,
-                      decoration: AppInputDecoration('Email'),
-                      keyboardType: TextInputType.emailAddress),
-                  const SizedBox(height: 16.0),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (data == null) {
-                          _addHospital(); // Add hospital if data is null
-                        } else {
-                          _updateHospital(
-                              id!); // Update hospital if data is provided
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.pColor.withOpacity(.8),
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0)),
-                      ),
-                      child: Text(
-                          data == null ? 'Add Hospital' : 'Update Hospital',
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 18)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   void _openDetailsScreen(Map<String, dynamic> data) {
@@ -271,17 +26,10 @@ class _AdminHospitalScreenState extends State<AdminHospitalScreen> {
         MaterialPageRoute(builder: (_) => HospitalDetailsScreen(data: data)));
   }
 
-  // Search function
-  void _onSearchChanged(String query) {
-    setState(() {
-      _searchQuery = query;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Hospital'),
+      appBar: CustomAppBar('হাসপাতাল'),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -295,7 +43,8 @@ class _AdminHospitalScreenState extends State<AdminHospitalScreen> {
                     prefixIcon: const Icon(Icons.search),
                     hintText: 'Search Hospital by Name or Location',
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   onChanged: _onSearchChanged,
                 ),
@@ -323,11 +72,11 @@ class _AdminHospitalScreenState extends State<AdminHospitalScreen> {
                             children: [
                               // Background Image
                               Padding(
-                                padding: const EdgeInsets.all(20.0),
+                                padding: const EdgeInsets.all(10.0),
                                 child: Center(
                                   child: Container(
                                     width: double.infinity,
-                                    height: 80,
+                                    height: 70,
                                     decoration: BoxDecoration(
                                       image: const DecorationImage(
                                         image: AssetImage(
@@ -385,24 +134,6 @@ class _AdminHospitalScreenState extends State<AdminHospitalScreen> {
                                         trailing: const Icon(
                                             Icons.arrow_forward_ios_sharp),
                                       ),
-                                      Row(
-                                        children: [
-                                          TextButton(
-                                            onPressed: () => _showHospitalForm(
-                                                id: hospitals[index].id,
-                                                data: data),
-                                            child: const Text('Edit'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () =>
-                                                _confirmDeleteHospital(
-                                                    hospitals[index].id),
-                                            child: const Text('Delete',
-                                                style: TextStyle(
-                                                    color: Colors.red)),
-                                          ),
-                                        ],
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -419,11 +150,6 @@ class _AdminHospitalScreenState extends State<AdminHospitalScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showHospitalForm(),
-        backgroundColor: AppColors.pColor,
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
@@ -437,23 +163,29 @@ class HospitalDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(data['name']),
-      body: Container(
-        color: AppColors.pColor.withOpacity(.2),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildImageSection(),
-              const SizedBox(height: 10),
-              _buildHospitalNameAndLocation(),
-              const SizedBox(height: 10),
-              _buildContactCard(context),
-              const SizedBox(height: 10),
-              _buildDescriptionCard(),
-            ],
+      body: Stack(
+        children: [
+          ScreenBackground(context),
+          Container(
+            color: AppColors.pColor.withOpacity(.1),
+            child: SingleChildScrollView(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildImageSection(),
+                  const SizedBox(height: 10),
+                  _buildHospitalNameAndLocation(),
+                  const SizedBox(height: 10),
+                  _buildContactCard(context),
+                  const SizedBox(height: 10),
+                  _buildDescriptionCard(),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

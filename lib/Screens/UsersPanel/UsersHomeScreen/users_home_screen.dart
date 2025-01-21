@@ -3,6 +3,7 @@ import 'package:district_online_service/Screens/SplashScreen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictHistoryScreen/district_history_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictMapScreen/district_map_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserHistoricalPlaceScreen/user_historical_place_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserAnimalDoctorScreen/user_animal_doctor_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserDoctorScreen/user_doctor_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserFireServiceScreen/user_fire_service_screen.dart';
@@ -250,7 +251,7 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => SplashScreen(),
+                                        builder: (context) => UserHistoricalPlaceScreen(),
                                       ));
                                 },
                                 'assets/icons/history-place.png',
@@ -425,7 +426,7 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (e) => CommentScreen()),
+                                        builder: (e) => UserCommentScreen()),
                                   );
                                 }),
                             const SizedBox(

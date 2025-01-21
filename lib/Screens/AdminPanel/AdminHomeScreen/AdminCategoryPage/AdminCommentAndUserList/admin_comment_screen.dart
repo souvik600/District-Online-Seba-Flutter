@@ -1,4 +1,3 @@
-import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,13 +5,14 @@ import 'package:intl/intl.dart';
 import 'package:district_online_service/AppColors/AppColors.dart';
 import 'package:district_online_service/Styles/BackGroundStyle.dart';
 
-class UserCommentScreen extends StatefulWidget {
+class AdminCommentScreen extends StatefulWidget {
   @override
-  _UserCommentScreenState createState() => _UserCommentScreenState();
+  _AdminCommentScreenState createState() => _AdminCommentScreenState();
 }
 
-class _UserCommentScreenState extends State<UserCommentScreen> {
+class _AdminCommentScreenState extends State<AdminCommentScreen> {
   final TextEditingController _commentController = TextEditingController();
+  final TextEditingController _replyController = TextEditingController();
   String? userImage, userName;
 
   // Fetch user data
@@ -44,6 +44,70 @@ class _UserCommentScreenState extends State<UserCommentScreen> {
     });
   }
 
+  // Submit a reply
+  Future<void> _submitReply(String commentId) async {
+    if (_replyController.text.trim().isEmpty) return;
+
+    await FirebaseFirestore.instance
+        .collection('comments')
+        .doc(commentId)
+        .collection('replies')
+        .add({
+      'userId': FirebaseAuth.instance.currentUser!.uid,
+      'userName': userName ?? 'Anonymous',
+      'userImage': userImage!,
+      'replyText': _replyController.text.trim(),
+      'timestamp': DateTime.now(),
+    });
+
+    setState(() {
+      _replyController.clear();
+    });
+  }
+
+  // Confirm and delete a comment
+  Future<void> _deleteComment(String commentId) async {
+    bool confirmed = await _showConfirmationDialog("Delete this comment?");
+    if (confirmed) {
+      await FirebaseFirestore.instance.collection('comments').doc(commentId).delete();
+    }
+  }
+
+  // Confirm and delete a reply
+  Future<void> _deleteReply(String commentId, String replyId) async {
+    bool confirmed = await _showConfirmationDialog("Delete this reply?");
+    if (confirmed) {
+      await FirebaseFirestore.instance
+          .collection('comments')
+          .doc(commentId)
+          .collection('replies')
+          .doc(replyId)
+          .delete();
+    }
+  }
+
+  // Confirmation dialog
+  Future<bool> _showConfirmationDialog(String message) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Confirm"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Delete"),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +117,10 @@ class _UserCommentScreenState extends State<UserCommentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Comments'),
+      appBar: AppBar(
+        backgroundColor: AppColors.pColor,
+        title: const Text('Admin Comments'),
+      ),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -98,7 +165,7 @@ class _UserCommentScreenState extends State<UserCommentScreen> {
                                       comment['userImage']),
                                 ),
                                 title: Text(comment['userName'],
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         color: AppColors.pColor,
                                         fontWeight: FontWeight.bold)),
                                 subtitle: Column(
@@ -114,6 +181,12 @@ class _UserCommentScreenState extends State<UserCommentScreen> {
                                           color: Colors.grey),
                                     ),
                                   ],
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
+                                  onPressed: () =>
+                                      _deleteComment(commentId),
                                 ),
                               ),
                               StreamBuilder<QuerySnapshot>(
@@ -153,7 +226,6 @@ class _UserCommentScreenState extends State<UserCommentScreen> {
                                             left: 48.0,
                                             right: 16.0),
                                         child: Card(
-                                          color: Colors.grey.shade50,
                                           child: ListTile(
                                             leading: CircleAvatar(
                                               backgroundImage:
@@ -179,12 +251,35 @@ class _UserCommentScreenState extends State<UserCommentScreen> {
                                                 ),
                                               ],
                                             ),
+                                            trailing: IconButton(
+                                              icon: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red),
+                                              onPressed: () =>
+                                                  _deleteReply(
+                                                      commentId,
+                                                      reply.id),
+                                            ),
                                           ),
                                         ),
                                       );
                                     },
                                   );
                                 },
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextField(
+                                  controller: _replyController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Reply...',
+                                    suffixIcon: IconButton(
+                                      icon: const Icon(Icons.send),
+                                      onPressed: () =>
+                                          _submitReply(commentId),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           ),

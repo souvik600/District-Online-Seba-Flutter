@@ -1,230 +1,20 @@
-import 'dart:io';
 import 'package:district_online_service/AppColors/AppColors.dart';
-import 'package:district_online_service/Styles/InputDecorationStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../../../../../Styles/BackGroundStyle.dart';
 import '../../../../../../Utilitys/utilitys.dart';
 
-class AdminHistoricalPlaceScreen extends StatefulWidget {
+class UserHistoricalPlaceScreen extends StatefulWidget {
   @override
-  _AdminHistoricalPlaceScreenState createState() =>
-      _AdminHistoricalPlaceScreenState();
+  _UserHistoricalPlaceScreenState createState() =>
+      _UserHistoricalPlaceScreenState();
 }
 
-class _AdminHistoricalPlaceScreenState
-    extends State<AdminHistoricalPlaceScreen> {
+class _UserHistoricalPlaceScreenState extends State<UserHistoricalPlaceScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _websiteController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-
-  XFile? _selectedImage;
-
-  // Add hospital
-  Future<void> _addHistoricalPlace() async {
-    final data = {
-      'name': _nameController.text.trim(),
-      'location': _locationController.text.trim(),
-      'contact': _contactController.text.trim(),
-      'description': _descriptionController.text.trim(),
-      'website': _websiteController.text.trim(),
-      'email': _emailController.text.trim(),
-    };
-
-    final docRef = await _firestore.collection('HistoricalPlace').add(data);
-    if (_selectedImage != null) {
-      final imageUrl = await _uploadImage(docRef.id);
-      await docRef.update({'image': imageUrl});
-    }
-
-    Navigator.of(context).pop(); // Close bottom sheet
-  }
-
-  // Update hospital
-  Future<void> _updateHistoricalPlace(String id) async {
-    final data = {
-      'name': _nameController.text.trim(),
-      'location': _locationController.text.trim(),
-      'contact': _contactController.text.trim(),
-      'description': _descriptionController.text.trim(),
-      'website': _websiteController.text.trim(),
-      'email': _emailController.text.trim(),
-    };
-
-    // Update the existing hospital with new data
-    await _firestore.collection('HistoricalPlace').doc(id).update(data);
-
-    // If image was changed, upload it and update the image field
-    if (_selectedImage != null) {
-      final imageUrl = await _uploadImage(id);
-      await _firestore
-          .collection('HistoricalPlace')
-          .doc(id)
-          .update({'image': imageUrl});
-    }
-
-    Navigator.of(context).pop(); // Close bottom sheet
-  }
-
-  // Upload image
-  Future<String> _uploadImage(String id) async {
-    final ref = _storage.ref().child('HistoricalPlace_images/$id.jpg');
-    await ref.putFile(File(_selectedImage!.path));
-    return await ref.getDownloadURL();
-  }
-
-  // Pick image from gallery
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _selectedImage = image;
-    });
-  }
-
-  Future<void> _deleteHistoricalPlace(String id) async {
-    await _firestore.collection('HistoricalPlace').doc(id).delete();
-  }
-
-  // Show form for adding or editing hospital
-  void _showHistoricalPlaceForm({String? id, Map<String, dynamic>? data}) {
-    // Reset form fields if no data
-    if (data == null) {
-      _nameController.clear();
-      _locationController.clear();
-      _contactController.clear();
-      _descriptionController.clear();
-      _websiteController.clear();
-      _emailController.clear();
-      _selectedImage = null;
-    } else {
-      // Pre-fill form with existing data
-      _nameController.text = data['name'];
-      _locationController.text = data['location'];
-      _contactController.text = data['contact'];
-      _descriptionController.text = data['description'];
-      _websiteController.text = data['website'];
-      _emailController.text = data['email'];
-      if (data['image'] != null) {
-        _selectedImage = null; // Reset image if updating (optional)
-      }
-    }
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) {
-        return Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    data == null ? 'Add Hospital' : 'Edit Hospital',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 16.0),
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.grey),
-                        image: DecorationImage(
-                          image: _selectedImage != null
-                              ? FileImage(File(_selectedImage!.path))
-                              : (data != null && data['image'] != null
-                                      ? NetworkImage(data['image'])
-                                      : const AssetImage(
-                                          'assets/images/user.png'))
-                                  as ImageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: _selectedImage == null &&
-                              (data == null || data['image'] == null)
-                          ? const Icon(Icons.add_a_photo,
-                              size: 50, color: Colors.grey)
-                          : null,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextField(
-                      controller: _nameController,
-                      decoration: AppInputDecoration('Historical Place Name')),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _locationController,
-                      decoration:
-                          AppInputDecoration('Historical Place Location')),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _contactController,
-                      decoration: AppInputDecoration('Contact Number'),
-                      keyboardType: TextInputType.phone),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _descriptionController,
-                      decoration: AppInputDecoration("Description")),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _websiteController,
-                      decoration: AppInputDecoration('Website')),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                      controller: _emailController,
-                      decoration: AppInputDecoration('Email'),
-                      keyboardType: TextInputType.emailAddress),
-                  const SizedBox(height: 16.0),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (data == null) {
-                          _addHistoricalPlace(); // Add hospital if data is null
-                        } else {
-                          _updateHistoricalPlace(
-                              id!); // Update hospital if data is provided
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.pColor.withOpacity(.8),
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0)),
-                      ),
-                      child: Text(
-                          data == null
-                              ? 'Add Historical Place'
-                              : 'Update Historical Place',
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 18)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   void _openDetailsScreen(Map<String, dynamic> data) {
     Navigator.of(context).push(MaterialPageRoute(
@@ -241,7 +31,7 @@ class _AdminHistoricalPlaceScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Historical Place'),
+      appBar: CustomAppBar('দর্শনীয় স্থান'),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -253,7 +43,7 @@ class _AdminHistoricalPlaceScreenState
                   controller: _searchController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search Historical Place by Name or Location',
+                    hintText: 'Search Historical Place by Name',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
                   ),
@@ -283,11 +73,11 @@ class _AdminHistoricalPlaceScreenState
                             children: [
                               // Background Image
                               Padding(
-                                padding: const EdgeInsets.all(20.0),
+                                padding: const EdgeInsets.all(10.0),
                                 child: Center(
                                   child: Container(
                                     width: double.infinity,
-                                    height: 80,
+                                    height: 70,
                                     decoration: BoxDecoration(
                                       image: const DecorationImage(
                                         image: AssetImage(
@@ -327,7 +117,7 @@ class _AdminHistoricalPlaceScreenState
                                                 size: 50),
                                         title: Text(
                                           data['name'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 18,
                                               color: AppColors.pColor,
                                               fontWeight: FontWeight.w500),
@@ -345,26 +135,6 @@ class _AdminHistoricalPlaceScreenState
                                         trailing: const Icon(
                                             Icons.arrow_forward_ios_sharp),
                                       ),
-                                      Row(
-                                        children: [
-                                          TextButton(
-                                            onPressed: () =>
-                                                _showHistoricalPlaceForm(
-                                                    id: HistoricalPlaces[index]
-                                                        .id,
-                                                    data: data),
-                                            child: const Text('Edit'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () =>
-                                                _deleteHistoricalPlace(
-                                                    HistoricalPlaces[index].id),
-                                            child: const Text('Delete',
-                                                style: TextStyle(
-                                                    color: Colors.red)),
-                                          ),
-                                        ],
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -381,11 +151,6 @@ class _AdminHistoricalPlaceScreenState
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showHistoricalPlaceForm(),
-        backgroundColor: AppColors.pColor,
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
@@ -401,12 +166,12 @@ class HistoricalPlaceDetailsScreen extends StatelessWidget {
       appBar: CustomAppBar(
         data['name'],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-        child: Stack(
-          children: [
-            ScreenBackground(context),
-            Column(
+      body: Stack(
+        children: [
+          ScreenBackground(context),
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Image Section with Gradient Overlay
@@ -422,8 +187,8 @@ class HistoricalPlaceDetailsScreen extends StatelessWidget {
                 _buildDescriptionCard(),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -500,11 +265,11 @@ class HistoricalPlaceDetailsScreen extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.location_on_outlined,
                 color: Colors.red,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
               Expanded(
@@ -647,7 +412,7 @@ class HistoricalPlaceDetailsScreen extends StatelessWidget {
             // Description Title
             const Center(
               child: Text(
-                'About Historical Place ',
+                'About Historical ',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

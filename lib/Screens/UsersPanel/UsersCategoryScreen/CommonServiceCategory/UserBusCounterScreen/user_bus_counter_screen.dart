@@ -3,51 +3,62 @@ import 'package:district_online_service/Utilitys/utilitys.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../AppColors/AppColors.dart';
-import '../../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminEmargencyServiceCategory/AdminAmbulanceScreen/admin_ambulance_screen.dart';
+import '../../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminCommonServiceCategory/AdminBusCounterScreen/admin_bus_counter_screen.dart';
 
-class UserAmbulanceServiceScreen extends StatefulWidget {
+
+class UserBusCounterServiceScreen extends StatefulWidget {
   @override
-  _UserAmbulanceServiceScreenState createState() =>
-      _UserAmbulanceServiceScreenState();
+  _UserBusCounterServiceScreenState createState() =>
+      _UserBusCounterServiceScreenState();
 }
 
-class _UserAmbulanceServiceScreenState
-    extends State<UserAmbulanceServiceScreen> {
-  final List<AmbulanceDataModel> allAmbulances = [];
-  List<AmbulanceDataModel> filteredAmbulances = [];
+class _UserBusCounterServiceScreenState
+    extends State<UserBusCounterServiceScreen> {
+  final List<BusCounterDataModel> allBusCounter = [];
+  List<BusCounterDataModel> filteredBusCounter = [];
 
   @override
   void initState() {
     super.initState();
-    fetchAmbulances();
+    fetchBusCounter();
   }
 
-  void fetchAmbulances() async {
+  void fetchBusCounter() async {
     final querySnapshot =
-        await FirebaseFirestore.instance.collection('AmbulanceList').get();
-    final ambulances = querySnapshot.docs
-        .map((doc) => AmbulanceDataModel.fromFirestore(doc))
+    await FirebaseFirestore.instance.collection('BusCounterList').get();
+    final busCounter = querySnapshot.docs
+        .map((doc) => BusCounterDataModel.fromFirestore(doc))
         .toList();
     setState(() {
-      allAmbulances.addAll(ambulances);
-      filteredAmbulances.addAll(ambulances);
+      allBusCounter.addAll(busCounter);
+      filteredBusCounter.addAll(busCounter);
     });
   }
 
-  void filterAmbulances(String query) {
+  void filterBusCounter(String query) {
     setState(() {
-      filteredAmbulances = allAmbulances
-          .where((ambulance) =>
-              ambulance.serviceName.toLowerCase().contains(query.toLowerCase()))
+      filteredBusCounter = allBusCounter
+          .where((busCounter) => busCounter.counterName
+          .toLowerCase()
+          .contains(query.toLowerCase()))
           .toList();
     });
+  }
+
+
+  void _openBookingUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('অ্যাম্বুলেন্স'),
+      appBar: CustomAppBar("বাস কাউন্টার"),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -56,9 +67,9 @@ class _UserAmbulanceServiceScreenState
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                  onChanged: filterAmbulances,
+                  onChanged: filterBusCounter,
                   decoration: InputDecoration(
-                    hintText: "Search Ambulance Services...",
+                    hintText: "Search Bus Counter...",
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -68,9 +79,9 @@ class _UserAmbulanceServiceScreenState
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: filteredAmbulances.length,
+                  itemCount: filteredBusCounter.length,
                   itemBuilder: (context, index) {
-                    final ambulance = filteredAmbulances[index];
+                    final busCounter = filteredBusCounter[index];
 
                     return Stack(
                       children: [
@@ -82,8 +93,8 @@ class _UserAmbulanceServiceScreenState
                               height: 150,
                               decoration: BoxDecoration(
                                 image: const DecorationImage(
-                                  image:
-                                      AssetImage('assets/icons/ambulance.png'),
+                                  image: AssetImage(
+                                      'assets/icons/bus_counter.png'),
                                   fit: BoxFit.contain,
                                 ),
                                 borderRadius: BorderRadius.circular(8.0),
@@ -118,7 +129,7 @@ class _UserAmbulanceServiceScreenState
                                     children: [
                                       Center(
                                         child: Text(
-                                          ambulance.serviceName,
+                                          busCounter.counterName,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18,
@@ -128,14 +139,14 @@ class _UserAmbulanceServiceScreenState
                                       const SizedBox(height: 4),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        MainAxisAlignment.center,
                                         children: [
                                           const Icon(
                                             Icons.location_on_outlined,
                                             color: AppColors.pColor,
                                           ),
                                           Text(
-                                            ambulance.location,
+                                            busCounter.location,
                                             style: const TextStyle(
                                                 color: Colors.black54),
                                           ),
@@ -153,76 +164,55 @@ class _UserAmbulanceServiceScreenState
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       // Image Section
-                                      ambulance.imageUrl.isNotEmpty
+                                      busCounter.imageUrl.isNotEmpty
                                           ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              child: Image.network(
-                                                ambulance.imageUrl,
-                                                fit: BoxFit.cover,
-                                                width: 80,
-                                                height: 80,
-                                              ),
-                                            )
+                                        borderRadius:
+                                        BorderRadius.circular(8.0),
+                                        child: Image.network(
+                                          busCounter.imageUrl,
+                                          fit: BoxFit.cover,
+                                          width: 80,
+                                          height: 80,
+                                        ),
+                                      )
                                           : Container(
-                                              width: 80,
-                                              height: 80,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey.shade200,
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              child: const Icon(
-                                                  Icons.local_hospital,
-                                                  size: 40),
-                                            ),
+                                        width: 80,
+                                        height: 80,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade200,
+                                          borderRadius:
+                                          BorderRadius.circular(8.0),
+                                        ),
+                                        child: const Icon(
+                                            Icons.local_hospital,
+                                            size: 40),
+                                      ),
                                       const SizedBox(width: 16),
 
                                       // Details Section
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              "Driver: ${ambulance.driverName}",
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16),
-                                            ),
                                             const SizedBox(
                                               height: 2,
                                             ),
                                             Text(
-                                              "Type: ${ambulance.ambulanceType}",
+                                              "ফোন: ${busCounter.contact}",
                                               style:
-                                                  const TextStyle(fontSize: 15),
+                                              const TextStyle(fontSize: 16),
                                             ),
                                             const SizedBox(
                                               height: 2,
                                             ),
                                             Text(
-                                              "Phone: ${ambulance.contact}",
+                                              "গন্তব্যস্থান: ${busCounter.destination}",
                                               style:
-                                                  const TextStyle(fontSize: 15),
-                                            ),
-                                            const SizedBox(
-                                              height: 2,
-                                            ),
-                                            Text(
-                                              ambulance.isAvailable
-                                                  ? "Available"
-                                                  : "Not Available",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: ambulance.isAvailable
-                                                    ? Colors.green
-                                                    : Colors.red,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                              const TextStyle(fontSize: 15),
                                             ),
                                           ],
                                         ),
@@ -237,16 +227,29 @@ class _UserAmbulanceServiceScreenState
                                       borderRadius: BorderRadius.circular(5),
                                       color: AppColors.pColor.withOpacity(.1)),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                     children: [
                                       ElevatedButton.icon(
                                         onPressed: () => showCallDialog(
-                                            ambulance.contact, context),
+                                            busCounter.contact, context),
                                         icon: const Icon(Icons.call,
                                             color: Colors.white),
-                                        label: const Text("Call Now"),
+                                        label: const Text("Call"),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.green,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0),
+                                        ),
+                                      ),
+                                      ElevatedButton.icon(
+                                        onPressed: () =>
+                                            _openBookingUrl(busCounter.webLink),
+                                        icon: const Icon(Icons.language,
+                                            color: Colors.white),
+                                        label: const Text("Online Book"),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue,
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 16.0),
                                         ),
@@ -270,3 +273,4 @@ class _UserAmbulanceServiceScreenState
     );
   }
 }
+

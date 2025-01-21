@@ -7,6 +7,7 @@ import '../../../Widgets/AdminImageSlideShowWidget.dart';
 import '../../../Widgets/AdminNoticeTextWidget.dart';
 import '../../UsersPanel/UsersCategoryScreen/WorkerServiceCategory/worker_service_category.dart';
 import '../../UsersPanel/UsersProfileScreen/user_profile_screen.dart';
+import 'AdminCategoryPage/AdminCommentAndUserList/admin_comment_and_user_list_catagory.dart';
 import 'AdminCategoryPage/AdminCommonServiceCategory/admin_common_service_category.dart';
 import 'AdminCategoryPage/AdminEducationalServiceCategory/admin_educational_institution_catagory_screen.dart';
 import 'AdminCategoryPage/AdminEmargencyServiceCategory/admin_emargency_service_category.dart';
@@ -128,6 +129,8 @@ class AdminHomeScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 8),
+                          AdminCommentAndUserListCategory(),
+                          SizedBox(height: 16),
                           AdminEmargencyServiceCategory(),
                           SizedBox(height: 16),
                           AdminCommonServiceCategory(),

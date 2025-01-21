@@ -148,17 +148,17 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
                           image: _selectedImage != null
                               ? FileImage(File(_selectedImage!.path))
                               : (data != null && data['image'] != null
-                              ? NetworkImage(data['image'])
-                              : const AssetImage(
-                              'assets/images/user.png'))
-                          as ImageProvider,
+                                      ? NetworkImage(data['image'])
+                                      : const AssetImage(
+                                          'assets/images/user.png'))
+                                  as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
                       child: _selectedImage == null &&
-                          (data == null || data['image'] == null)
+                              (data == null || data['image'] == null)
                           ? const Icon(Icons.add_a_photo,
-                          size: 50, color: Colors.grey)
+                              size: 50, color: Colors.grey)
                           : null,
                     ),
                   ),
@@ -169,7 +169,8 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
                   const SizedBox(height: 8.0),
                   TextField(
                       controller: _locationController,
-                      decoration: AppInputDecoration('Park & Resort  Location')),
+                      decoration:
+                          AppInputDecoration('Park & Resort  Location')),
                   const SizedBox(height: 8.0),
                   TextField(
                       controller: _contactController,
@@ -207,8 +208,11 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
                             borderRadius: BorderRadius.circular(8.0)),
                       ),
                       child: Text(
-                          data == null ? 'Add Park & Resort ' : 'Update Park & Resort ',
-                          style: const TextStyle(color: Colors.white, fontSize: 18)),
+                          data == null
+                              ? 'Add Park & Resort '
+                              : 'Update Park & Resort ',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 18)),
                     ),
                   ),
                 ],
@@ -219,8 +223,10 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
       },
     );
   }
+
   void _openDetailsScreen(Map<String, dynamic> data) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => ParkResortDetailsScreen(data: data)));
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => ParkResortDetailsScreen(data: data)));
   }
 
   // Search function
@@ -233,7 +239,7 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Park & Resort '),
+      appBar: CustomAppBar('পার্ক রিসোর্ট'),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -245,9 +251,9 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search Park & Resort by Name or Location',
-                    border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                    hintText: 'Search Park & Resort by Name ',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
                   ),
                   onChanged: _onSearchChanged,
                 ),
@@ -257,7 +263,8 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
                   stream: _firestore
                       .collection('ParkResort')
                       .where('name', isGreaterThanOrEqualTo: _searchQuery)
-                      .where('name', isLessThanOrEqualTo: _searchQuery + '\uf8ff')
+                      .where('name',
+                          isLessThanOrEqualTo: _searchQuery + '\uf8ff')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -281,8 +288,8 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
                                     height: 80,
                                     decoration: BoxDecoration(
                                       image: const DecorationImage(
-                                        image:
-                                        AssetImage('assets/icons/bungalow.png'),
+                                        image: AssetImage(
+                                            'assets/icons/bungalow.png'),
                                         fit: BoxFit.contain,
                                       ),
                                       borderRadius: BorderRadius.circular(8.0),
@@ -296,7 +303,8 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                color: Colors.white.withOpacity(0.85), // Semi-transparent background
+                                color: Colors.white.withOpacity(0.85),
+                                // Semi-transparent background
                                 child: Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(
@@ -308,31 +316,48 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
                                       ListTile(
                                         leading: data['image'] != null
                                             ? Image.network(
-                                          data['image'],
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.cover,
-                                        )
-                                            : const Icon(Icons.local_hospital, size: 50),
-                                        title: Text(data['name'],style: TextStyle(fontSize: 18,color: AppColors.pColor,fontWeight: FontWeight.w500),),
+                                                data['image'],
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : const Icon(Icons.local_hospital,
+                                                size: 50),
+                                        title: Text(
+                                          data['name'],
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: AppColors.pColor,
+                                              fontWeight: FontWeight.w500),
+                                        ),
                                         subtitle: Row(
                                           children: [
-                                            const Icon(Icons.location_on_outlined,color: Colors.red,),
+                                            const Icon(
+                                              Icons.location_on_outlined,
+                                              color: Colors.red,
+                                            ),
                                             Text(data['location']),
                                           ],
                                         ),
                                         onTap: () => _openDetailsScreen(data),
-                                        trailing: const Icon(Icons.arrow_forward_ios_sharp),
+                                        trailing: const Icon(
+                                            Icons.arrow_forward_ios_sharp),
                                       ),
                                       Row(
                                         children: [
                                           TextButton(
-                                            onPressed: () => _showParkResortForm(id: ParkResorts[index].id, data: data),
+                                            onPressed: () =>
+                                                _showParkResortForm(
+                                                    id: ParkResorts[index].id,
+                                                    data: data),
                                             child: const Text('Edit'),
                                           ),
                                           TextButton(
-                                            onPressed: () => _deleteParkResort(ParkResorts[index].id),
-                                            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                            onPressed: () => _deleteParkResort(
+                                                ParkResorts[index].id),
+                                            child: const Text('Delete',
+                                                style: TextStyle(
+                                                    color: Colors.red)),
                                           ),
                                         ],
                                       ),
@@ -342,7 +367,6 @@ class _AdminParkResortScreenState extends State<AdminParkResortScreen> {
                               ),
                             ],
                           ),
-
                         );
                       },
                     );
@@ -370,7 +394,8 @@ class ParkResortDetailsScreen extends StatelessWidget {
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
-    } else {      throw 'Could not launch $url';
+    } else {
+      throw 'Could not launch $url';
     }
   }
 
@@ -395,25 +420,33 @@ class ParkResortDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:CustomAppBar(data['name'],),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image Section with Gradient Overlay
-            _buildImageSection(),
-            const SizedBox(height: 10),
-            // Hospital Name & Location
-            _buildParkResortNameAndLocation(),
-            const SizedBox(height: 10),
-            // Contact Info Card (Phone, Email, Website)
-            _buildContactCard(),
-            const SizedBox(height: 10),
-            // Description Card
-            _buildDescriptionCard(),
-          ],
-        ),
+      appBar: CustomAppBar(
+        data['name'],
+      ),
+      body: Stack(
+        children: [
+          ScreenBackground(context),
+          SingleChildScrollView(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Image Section with Gradient Overlay
+                _buildImageSection(),
+                const SizedBox(height: 10),
+                // Hospital Name & Location
+                _buildParkResortNameAndLocation(),
+                const SizedBox(height: 10),
+                // Contact Info Card (Phone, Email, Website)
+                _buildContactCard(),
+                const SizedBox(height: 10),
+                // Description Card
+                _buildDescriptionCard(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -424,26 +457,26 @@ class ParkResortDetailsScreen extends StatelessWidget {
       children: [
         data['image'] != null
             ? ClipRRect(
-          borderRadius: BorderRadius.circular(15.0),
-          child: Image.network(
-            data['image'],
-            width: double.infinity,
-            height: 250,
-            fit: BoxFit.cover,
-          ),
-        )
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.network(
+                  data['image'],
+                  width: double.infinity,
+                  height: 250,
+                  fit: BoxFit.cover,
+                ),
+              )
             : Container(
-          height: 250,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: Icon(
-            Icons.local_hospital,
-            size: 100,
-            color: Colors.grey[700],
-          ),
-        ),
+                height: 250,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Icon(
+                  Icons.local_hospital,
+                  size: 100,
+                  color: Colors.grey[700],
+                ),
+              ),
         // Gradient Overlay for Image
         Positioned.fill(
           child: Container(
@@ -471,7 +504,8 @@ class ParkResortDetailsScreen extends StatelessWidget {
       ),
       shadowColor: Colors.black.withOpacity(0.4),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center, // Center text in the Card
+        crossAxisAlignment: CrossAxisAlignment.center,
+        // Center text in the Card
         children: [
           const SizedBox(height: 5),
           // Hospital Name
@@ -481,8 +515,7 @@ class ParkResortDetailsScreen extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.pColor
-              ),
+                  color: AppColors.pColor),
             ),
           ),
           const SizedBox(height: 5),
@@ -490,8 +523,13 @@ class ParkResortDetailsScreen extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Icons.location_on_outlined,color: Colors.red,),
-              SizedBox(width: 5,),
+              Icon(
+                Icons.location_on_outlined,
+                color: Colors.red,
+              ),
+              SizedBox(
+                width: 5,
+              ),
               Expanded(
                 child: Text(
                   data['location'],
@@ -508,6 +546,7 @@ class ParkResortDetailsScreen extends StatelessWidget {
       ),
     );
   }
+
   // Contact Info Card with Buttons at the Bottom
   Widget _buildContactCard() {
     return Card(
@@ -530,8 +569,7 @@ class ParkResortDetailsScreen extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.pColor
-                ),
+                    color: AppColors.pColor),
               ),
             ),
             const SizedBox(height: 20),
@@ -546,7 +584,7 @@ class ParkResortDetailsScreen extends StatelessWidget {
             GestureDetector(
               onTap: () => _launchURL(data['website']),
               child:
-              _buildContactItem(Icons.language, 'Website', data['website']),
+                  _buildContactItem(Icons.language, 'Website', data['website']),
             ),
 
             const SizedBox(height: 20),
@@ -557,15 +595,15 @@ class ParkResortDetailsScreen extends StatelessWidget {
               children: [
                 // Call Button
                 _buildContactButton(Icons.phone, 'Call',
-                        () => _callPhone(data['contact']), Colors.green),
+                    () => _callPhone(data['contact']), Colors.green),
 
                 // Email Button
                 _buildContactButton(Icons.email, 'Email',
-                        () => _sendEmail(data['email']), Colors.blue),
+                    () => _sendEmail(data['email']), Colors.blue),
 
                 // Website Button
                 _buildContactButton(Icons.language, 'Website',
-                        () => _launchURL(data['website']), Colors.blueAccent),
+                    () => _launchURL(data['website']), Colors.blueAccent),
               ],
             ),
           ],
@@ -608,6 +646,7 @@ class ParkResortDetailsScreen extends StatelessWidget {
       ),
     );
   }
+
   // Description Card
   Widget _buildDescriptionCard() {
     return Card(
@@ -625,12 +664,11 @@ class ParkResortDetailsScreen extends StatelessWidget {
             // Description Title
             const Center(
               child: Text(
-                'About Park & Resort Place ',
+                'About Park & Resort ',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.pColor
-                ),
+                    color: AppColors.pColor),
               ),
             ),
             const SizedBox(height: 10),

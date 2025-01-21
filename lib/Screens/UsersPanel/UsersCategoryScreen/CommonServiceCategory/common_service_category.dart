@@ -1,15 +1,15 @@
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserBusCounterScreen/user_bus_counter_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserParkResortScreen/user_park_resort_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../AppColors/AppColors.dart';
 import '../../../../Styles/TextContainerStyle.dart';
 import '../../../../Widgets/information_category_list_widget.dart';
-import '../../../AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminCommonServiceCategory/AdminBusCounterScreen/admin_bus_counter_screen.dart';
 import '../../../SplashScreen.dart';
 import 'DistrictHistoryScreen/district_history_screen.dart';
 import 'DistrictMapScreen/district_map_screen.dart';
 import 'NewsPaperScreen/news_paper_screen.dart';
-
+import 'UserHistoricalPlaceScreen/user_historical_place_screen.dart';
 
 class CommonServiceCategory extends StatelessWidget {
   const CommonServiceCategory({super.key});
@@ -18,63 +18,57 @@ class CommonServiceCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border:
-        Border.all(color: AppColors.pColor, width: 1),
+        border: Border.all(color: AppColors.pColor, width: 1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Column(
           children: [
-            TextContainerStyle("অন্যান্য সেবা সমূহ ...",AppColors.pColor),
+            TextContainerStyle("অন্যান্য সেবা সমূহ ...", AppColors.pColor),
             Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              DistrictHistoryScreen(),
+                          builder: (context) => DistrictHistoryScreen(),
                         ));
                   },
                   'assets/icons/history-book.png',
                   'জেলার ইতিহাস',
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              MapScreen(),
+                          builder: (context) => MapScreen(),
                         ));
                   },
                   'assets/icons/map.png',
                   "মানচিত্র",
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              NewspaperScreen(),
+                          builder: (context) => NewspaperScreen(),
                         ));
                   },
                   'assets/icons/newspaper.png',
                   "সংবাদপত্র",
                 ),
                 AllInfromationCategoryList(
-                      () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           HistricalPlaceScreen(),
-                    //     ));
+                  () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserHistoricalPlaceScreen(),
+                        ));
                   },
                   'assets/icons/history-place.png',
                   "দর্শনীয় স্থান",
@@ -85,43 +79,39 @@ class CommonServiceCategory extends StatelessWidget {
               height: 20,
             ),
             Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 AllInfromationCategoryList(
-                      () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           ParkResortScreen(),
-                    //     ));
+                  () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserParkResortScreen(),
+                        ));
                   },
                   'assets/icons/bungalow.png',
                   'পার্ক রিসোর্ট',
                 ),
                 AllInfromationCategoryList(
-                      () {
-                    launch(
-                        'https://bangladesh-railway.com/');
+                  () {
+                    launch('https://bangladesh-railway.com/');
                   },
                   'assets/icons/rail.png',
                   "ট্রেন টিকিট",
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              AdminBusCounterServiceScreen(),
+                          builder: (context) => UserBusCounterServiceScreen(),
                         ));
                   },
                   'assets/icons/bus_counter.png',
                   "বাস কাউন্টার",
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     // Navigator.push(
                     //     context,
                     //     MaterialPageRoute(
@@ -138,11 +128,10 @@ class CommonServiceCategory extends StatelessWidget {
               height: 20,
             ),
             Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     // Navigator.push(
                     //     context,
                     //     MaterialPageRoute(
@@ -154,7 +143,7 @@ class CommonServiceCategory extends StatelessWidget {
                   "কুরিয়ার",
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     // Navigator.push(
                     //     context,
                     //     MaterialPageRoute(
@@ -166,24 +155,22 @@ class CommonServiceCategory extends StatelessWidget {
                   "গাড়ী ভাড়া",
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              SplashScreen(),
+                          builder: (context) => SplashScreen(),
                         ));
                   },
                   'assets/icons/shipment.png',
                   'ট্র্যাক পরিবহন',
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              SplashScreen(),
+                          builder: (context) => SplashScreen(),
                         ));
                   },
                   'assets/icons/hotel.png',
@@ -195,40 +182,36 @@ class CommonServiceCategory extends StatelessWidget {
               height: 20,
             ),
             Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              SplashScreen(),
+                          builder: (context) => SplashScreen(),
                         ));
                   },
                   'assets/icons/burger.png',
                   "রেঁস্তোরা",
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              SplashScreen(),
+                          builder: (context) => SplashScreen(),
                         ));
                   },
                   'assets/icons/lawyer.png',
                   "আইনজীবী",
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              SplashScreen(),
+                          builder: (context) => SplashScreen(),
                         ));
                   },
                   'assets/icons/commentator.png',

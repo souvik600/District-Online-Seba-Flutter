@@ -1,3 +1,4 @@
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,36 +47,42 @@ class _UserPoliceScreenState extends State<UserPoliceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar("পুলিশ"),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: filterCategories,
-              decoration: InputDecoration(
-                hintText: "তথ্য খুঁজুন...",
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+          ScreenBackground(context),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: filterCategories,
+                  decoration: InputDecoration(
+                    hintText: "তথ্য খুঁজুন...",
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: EdgeInsets.zero,
+                  ),
                 ),
-                contentPadding: EdgeInsets.zero,
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredCategories.length,
-              itemBuilder: (context, index) {
-                return PiliceListItem(
-                  category: filteredCategories[index],
-                  onMakeCall: () {
-                    showCallDialog(filteredCategories[index].contact, context);
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredCategories.length,
+                  itemBuilder: (context, index) {
+                    return PiliceListItem(
+                      category: filteredCategories[index],
+                      onMakeCall: () {
+                        showCallDialog(
+                            filteredCategories[index].contact, context);
+                      },
+                    );
                   },
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

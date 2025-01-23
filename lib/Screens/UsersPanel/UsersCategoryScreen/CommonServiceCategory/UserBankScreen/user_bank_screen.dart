@@ -71,11 +71,11 @@ class _UserBankScreenState extends State<UserBankScreen> {
                           child: Stack(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(20.0),
+                                padding: const EdgeInsets.all(10.0),
                                 child: Center(
                                   child: Container(
                                     width: double.infinity,
-                                    height: 80,
+                                    height: 60,
                                     decoration: BoxDecoration(
                                       image: const DecorationImage(
                                         image:

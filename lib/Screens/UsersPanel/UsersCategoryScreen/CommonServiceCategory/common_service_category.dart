@@ -1,7 +1,13 @@
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserBankScreen/user_bank_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserBusCounterScreen/user_bus_counter_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserCarRentScreen/user_car_rent_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserCurierServiceScreen/user_curier_service_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserHostelScreen/user_hostel_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserLawyerScreen/user_lawyer_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserParkResortScreen/user_park_resort_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserReporterScreen/user_reporter_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserRestarurantScreen/user_restarurant_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserTrackRentServiceScreen/user_truck_rent_service_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../AppColors/AppColors.dart';
@@ -146,12 +152,12 @@ class CommonServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                   () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           SplashScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              UserCarRentServiceScreen(),
+                        ));
                   },
                   'assets/icons/rent-a-car.png',
                   "গাড়ী ভাড়া",
@@ -161,7 +167,7 @@ class CommonServiceCategory extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SplashScreen(),
+                          builder: (context) => UserTruckRentServiceScreen(),
                         ));
                   },
                   'assets/icons/shipment.png',
@@ -172,7 +178,7 @@ class CommonServiceCategory extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SplashScreen(),
+                          builder: (context) => UserHostelScreen(),
                         ));
                   },
                   'assets/icons/hotel.png',
@@ -191,7 +197,7 @@ class CommonServiceCategory extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SplashScreen(),
+                          builder: (context) => UserRestaurantScreen(),
                         ));
                   },
                   'assets/icons/burger.png',
@@ -202,7 +208,7 @@ class CommonServiceCategory extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SplashScreen(),
+                          builder: (context) => UserLawyerScreen(),
                         ));
                   },
                   'assets/icons/lawyer.png',
@@ -213,7 +219,7 @@ class CommonServiceCategory extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SplashScreen(),
+                          builder: (context) => UserReporterScreen(),
                         ));
                   },
                   'assets/icons/commentator.png',

@@ -224,7 +224,7 @@ class _AdminRestaurantScreenState extends State<AdminRestaurantScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Restaurant'),
+      appBar: CustomAppBar('রেঁস্তোরা'),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -283,7 +283,7 @@ class _AdminRestaurantScreenState extends State<AdminRestaurantScreen> {
                                     decoration: BoxDecoration(
                                       image: const DecorationImage(
                                         image:
-                                        AssetImage('assets/icons/high-school.png'),
+                                        AssetImage('assets/icons/burger.png'),
                                         fit: BoxFit.contain,
                                       ),
                                       borderRadius: BorderRadius.circular(8.0),
@@ -315,7 +315,7 @@ class _AdminRestaurantScreenState extends State<AdminRestaurantScreen> {
                                           fit: BoxFit.cover,
                                         )
                                             : const Icon(Icons.local_hospital, size: 50),
-                                        title: Text(data['name'],style: TextStyle(fontSize: 18,color: AppColors.pColor,fontWeight: FontWeight.w500),),
+                                        title: Text(data['name'],style: const TextStyle(fontSize: 18,color: AppColors.pColor,fontWeight: FontWeight.w500),),
                                         subtitle: Row(
                                           children: [
                                             const Icon(Icons.location_on_outlined,color: Colors.red,),

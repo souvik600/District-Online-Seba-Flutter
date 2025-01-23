@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,7 +10,6 @@ import '../../../../../../AppColors/AppColors.dart';
 import '../../../../../../Styles/ElevatedBottonStyle.dart';
 import '../../../../../../Styles/TextContainerStyle.dart';
 import '../../../../../../Utilitys/utilitys.dart';
-
 
 class LawyerDataModels {
   final String id;
@@ -61,7 +61,7 @@ class _AdminLawyerScreenState extends State<AdminLawyerScreen> {
 
   void fetchLawyers() async {
     final querySnapshot =
-    await FirebaseFirestore.instance.collection('LawyerList').get();
+        await FirebaseFirestore.instance.collection('LawyerList').get();
     final lawyers = querySnapshot.docs
         .map((doc) => LawyerDataModels.fromFirestore(doc))
         .toList();
@@ -75,8 +75,8 @@ class _AdminLawyerScreenState extends State<AdminLawyerScreen> {
     setState(() {
       filteredLawyers = allLawyers
           .where((lawyer) =>
-      lawyer.name.toLowerCase().contains(query.toLowerCase()) ||
-          lawyer.specialization.toLowerCase().contains(query.toLowerCase()))
+              lawyer.name.toLowerCase().contains(query.toLowerCase()) ||
+              lawyer.specialization.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -97,12 +97,12 @@ class _AdminLawyerScreenState extends State<AdminLawyerScreen> {
           lawyer: lawyer,
           onSubmit: (updatedLawyer) {
             setState(() {
-              int index = filteredLawyers
-                  .indexWhere((d) => d.id == updatedLawyer.id);
+              int index =
+                  filteredLawyers.indexWhere((d) => d.id == updatedLawyer.id);
               if (index != -1) {
                 filteredLawyers[index] = updatedLawyer;
-                allLawyers[allLawyers
-                    .indexWhere((d) => d.id == updatedLawyer.id)] = updatedLawyer;
+                allLawyers[allLawyers.indexWhere(
+                    (d) => d.id == updatedLawyer.id)] = updatedLawyer;
               }
             });
           },
@@ -131,45 +131,50 @@ class _AdminLawyerScreenState extends State<AdminLawyerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:CustomAppBar("lawyer"),
+      appBar: CustomAppBar("আইনজীবী"),
       floatingActionButton: FloatingActionButton(
         onPressed: _addLawyer,
         child: const Icon(Icons.add),
         backgroundColor: AppColors.pColor,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: filterLawyers,
-              decoration: InputDecoration(
-                hintText: "Search Lawyer...",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+          ScreenBackground(context),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: filterLawyers,
+                  decoration: InputDecoration(
+                    hintText: "Search Lawyer...",
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredLawyers.length,
-              itemBuilder: (context, index) {
-                return LawyerListItem(
-                  lawyer: filteredLawyers[index],
-                  onDelete: () => _deleteLawyer(filteredLawyers[index].id, index),
-                  onEdit: () => _editLawyer(filteredLawyers[index]),
-                );
-              },
-            ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredLawyers.length,
+                  itemBuilder: (context, index) {
+                    return LawyerListItem(
+                      lawyer: filteredLawyers[index],
+                      onDelete: () =>
+                          _deleteLawyer(filteredLawyers[index].id, index),
+                      onEdit: () => _editLawyer(filteredLawyers[index]),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 }
-
 
 class LawyerListItem extends StatelessWidget {
   final LawyerDataModels lawyer;
@@ -212,8 +217,7 @@ class LawyerListItem extends StatelessWidget {
             ),
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                    color: AppColors.pColor, width: 1.5),
+                border: Border.all(color: AppColors.pColor, width: 1.5),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Padding(
@@ -226,39 +230,39 @@ class LawyerListItem extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.pColor,
-                                width: 2.0),
-                            borderRadius:
-                            BorderRadius.circular(8),
+                            border:
+                                Border.all(color: AppColors.pColor, width: 2.0),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
                             child: lawyer.imageUrl.isNotEmpty
                                 ? Image.network(
-                              lawyer.imageUrl,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            )
+                                    lawyer.imageUrl,
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  )
                                 : Image.asset(
-                              'assets/images/user.png',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            ),
+                                    'assets/images/user.png',
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                         const SizedBox(height: 4),
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10.0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             backgroundColor: Colors.teal,
                           ),
-                          icon: const Icon(Icons.call, size: 16, color: Colors.white),
+                          icon: const Icon(Icons.call,
+                              size: 16, color: Colors.white),
                           label: const Text(
                             "Call",
                             style: TextStyle(fontSize: 12, color: Colors.white),
@@ -277,7 +281,8 @@ class LawyerListItem extends StatelessWidget {
                           // Name and Specialization
                           Row(
                             children: [
-                              const Icon(Icons.person, size: 16, color: Colors.blue),
+                              const Icon(Icons.person,
+                                  size: 16, color: Colors.blue),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -303,7 +308,8 @@ class LawyerListItem extends StatelessWidget {
                           // Contact Information
                           Row(
                             children: [
-                              const Icon(Icons.phone, size: 16, color: Colors.blue),
+                              const Icon(Icons.phone,
+                                  size: 16, color: Colors.blue),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -319,7 +325,8 @@ class LawyerListItem extends StatelessWidget {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              const Icon(Icons.email, size: 16, color: Colors.orange),
+                              const Icon(Icons.email,
+                                  size: 16, color: Colors.orange),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -335,7 +342,8 @@ class LawyerListItem extends StatelessWidget {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              const Icon(Icons.location_on, size: 16, color: Colors.green),
+                              const Icon(Icons.location_on,
+                                  size: 16, color: Colors.green),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -353,13 +361,15 @@ class LawyerListItem extends StatelessWidget {
                           Row(
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.blue),
                                 tooltip: "Edit",
                                 onPressed: onEdit,
                               ),
                               const SizedBox(width: 30),
                               IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
                                 tooltip: "Delete",
                                 onPressed: onDelete,
                               ),
@@ -379,7 +389,6 @@ class LawyerListItem extends StatelessWidget {
     );
   }
 }
-
 
 class LawyerForm extends StatefulWidget {
   final LawyerDataModels? lawyer;
@@ -512,19 +521,20 @@ class _LawyerFormState extends State<LawyerForm> {
                     border: Border.all(color: Colors.grey),
                     image: _selectedImage == null
                         ? const DecorationImage(
-                      image: AssetImage('assets/images/user.png'),
-                      fit: BoxFit.contain,
-                    )
+                            image: AssetImage('assets/images/user.png'),
+                            fit: BoxFit.contain,
+                          )
                         : DecorationImage(
-                      image: FileImage(File(_selectedImage!.path)),
-                      fit: BoxFit.cover,
-                    ),
+                            image: FileImage(File(_selectedImage!.path)),
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   child: _selectedImage == null
                       ? IconButton(
-                    icon: const Icon(Icons.add, size: 50, color: Colors.grey),
-                    onPressed: _pickImage,
-                  )
+                          icon: const Icon(Icons.add,
+                              size: 50, color: Colors.grey),
+                          onPressed: _pickImage,
+                        )
                       : null,
                 ),
                 const SizedBox(height: 8),
@@ -532,8 +542,9 @@ class _LawyerFormState extends State<LawyerForm> {
                   initialValue: widget.lawyer?.name,
                   decoration: AppInputDecoration('Name'),
                   onSaved: (value) => _name = value,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Name is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Name is required"
+                      : null,
                 ),
                 const SizedBox(height: 6),
                 TextFormField(
@@ -549,8 +560,9 @@ class _LawyerFormState extends State<LawyerForm> {
                   initialValue: widget.lawyer?.contact,
                   decoration: AppInputDecoration('Contact'),
                   onSaved: (value) => _contact = value,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Contact is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Contact is required"
+                      : null,
                 ),
                 const SizedBox(height: 6),
                 TextFormField(
@@ -573,7 +585,8 @@ class _LawyerFormState extends State<LawyerForm> {
                 const SizedBox(height: 20),
                 _isLoading
                     ? const CircularProgressIndicator()
-                    : ElevatedButtonStyle(text: "Submit", onPressed: _submitForm),
+                    : ElevatedButtonStyle(
+                        text: "Submit", onPressed: _submitForm),
                 const SizedBox(height: 10),
               ],
             ),
@@ -583,5 +596,3 @@ class _LawyerFormState extends State<LawyerForm> {
     );
   }
 }
-
-

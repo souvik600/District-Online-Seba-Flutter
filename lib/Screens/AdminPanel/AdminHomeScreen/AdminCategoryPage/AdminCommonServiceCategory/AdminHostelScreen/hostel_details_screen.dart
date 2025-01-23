@@ -1,56 +1,37 @@
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../../../../../AppColors/AppColors.dart';
+import '../../../../../../Utilitys/utilitys.dart';
 
 class HostelDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> data;
 
   HostelDetailsScreen({required this.data});
 
-  Future<void> _launchURL(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  Future<void> _callPhone(String phone) async {
-    final url = 'tel:$phone';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not place call';
-    }
-  }
-
-  Future<void> _sendEmail(String email) async {
-    final url = 'mailto:$email';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not send email';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(data['name']),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildImageSection(),
-            const SizedBox(height: 20),
-            _buildHostelNameAndLocation(),
-            const SizedBox(height: 20),
-            _buildContactCard(),
-            const SizedBox(height: 20),
-            _buildDescriptionCard(),
-          ],
-        ),
+      body: Stack(
+        children: [
+          ScreenBackground(context),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImageSection(),
+                const SizedBox(height: 15),
+                _buildNameAndLocation(),
+                const SizedBox(height: 15),
+                _buildContactCard(context),
+                const SizedBox(height: 15),
+                _buildDescriptionCard(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -75,7 +56,7 @@ class HostelDetailsScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: Icon(
-            Icons.house,
+            Icons.hotel,
             size: 100,
             color: Colors.grey[700],
           ),
@@ -95,7 +76,7 @@ class HostelDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHostelNameAndLocation() {
+  Widget _buildNameAndLocation() {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(
@@ -108,22 +89,23 @@ class HostelDetailsScreen extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                data['name'] ?? 'N/A',
+                data['name'],
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
+                  color: AppColors.pColor,
                 ),
               ),
             ),
             const SizedBox(height: 10),
             Row(
               children: [
-                const Icon(Icons.location_on, color: Colors.orangeAccent),
+                const Icon(Icons.location_on, color: Colors.red),
                 const SizedBox(width: 5),
                 Expanded(
                   child: Text(
-                    data['location'] ?? 'N/A',
-                    style: const TextStyle(fontSize: 16),
+                    data['location'],
+                    style: const TextStyle(fontSize: 16, color: Colors.black54),
                   ),
                 ),
               ],
@@ -134,7 +116,7 @@ class HostelDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContactCard() {
+  Widget _buildContactCard(BuildContext context) {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(
@@ -145,48 +127,74 @@ class HostelDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Contact Information',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            const Center(
+              child: Text(
+                'যোগাযোগের তথ্য',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.pColor,
+                ),
               ),
             ),
-            const Divider(),
-            _buildContactRow(Icons.phone, 'Call', data['contact'], _callPhone),
-            const SizedBox(height: 10),
-            _buildContactRow(Icons.email, 'Email', data['email'], _sendEmail),
-            const SizedBox(height: 10),
-            _buildContactRow(Icons.language, 'Website', data['website'], _launchURL),
+            const SizedBox(height: 20),
+            _buildContactItem(Icons.phone, 'Phone', data['contact']),
+            const SizedBox(height: 15),
+            _buildContactItem(Icons.email, 'Email', data['email']),
+            const SizedBox(height: 15),
+            GestureDetector(
+              onTap: () => launchWebsite(data['website'], context),
+              child:
+              _buildContactItem(Icons.language, 'Website', data['website']),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildContactButton(Icons.phone, 'Call', () {
+                  showCallDialog(data['contact'], context);
+                }, Colors.green),
+                _buildContactButton(Icons.email, 'Email', () {
+                  sendEmail(data['email'], context);
+                }, Colors.blue),
+                _buildContactButton(Icons.language, 'Website', () {
+                  launchWebsite(data['website'], context);
+                }, Colors.blueAccent),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildContactRow(
-      IconData icon, String label, String? value, Function(String) action) {
-    return InkWell(
-      onTap: value != null ? () => action(value) : null,
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.orangeAccent),
-          const SizedBox(width: 10),
-          Text(
-            '$label: ',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  Widget _buildContactItem(IconData icon, String label, String content) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.blueAccent),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            '$label: $content',
+            style: const TextStyle(fontSize: 16),
           ),
-          Expanded(
-            child: Text(
-              value ?? 'N/A',
-              style: TextStyle(
-                fontSize: 16,
-                color: value != null ? Colors.blue : Colors.grey,
-                decoration: value != null ? TextDecoration.underline : null,
-              ),
-            ),
-          ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContactButton(
+      IconData icon, String label, VoidCallback onPressed, Color color) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon),
+      label: Text(label),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       ),
     );
   }
@@ -202,17 +210,20 @@ class HostelDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Description',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            const Center(
+              child: Text(
+                'হোটেল সম্পর্কে',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.pColor,
+                ),
               ),
             ),
-            const Divider(),
+            const SizedBox(height: 10),
             Text(
-              data['description'] ?? 'N/A',
-              style: const TextStyle(fontSize: 16),
+              data['description'],
+              style: const TextStyle(fontSize: 16, color: Colors.black54),
             ),
           ],
         ),

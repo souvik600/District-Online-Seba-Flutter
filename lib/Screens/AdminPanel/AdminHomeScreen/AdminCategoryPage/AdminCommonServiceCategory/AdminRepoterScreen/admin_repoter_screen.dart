@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,7 +10,6 @@ import '../../../../../../AppColors/AppColors.dart';
 import '../../../../../../Styles/ElevatedBottonStyle.dart';
 import '../../../../../../Styles/TextContainerStyle.dart';
 import '../../../../../../Utilitys/utilitys.dart';
-
 
 class ReporterDataModels {
   final String id;
@@ -61,7 +61,7 @@ class _AdminReporterScreenState extends State<AdminReporterScreen> {
 
   void fetchReporter() async {
     final querySnapshot =
-    await FirebaseFirestore.instance.collection('ReporterList').get();
+        await FirebaseFirestore.instance.collection('ReporterList').get();
     final reporters = querySnapshot.docs
         .map((doc) => ReporterDataModels.fromFirestore(doc))
         .toList();
@@ -75,14 +75,19 @@ class _AdminReporterScreenState extends State<AdminReporterScreen> {
     setState(() {
       filteredReporter = allReporter
           .where((reporter) =>
-      reporter.name.toLowerCase().contains(query.toLowerCase()) ||
-          reporter.specialization.toLowerCase().contains(query.toLowerCase()))
+              reporter.name.toLowerCase().contains(query.toLowerCase()) ||
+              reporter.specialization
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))
           .toList();
     });
   }
 
   void _deleteReporter(String id, int index) async {
-    await FirebaseFirestore.instance.collection('ReporterList').doc(id).delete();
+    await FirebaseFirestore.instance
+        .collection('ReporterList')
+        .doc(id)
+        .delete();
     setState(() {
       filteredReporter.removeAt(index);
     });
@@ -97,12 +102,12 @@ class _AdminReporterScreenState extends State<AdminReporterScreen> {
           reporter: reporter,
           onSubmit: (updatedReporter) {
             setState(() {
-              int index =
-              filteredReporter.indexWhere((d) => d.id == updatedReporter.id);
+              int index = filteredReporter
+                  .indexWhere((d) => d.id == updatedReporter.id);
               if (index != -1) {
                 filteredReporter[index] = updatedReporter;
-                allReporter[allReporter.indexWhere((d) => d.id == updatedReporter.id)] =
-                    updatedReporter;
+                allReporter[allReporter.indexWhere(
+                    (d) => d.id == updatedReporter.id)] = updatedReporter;
               }
             });
           },
@@ -131,39 +136,44 @@ class _AdminReporterScreenState extends State<AdminReporterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Reporter"),
+      appBar: CustomAppBar("সংবাদিক"),
       floatingActionButton: FloatingActionButton(
         onPressed: _addReporter,
         child: const Icon(Icons.add),
         backgroundColor: AppColors.pColor,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: filterReporters,
-              decoration: InputDecoration(
-                hintText: "Search Reporter...",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+          ScreenBackground(context),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: filterReporters,
+                  decoration: InputDecoration(
+                    hintText: "Search Reporter...",
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredReporter.length,
-              itemBuilder: (context, index) {
-                return ReporterListItem(
-                  reporter: filteredReporter[index],
-                  onDelete: () => _deleteReporter(filteredReporter[index].id, index),
-                  onEdit: () => _editReporter(filteredReporter[index]),
-
-                );
-              },
-            ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredReporter.length,
+                  itemBuilder: (context, index) {
+                    return ReporterListItem(
+                      reporter: filteredReporter[index],
+                      onDelete: () =>
+                          _deleteReporter(filteredReporter[index].id, index),
+                      onEdit: () => _editReporter(filteredReporter[index]),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -176,12 +186,10 @@ class ReporterListItem extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback onEdit;
 
-
   ReporterListItem({
     required this.reporter,
     required this.onDelete,
     required this.onEdit,
-
   });
 
   @override
@@ -198,8 +206,7 @@ class ReporterListItem extends StatelessWidget {
                 height: 150,
                 decoration: BoxDecoration(
                   image: const DecorationImage(
-                    image:
-                    AssetImage('assets/icons/commentator.png'),
+                    image: AssetImage('assets/icons/commentator.png'),
                     fit: BoxFit.contain,
                   ),
                   borderRadius: BorderRadius.circular(8.0),
@@ -215,8 +222,7 @@ class ReporterListItem extends StatelessWidget {
             ),
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                    color: AppColors.pColor, width: 1.5),
+                border: Border.all(color: AppColors.pColor, width: 1.5),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Padding(
@@ -229,39 +235,41 @@ class ReporterListItem extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.pColor,
-                                width: 2.0),
-                            borderRadius:
-                            BorderRadius.circular(8),
+                            border:
+                                Border.all(color: AppColors.pColor, width: 2.0),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
                             child: reporter.imageUrl.isNotEmpty
                                 ? Image.network(
-                              reporter.imageUrl,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            )
+                                    reporter.imageUrl,
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  )
                                 : Image.asset(
-                              'assets/images/user.png',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            ),
+                                    'assets/images/user.png',
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
-                        SizedBox(height: 4,),
+                        const SizedBox(
+                          height: 4,
+                        ),
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10.0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             backgroundColor: Colors.teal,
                           ),
-                          icon: const Icon(Icons.call, size: 16, color: Colors.white),
+                          icon: const Icon(Icons.call,
+                              size: 16, color: Colors.white),
                           label: const Text(
                             "Call",
                             style: TextStyle(fontSize: 12, color: Colors.white),
@@ -280,7 +288,8 @@ class ReporterListItem extends StatelessWidget {
                           // Name and Specialization
                           Row(
                             children: [
-                              const Icon(Icons.person, size: 16, color: Colors.blue),
+                              const Icon(Icons.person,
+                                  size: 16, color: Colors.blue),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -306,7 +315,8 @@ class ReporterListItem extends StatelessWidget {
                           // Contact Information
                           Row(
                             children: [
-                              const Icon(Icons.phone, size: 16, color: Colors.blue),
+                              const Icon(Icons.phone,
+                                  size: 16, color: Colors.blue),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -322,7 +332,8 @@ class ReporterListItem extends StatelessWidget {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              const Icon(Icons.email, size: 16, color: Colors.orange),
+                              const Icon(Icons.email,
+                                  size: 16, color: Colors.orange),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -338,7 +349,8 @@ class ReporterListItem extends StatelessWidget {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              const Icon(Icons.location_on, size: 16, color: Colors.green),
+                              const Icon(Icons.location_on,
+                                  size: 16, color: Colors.green),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -356,20 +368,22 @@ class ReporterListItem extends StatelessWidget {
                           Row(
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.blue),
                                 tooltip: "Edit",
                                 onPressed: onEdit,
                               ),
-                              SizedBox(width: 30,),
+                              const SizedBox(
+                                width: 30,
+                              ),
                               IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
                                 tooltip: "Delete",
                                 onPressed: onDelete,
                               ),
-
                             ],
                           ),
-
                         ],
                       ),
                     ),
@@ -384,8 +398,6 @@ class ReporterListItem extends StatelessWidget {
     );
   }
 }
-
-
 
 class ReporterForm extends StatefulWidget {
   final ReporterDataModels? reporter;
@@ -521,30 +533,36 @@ class _ReporterFormState extends State<ReporterForm> {
                     border: Border.all(color: Colors.grey),
                     image: _selectedImage == null
                         ? const DecorationImage(
-                      image: AssetImage('assets/images/user.png'),
-                      fit: BoxFit.contain,
-                    )
+                            image: AssetImage('assets/images/user.png'),
+                            fit: BoxFit.contain,
+                          )
                         : DecorationImage(
-                      image: FileImage(File(_selectedImage!.path)),
-                      fit: BoxFit.cover,
-                    ),
+                            image: FileImage(File(_selectedImage!.path)),
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   child: _selectedImage == null
                       ? IconButton(
-                    icon: const Icon(Icons.add, size: 50, color: Colors.grey),
-                    onPressed: _pickImage,
-                  )
+                          icon: const Icon(Icons.add,
+                              size: 50, color: Colors.grey),
+                          onPressed: _pickImage,
+                        )
                       : null,
                 ),
-                SizedBox(height: 8,),
+                const SizedBox(
+                  height: 8,
+                ),
                 TextFormField(
                   initialValue: widget.reporter?.name,
                   decoration: AppInputDecoration('Name'),
                   onSaved: (value) => _name = value,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Name is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Name is required"
+                      : null,
                 ),
-                SizedBox(height: 6,),
+                const SizedBox(
+                  height: 6,
+                ),
                 TextFormField(
                   initialValue: widget.reporter?.specialization,
                   decoration: AppInputDecoration('Specialization'),
@@ -553,15 +571,20 @@ class _ReporterFormState extends State<ReporterForm> {
                       ? "Specialization is required"
                       : null,
                 ),
-                SizedBox(height: 6,),
+                const SizedBox(
+                  height: 6,
+                ),
                 TextFormField(
                   initialValue: widget.reporter?.contact,
                   decoration: AppInputDecoration('Contact'),
                   onSaved: (value) => _contact = value,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Contact is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Contact is required"
+                      : null,
                 ),
-                SizedBox(height: 6,),
+                const SizedBox(
+                  height: 6,
+                ),
                 TextFormField(
                   initialValue: widget.reporter?.email,
                   decoration: AppInputDecoration('Email'),
@@ -570,7 +593,9 @@ class _ReporterFormState extends State<ReporterForm> {
                       ? "Email is required"
                       : null,
                 ),
-                SizedBox(height: 6,),
+                const SizedBox(
+                  height: 6,
+                ),
                 TextFormField(
                   initialValue: widget.reporter?.location,
                   decoration: AppInputDecoration('Location'),
@@ -581,8 +606,9 @@ class _ReporterFormState extends State<ReporterForm> {
                 ),
                 const SizedBox(height: 20),
                 _isLoading
-                    ? CircularProgressIndicator()
-                    : ElevatedButtonStyle(text: "Submit", onPressed: _submitForm),
+                    ? const CircularProgressIndicator()
+                    : ElevatedButtonStyle(
+                        text: "Submit", onPressed: _submitForm),
                 const SizedBox(height: 10),
               ],
             ),
@@ -592,4 +618,3 @@ class _ReporterFormState extends State<ReporterForm> {
     );
   }
 }
-

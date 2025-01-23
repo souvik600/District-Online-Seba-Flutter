@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
 import 'package:district_online_service/Utilitys/utilitys.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
@@ -7,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../../../AppColors/AppColors.dart';
+
 class CarRentDataModel {
   final String id;
   final String serviceName;
@@ -49,8 +51,7 @@ class AdminCarRentServiceScreen extends StatefulWidget {
       _AdminCarRentServiceScreenState();
 }
 
-class _AdminCarRentServiceScreenState
-    extends State<AdminCarRentServiceScreen> {
+class _AdminCarRentServiceScreenState extends State<AdminCarRentServiceScreen> {
   final List<CarRentDataModel> allCarRents = [];
   List<CarRentDataModel> filteredCarRents = [];
 
@@ -62,7 +63,7 @@ class _AdminCarRentServiceScreenState
 
   void fetchCarRents() async {
     final querySnapshot =
-    await FirebaseFirestore.instance.collection('CarRentList').get();
+        await FirebaseFirestore.instance.collection('CarRentList').get();
     final carRents = querySnapshot.docs
         .map((doc) => CarRentDataModel.fromFirestore(doc))
         .toList();
@@ -76,16 +77,13 @@ class _AdminCarRentServiceScreenState
     setState(() {
       filteredCarRents = allCarRents
           .where((car) =>
-          car.serviceName.toLowerCase().contains(query.toLowerCase()))
+              car.serviceName.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
 
   void _deleteCarRent(String id, int index) async {
-    await FirebaseFirestore.instance
-        .collection('CarRentList')
-        .doc(id)
-        .delete();
+    await FirebaseFirestore.instance.collection('CarRentList').doc(id).delete();
     setState(() {
       filteredCarRents.removeAt(index);
     });
@@ -100,12 +98,12 @@ class _AdminCarRentServiceScreenState
           carRent: car,
           onSubmit: (updatedCar) {
             setState(() {
-              int index = filteredCarRents
-                  .indexWhere((c) => c.id == updatedCar.id);
+              int index =
+                  filteredCarRents.indexWhere((c) => c.id == updatedCar.id);
               if (index != -1) {
                 filteredCarRents[index] = updatedCar;
-                allCarRents[allCarRents.indexWhere(
-                        (c) => c.id == updatedCar.id)] = updatedCar;
+                allCarRents[allCarRents
+                    .indexWhere((c) => c.id == updatedCar.id)] = updatedCar;
               }
             });
           },
@@ -131,235 +129,241 @@ class _AdminCarRentServiceScreenState
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Car Rent Services'),
+      appBar: CustomAppBar('গাড়ী ভাড়া'),
       floatingActionButton: FloatingActionButton(
         onPressed: _addCarRent,
         child: const Icon(Icons.add),
         backgroundColor: Colors.teal,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: filterCarRents,
-              decoration: InputDecoration(
-                hintText: "Search Car Rent Services...",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+          ScreenBackground(context),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: filterCarRents,
+                  decoration: InputDecoration(
+                    hintText: "Search Car Rent Services...",
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredCarRents.length,
-              itemBuilder: (context, index) {
-                final car = filteredCarRents[index];
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredCarRents.length,
+                  itemBuilder: (context, index) {
+                    final car = filteredCarRents[index];
 
-                return Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: Center(
-                        child: Container(
-                          width: double.infinity,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage('assets/icons/rent-a-car.png'),
-                              fit: BoxFit.contain,
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(30.0),
+                          child: Center(
+                            child: Container(
+                              width: double.infinity,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                image: const DecorationImage(
+                                  image:
+                                      AssetImage('assets/icons/rent-a-car.png'),
+                                  fit: BoxFit.contain,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                      ),
-                    ),
-                    Card(
-                      elevation: 8,
-                      color: AppColors.wColor.withOpacity(.92),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      margin: const EdgeInsets.all(8),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border:
-                          Border.all(color: AppColors.pColor, width: 1.5),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColors.pColor, width: 1.5),
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: AppColors.pColor.withOpacity(.3)),
-                              child: Column(
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      car.serviceName,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                        Card(
+                          elevation: 8,
+                          color: AppColors.wColor.withOpacity(.92),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          margin: const EdgeInsets.all(8),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: AppColors.pColor, width: 1.5),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: AppColors.pColor, width: 1.5),
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: AppColors.pColor.withOpacity(.3)),
+                                  child: Column(
                                     children: [
-                                      const Icon(
-                                        Icons.location_on_outlined,
-                                        color: AppColors.pColor,
+                                      Center(
+                                        child: Text(
+                                          car.serviceName,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
                                       ),
-                                      Text(
-                                        car.location,
-                                        style: const TextStyle(
-                                            color: Colors.black54),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.location_on_outlined,
+                                            color: AppColors.pColor,
+                                          ),
+                                          Text(
+                                            car.location,
+                                            style: const TextStyle(
+                                                color: Colors.black54),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      car.imageUrl.isNotEmpty
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              child: Image.network(
+                                                car.imageUrl,
+                                                fit: BoxFit.cover,
+                                                width: 80,
+                                                height: 80,
+                                              ),
+                                            )
+                                          : Container(
+                                              width: 80,
+                                              height: 80,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade200,
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              child: const Icon(
+                                                  Icons.local_shipping,
+                                                  size: 40),
+                                            ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Driver: ${car.driverName}",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              "Type: ${car.carType}",
+                                              style:
+                                                  const TextStyle(fontSize: 15),
+                                            ),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              "Phone: ${car.contact}",
+                                              style:
+                                                  const TextStyle(fontSize: 15),
+                                            ),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              car.isAvailable
+                                                  ? "Available"
+                                                  : "Not Available",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: car.isAvailable
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: AppColors.pColor.withOpacity(.1)),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () => showCallDialog(
+                                            car.contact, context),
+                                        icon: const Icon(Icons.call,
+                                            color: Colors.white),
+                                        label: const Text("Call"),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.green,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.edit,
+                                            color: Colors.blue),
+                                        onPressed: () => _editCarRent(car),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete,
+                                            color: Colors.red),
+                                        onPressed: () =>
+                                            _deleteCarRent(car.id, index),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  car.imageUrl.isNotEmpty
-                                      ? ClipRRect(
-                                    borderRadius:
-                                    BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      car.imageUrl,
-                                      fit: BoxFit.cover,
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  )
-                                      : Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius:
-                                      BorderRadius.circular(8.0),
-                                    ),
-                                    child: const Icon(Icons.local_shipping,
-                                        size: 40),
-                                  ),
-                                  const SizedBox(width: 16),
-
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Driver: ${car.driverName}",
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          "Type: ${car.carType}",
-                                          style: const TextStyle(fontSize: 15),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          "Phone: ${car.contact}",
-                                          style: const TextStyle(fontSize: 15),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          car.isAvailable
-                                              ? "Available"
-                                              : "Not Available",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: car.isAvailable
-                                                ? Colors.green
-                                                : Colors.red,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: AppColors.pColor.withOpacity(.1)),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  ElevatedButton.icon(
-                                    onPressed: () =>
-                                        showCallDialog(car.contact,context),
-                                    icon: const Icon(Icons.call,
-                                        color: Colors.white),
-                                    label: const Text("Call"),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.blue),
-                                    onPressed: () => _editCarRent(car),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
-                                    onPressed: () =>
-                                        _deleteCarRent(car.id, index),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 }
-
-
 
 class CarRentForm extends StatefulWidget {
   final CarRentDataModel? carRent;
@@ -488,37 +492,42 @@ class _CarRentFormState extends State<CarRentForm> {
                   initialValue: widget.carRent?.serviceName,
                   decoration: AppInputDecoration('Car Rent Service Name'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter a service name' : null,
+                      value!.isEmpty ? 'Please enter a service name' : null,
                   onSaved: (value) => _serviceName = value,
                 ),
+                SizedBox(height: 10,),
                 TextFormField(
                   initialValue: widget.carRent?.contact,
                   decoration: AppInputDecoration('Contact'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter a contact number' : null,
+                      value!.isEmpty ? 'Please enter a contact number' : null,
                   onSaved: (value) => _contact = value,
                 ),
+                SizedBox(height: 10,),
                 TextFormField(
                   initialValue: widget.carRent?.location,
                   decoration: AppInputDecoration('Location'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter a location' : null,
+                      value!.isEmpty ? 'Please enter a location' : null,
                   onSaved: (value) => _location = value,
                 ),
+                SizedBox(height: 10,),
                 TextFormField(
                   initialValue: widget.carRent?.carType,
                   decoration: AppInputDecoration('Car Type'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter car type' : null,
+                      value!.isEmpty ? 'Please enter car type' : null,
                   onSaved: (value) => _carType = value,
                 ),
+                SizedBox(height: 10,),
                 TextFormField(
                   initialValue: widget.carRent?.driverName,
                   decoration: AppInputDecoration('Driver Name'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter driver name' : null,
+                      value!.isEmpty ? 'Please enter driver name' : null,
                   onSaved: (value) => _driverName = value,
                 ),
+                SizedBox(height: 10,),
                 SwitchListTile(
                   title: const Text("Available"),
                   value: _isAvailable,
@@ -529,16 +538,16 @@ class _CarRentFormState extends State<CarRentForm> {
                 const SizedBox(height: 8),
                 _selectedImage != null
                     ? Image.file(
-                  File(_selectedImage!.path),
-                  height: 150,
-                )
+                        File(_selectedImage!.path),
+                        height: 150,
+                      )
                     : widget.carRent?.imageUrl != null &&
-                    widget.carRent!.imageUrl.isNotEmpty
-                    ? Image.network(
-                  widget.carRent!.imageUrl,
-                  height: 150,
-                )
-                    : const Icon(Icons.image, size: 100),
+                            widget.carRent!.imageUrl.isNotEmpty
+                        ? Image.network(
+                            widget.carRent!.imageUrl,
+                            height: 150,
+                          )
+                        : const Icon(Icons.image, size: 100),
                 TextButton.icon(
                   onPressed: _pickImage,
                   icon: const Icon(Icons.image),
@@ -567,6 +576,3 @@ class _CarRentFormState extends State<CarRentForm> {
     );
   }
 }
-
-
-

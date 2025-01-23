@@ -224,7 +224,7 @@ class _AdminHostelScreenState extends State<AdminHostelScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Hostel'),
+      appBar: CustomAppBar('হোটেল'),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -283,7 +283,7 @@ class _AdminHostelScreenState extends State<AdminHostelScreen> {
                                     decoration: BoxDecoration(
                                       image: const DecorationImage(
                                         image:
-                                        AssetImage('assets/icons/high-school.png'),
+                                        AssetImage('assets/icons/hotel.png'),
                                         fit: BoxFit.contain,
                                       ),
                                       borderRadius: BorderRadius.circular(8.0),

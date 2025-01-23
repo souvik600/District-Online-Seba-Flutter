@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
 import 'package:district_online_service/Styles/InputDecorationStyle.dart';
 import 'package:district_online_service/Utilitys/utilitys.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
@@ -6,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../AppColors/AppColors.dart';
+
 class TruckRentDataModel {
   final String id;
   final String serviceName;
@@ -64,7 +65,7 @@ class _AdminTruckRentServiceScreenState
 
   void fetchTruckRents() async {
     final querySnapshot =
-    await FirebaseFirestore.instance.collection('TruckRentList').get();
+        await FirebaseFirestore.instance.collection('TruckRentList').get();
     final truckRents = querySnapshot.docs
         .map((doc) => TruckRentDataModel.fromFirestore(doc))
         .toList();
@@ -78,7 +79,7 @@ class _AdminTruckRentServiceScreenState
     setState(() {
       filteredTruckRents = allTruckRents
           .where((truck) =>
-          truck.serviceName.toLowerCase().contains(query.toLowerCase()))
+              truck.serviceName.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -102,12 +103,12 @@ class _AdminTruckRentServiceScreenState
           truckRent: truck,
           onSubmit: (updatedTruck) {
             setState(() {
-              int index = filteredTruckRents
-                  .indexWhere((t) => t.id == updatedTruck.id);
+              int index =
+                  filteredTruckRents.indexWhere((t) => t.id == updatedTruck.id);
               if (index != -1) {
                 filteredTruckRents[index] = updatedTruck;
-                allTruckRents[allTruckRents.indexWhere(
-                        (t) => t.id == updatedTruck.id)] = updatedTruck;
+                allTruckRents[allTruckRents
+                    .indexWhere((t) => t.id == updatedTruck.id)] = updatedTruck;
               }
             });
           },
@@ -136,231 +137,238 @@ class _AdminTruckRentServiceScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Truck Rent Services'),
+      appBar: CustomAppBar('ট্র্যাক পরিবহন'),
       floatingActionButton: FloatingActionButton(
         onPressed: _addTruckRent,
         child: const Icon(Icons.add),
         backgroundColor: Colors.teal,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: filterTruckRents,
-              decoration: InputDecoration(
-                hintText: "Search Truck Rent Services...",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+          ScreenBackground(context),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: filterTruckRents,
+                  decoration: InputDecoration(
+                    hintText: "Search Truck Rent Services...",
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredTruckRents.length,
-              itemBuilder: (context, index) {
-                final truck = filteredTruckRents[index];
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredTruckRents.length,
+                  itemBuilder: (context, index) {
+                    final truck = filteredTruckRents[index];
 
-                return Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: Center(
-                        child: Container(
-                          width: double.infinity,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage('assets/icons/shipment.png'),
-                              fit: BoxFit.contain,
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(30.0),
+                          child: Center(
+                            child: Container(
+                              width: double.infinity,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                image: const DecorationImage(
+                                  image:
+                                      AssetImage('assets/icons/shipment.png'),
+                                  fit: BoxFit.contain,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                      ),
-                    ),
-                    Card(
-                      elevation: 8,
-                      color: AppColors.wColor.withOpacity(.92),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      margin: const EdgeInsets.all(8),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border:
-                          Border.all(color: AppColors.pColor, width: 1.5),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColors.pColor, width: 1.5),
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: AppColors.pColor.withOpacity(.3)),
-                              child: Column(
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      truck.serviceName,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                        Card(
+                          elevation: 8,
+                          color: AppColors.wColor.withOpacity(.92),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          margin: const EdgeInsets.all(8),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: AppColors.pColor, width: 1.5),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: AppColors.pColor, width: 1.5),
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: AppColors.pColor.withOpacity(.3)),
+                                  child: Column(
                                     children: [
-                                      const Icon(
-                                        Icons.location_on_outlined,
-                                        color: AppColors.pColor,
+                                      Center(
+                                        child: Text(
+                                          truck.serviceName,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
                                       ),
-                                      Text(
-                                        truck.location,
-                                        style: const TextStyle(
-                                            color: Colors.black54),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.location_on_outlined,
+                                            color: AppColors.pColor,
+                                          ),
+                                          Text(
+                                            truck.location,
+                                            style: const TextStyle(
+                                                color: Colors.black54),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      truck.imageUrl.isNotEmpty
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              child: Image.network(
+                                                truck.imageUrl,
+                                                fit: BoxFit.cover,
+                                                width: 80,
+                                                height: 80,
+                                              ),
+                                            )
+                                          : Container(
+                                              width: 80,
+                                              height: 80,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade200,
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              child: const Icon(
+                                                  Icons.local_shipping,
+                                                  size: 40),
+                                            ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Driver: ${truck.driverName}",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              "Type: ${truck.truckType}",
+                                              style:
+                                                  const TextStyle(fontSize: 15),
+                                            ),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              "Phone: ${truck.contact}",
+                                              style:
+                                                  const TextStyle(fontSize: 15),
+                                            ),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              truck.isAvailable
+                                                  ? "Available"
+                                                  : "Not Available",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: truck.isAvailable
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: AppColors.pColor.withOpacity(.1)),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () => showCallDialog(
+                                            truck.contact, context),
+                                        icon: const Icon(Icons.call,
+                                            color: Colors.white),
+                                        label: const Text("Call"),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.green,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.edit,
+                                            color: Colors.blue),
+                                        onPressed: () => _editTruckRent(truck),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete,
+                                            color: Colors.red),
+                                        onPressed: () =>
+                                            _deleteTruckRent(truck.id, index),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  truck.imageUrl.isNotEmpty
-                                      ? ClipRRect(
-                                    borderRadius:
-                                    BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      truck.imageUrl,
-                                      fit: BoxFit.cover,
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  )
-                                      : Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius:
-                                      BorderRadius.circular(8.0),
-                                    ),
-                                    child: const Icon(Icons.local_shipping,
-                                        size: 40),
-                                  ),
-                                  const SizedBox(width: 16),
-
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Driver: ${truck.driverName}",
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          "Type: ${truck.truckType}",
-                                          style: const TextStyle(fontSize: 15),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          "Phone: ${truck.contact}",
-                                          style: const TextStyle(fontSize: 15),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          truck.isAvailable
-                                              ? "Available"
-                                              : "Not Available",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: truck.isAvailable
-                                                ? Colors.green
-                                                : Colors.red,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: AppColors.pColor.withOpacity(.1)),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  ElevatedButton.icon(
-                                    onPressed: () =>
-                                        showCallDialog(truck.contact, context),
-                                    icon: const Icon(Icons.call,
-                                        color: Colors.white),
-                                    label: const Text("Call"),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.blue),
-                                    onPressed: () => _editTruckRent(truck),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
-                                    onPressed: () =>
-                                        _deleteTruckRent(truck.id, index),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 }
-
-
 
 class TruckRentForm extends StatefulWidget {
   final TruckRentDataModel? truckRent;
@@ -489,37 +497,42 @@ class _TruckRentFormState extends State<TruckRentForm> {
                   initialValue: widget.truckRent?.serviceName,
                   decoration: AppInputDecoration('Truck Rent Service Name'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter a service name' : null,
+                      value!.isEmpty ? 'Please enter a service name' : null,
                   onSaved: (value) => _serviceName = value,
                 ),
+                SizedBox(height: 10,),
                 TextFormField(
                   initialValue: widget.truckRent?.contact,
                   decoration: AppInputDecoration('Contact'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter a contact number' : null,
+                      value!.isEmpty ? 'Please enter a contact number' : null,
                   onSaved: (value) => _contact = value,
                 ),
+                SizedBox(height: 10,),
                 TextFormField(
                   initialValue: widget.truckRent?.location,
                   decoration: AppInputDecoration('Location'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter a location' : null,
+                      value!.isEmpty ? 'Please enter a location' : null,
                   onSaved: (value) => _location = value,
                 ),
+                SizedBox(height: 10,),
                 TextFormField(
                   initialValue: widget.truckRent?.truckType,
                   decoration: AppInputDecoration('Truck Type'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter truck type' : null,
+                      value!.isEmpty ? 'Please enter truck type' : null,
                   onSaved: (value) => _truckType = value,
                 ),
+                SizedBox(height: 10,),
                 TextFormField(
                   initialValue: widget.truckRent?.driverName,
                   decoration: AppInputDecoration('Driver Name'),
                   validator: (value) =>
-                  value!.isEmpty ? 'Please enter driver name' : null,
+                      value!.isEmpty ? 'Please enter driver name' : null,
                   onSaved: (value) => _driverName = value,
                 ),
+                SizedBox(height: 10,),
                 SwitchListTile(
                   title: const Text("Available"),
                   value: _isAvailable,
@@ -530,16 +543,16 @@ class _TruckRentFormState extends State<TruckRentForm> {
                 const SizedBox(height: 8),
                 _selectedImage != null
                     ? Image.file(
-                  File(_selectedImage!.path),
-                  height: 150,
-                )
+                        File(_selectedImage!.path),
+                        height: 150,
+                      )
                     : widget.truckRent?.imageUrl != null &&
-                    widget.truckRent!.imageUrl.isNotEmpty
-                    ? Image.network(
-                  widget.truckRent!.imageUrl,
-                  height: 150,
-                )
-                    : const Icon(Icons.image, size: 100),
+                            widget.truckRent!.imageUrl.isNotEmpty
+                        ? Image.network(
+                            widget.truckRent!.imageUrl,
+                            height: 150,
+                          )
+                        : const Icon(Icons.image, size: 100),
                 TextButton.icon(
                   onPressed: _pickImage,
                   icon: const Icon(Icons.image),
@@ -568,5 +581,3 @@ class _TruckRentFormState extends State<TruckRentForm> {
     );
   }
 }
-
-

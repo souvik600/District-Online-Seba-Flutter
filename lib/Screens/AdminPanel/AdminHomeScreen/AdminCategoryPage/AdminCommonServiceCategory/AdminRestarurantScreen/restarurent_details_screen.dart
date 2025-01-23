@@ -1,3 +1,4 @@
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
 import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -50,20 +51,25 @@ class RestaurantDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(data['name']),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildImageSection(),
-            const SizedBox(height: 20),
-            _buildRestaurantNameAndLocation(),
-            const SizedBox(height: 20),
-            _buildContactCard(),
-            const SizedBox(height: 20),
-            _buildDescriptionCard(),
-          ],
+      body: Stack(
+        children: [
+          ScreenBackground(context),
+         SingleChildScrollView(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildImageSection(),
+              const SizedBox(height: 20),
+              _buildRestaurantNameAndLocation(),
+              const SizedBox(height: 20),
+              _buildContactCard(),
+              const SizedBox(height: 20),
+              _buildDescriptionCard(),
+            ],
+          ),
         ),
+      ],
       ),
     );
   }

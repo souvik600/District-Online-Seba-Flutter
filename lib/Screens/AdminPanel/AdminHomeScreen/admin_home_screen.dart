@@ -1,3 +1,4 @@
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/admin_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../AppColors/AppColors.dart';
@@ -6,7 +7,6 @@ import '../../../Utilitys/utilitys.dart';
 import '../../../Widgets/AdminImageSlideShowWidget.dart';
 import '../../../Widgets/AdminNoticeTextWidget.dart';
 import '../../UsersPanel/UsersCategoryScreen/WorkerServiceCategory/worker_service_category.dart';
-import '../../UsersPanel/UsersProfileScreen/user_profile_screen.dart';
 import 'AdminCategoryPage/AdminCommentAndUserList/admin_comment_and_user_list_catagory.dart';
 import 'AdminCategoryPage/AdminCommonServiceCategory/admin_common_service_category.dart';
 import 'AdminCategoryPage/AdminEducationalServiceCategory/admin_educational_institution_catagory_screen.dart';
@@ -48,7 +48,7 @@ class AdminHomeScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfileScreen(),
+                          builder: (context) => AdminLogoutScreen(),
                         ),
                       );
                     },

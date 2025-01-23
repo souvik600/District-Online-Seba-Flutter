@@ -16,14 +16,19 @@ class ElevatedButtonStyle extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.pColor.withOpacity(.8),
-          padding: EdgeInsets.symmetric(vertical: 12.0), // Padding for the button
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          // Padding for the button
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
         child: Text(
           text,
-          style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.w600,color: Colors.white),
+          style: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+              fontFamily: 'kalpurush'),
         ),
       ),
     );

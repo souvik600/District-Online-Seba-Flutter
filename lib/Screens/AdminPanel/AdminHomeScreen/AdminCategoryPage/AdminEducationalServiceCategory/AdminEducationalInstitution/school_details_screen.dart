@@ -1,4 +1,7 @@
+import 'package:district_online_service/Styles/BackGroundStyle.dart';
+import 'package:district_online_service/Widgets/Custom_appBar_widgets.dart';
 import 'package:flutter/material.dart';
+import '../../../../../../AppColors/AppColors.dart';
 import '../../../../../../Utilitys/utilitys.dart';
 
 class SchoolDetailsScreen extends StatelessWidget {
@@ -6,40 +9,29 @@ class SchoolDetailsScreen extends StatelessWidget {
 
   SchoolDetailsScreen({required this.data});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: Text(
-          data['name'],
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue.shade700, Colors.blue.shade200],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+      appBar: CustomAppBar(data['name']),
+      body: Stack(
+        children: [
+          ScreenBackground(context),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImageSection(),
+                const SizedBox(height: 15),
+                _buildNameAndLocation(),
+                const SizedBox(height: 15),
+                _buildContactCard(context),
+                const SizedBox(height: 15),
+                _buildDescriptionCard(),
+              ],
             ),
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildImageSection(),
-            const SizedBox(height: 15),
-            _buildHospitalNameAndLocation(),
-            const SizedBox(height: 15),
-            _buildContactCard(context),
-            const SizedBox(height: 15),
-            _buildDescriptionCard(),
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -49,26 +41,26 @@ class SchoolDetailsScreen extends StatelessWidget {
       children: [
         data['image'] != null
             ? ClipRRect(
-          borderRadius: BorderRadius.circular(15.0),
-          child: Image.network(
-            data['image'],
-            width: double.infinity,
-            height: 250,
-            fit: BoxFit.cover,
-          ),
-        )
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.network(
+                  data['image'],
+                  width: double.infinity,
+                  height: 250,
+                  fit: BoxFit.cover,
+                ),
+              )
             : Container(
-          height: 250,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: Icon(
-            Icons.local_hospital,
-            size: 100,
-            color: Colors.grey[700],
-          ),
-        ),
+                height: 250,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Icon(
+                  Icons.school,
+                  size: 100,
+                  color: Colors.grey[700],
+                ),
+              ),
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -84,7 +76,7 @@ class SchoolDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHospitalNameAndLocation() {
+  Widget _buildNameAndLocation() {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(
@@ -101,14 +93,14 @@ class SchoolDetailsScreen extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: AppColors.pColor,
                 ),
               ),
             ),
             const SizedBox(height: 10),
             Row(
               children: [
-                Icon(Icons.location_on, color: Colors.red),
+                const Icon(Icons.location_on, color: Colors.red),
                 const SizedBox(width: 5),
                 Expanded(
                   child: Text(
@@ -116,20 +108,20 @@ class SchoolDetailsScreen extends StatelessWidget {
                     style: const TextStyle(fontSize: 16, color: Colors.black54),
                   ),
                 ),
-
               ],
             ),
-            SizedBox(height: 5,),
+            const SizedBox(
+              height: 5,
+            ),
             Row(
               children: [
-                Text(
+                const Text(
                   '       প্রতিষ্ঠাপিত : ',
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
-
                 Text(
                   data['establishedYear'],
                   style: const TextStyle(
@@ -158,11 +150,11 @@ class SchoolDetailsScreen extends StatelessWidget {
           children: [
             const Center(
               child: Text(
-                'Contact Information',
+                'যোগাযোগের তথ্য',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: AppColors.pColor,
                 ),
               ),
             ),
@@ -172,16 +164,16 @@ class SchoolDetailsScreen extends StatelessWidget {
             _buildContactItem(Icons.email, 'Email', data['email']),
             const SizedBox(height: 15),
             GestureDetector(
-              onTap: () => launchWebsite(data['website'],context),
+              onTap: () => launchWebsite(data['website'], context),
               child:
-              _buildContactItem(Icons.language, 'Website', data['website']),
+                  _buildContactItem(Icons.language, 'Website', data['website']),
             ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildContactButton(Icons.phone, 'Call', () {
-                  showCallDialog(data['contact'],context);
+                  showCallDialog(data['contact'], context);
                 }, Colors.green),
                 _buildContactButton(Icons.email, 'Email', () {
                   sendEmail(data['email'], context);
@@ -241,11 +233,11 @@ class SchoolDetailsScreen extends StatelessWidget {
           children: [
             const Center(
               child: Text(
-                'About School',
+                'স্কুল সম্পর্কে',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: AppColors.pColor,
                 ),
               ),
             ),

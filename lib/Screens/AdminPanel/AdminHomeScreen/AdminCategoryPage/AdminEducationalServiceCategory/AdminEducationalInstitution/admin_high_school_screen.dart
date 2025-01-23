@@ -310,7 +310,7 @@ class _AdminHighSchoolScreenState extends State<AdminHighSchoolScreen> {
                                     decoration: BoxDecoration(
                                       image: const DecorationImage(
                                         image:
-                                        AssetImage('assets/icons/high-school.png'),
+                                        AssetImage('assets/icons/school.png'),
                                         fit: BoxFit.contain,
                                       ),
                                       borderRadius: BorderRadius.circular(8.0),

@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../Styles/BackGroundStyle.dart';
+import '../../../../../../Utilitys/utilitys.dart';
 
 class AdminBankScreen extends StatefulWidget {
   @override
@@ -145,17 +145,17 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
                           image: _selectedImage != null
                               ? FileImage(File(_selectedImage!.path))
                               : (data != null && data['image'] != null
-                              ? NetworkImage(data['image'])
-                              : const AssetImage(
-                              'assets/images/user.png'))
-                          as ImageProvider,
+                                      ? NetworkImage(data['image'])
+                                      : const AssetImage(
+                                          'assets/images/user.png'))
+                                  as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
                       child: _selectedImage == null &&
-                          (data == null || data['image'] == null)
+                              (data == null || data['image'] == null)
                           ? const Icon(Icons.add_a_photo,
-                          size: 50, color: Colors.grey)
+                              size: 50, color: Colors.grey)
                           : null,
                     ),
                   ),
@@ -193,8 +193,7 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
                         if (data == null) {
                           _addBank(); // Add bank if data is null
                         } else {
-                          _updateBank(
-                              id!); // Update bank if data is provided
+                          _updateBank(id!); // Update bank if data is provided
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -203,9 +202,9 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0)),
                       ),
-                      child: Text(
-                          data == null ? 'Add Bank' : 'Update Bank',
-                          style: const TextStyle(color: Colors.white, fontSize: 18)),
+                      child: Text(data == null ? 'Add Bank' : 'Update Bank',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 18)),
                     ),
                   ),
                 ],
@@ -218,8 +217,8 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
   }
 
   void _openDetailsScreen(Map<String, dynamic> data) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => BankDetailsScreen(data: data)));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => BankDetailsScreen(data: data)));
   }
 
   // Search function
@@ -257,7 +256,7 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
                       .collection('banks')
                       .where('name', isGreaterThanOrEqualTo: _searchQuery)
                       .where('name',
-                      isLessThanOrEqualTo: _searchQuery + '\uf8ff')
+                          isLessThanOrEqualTo: _searchQuery + '\uf8ff')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -280,8 +279,8 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
                                     height: 80,
                                     decoration: BoxDecoration(
                                       image: const DecorationImage(
-                                        image: AssetImage(
-                                            'assets/icons/bank.png'),
+                                        image:
+                                            AssetImage('assets/icons/bank.png'),
                                         fit: BoxFit.contain,
                                       ),
                                       borderRadius: BorderRadius.circular(8.0),
@@ -306,16 +305,16 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
                                       ListTile(
                                         leading: data['image'] != null
                                             ? Image.network(
-                                          data['image'],
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.cover,
-                                        )
+                                                data['image'],
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.cover,
+                                              )
                                             : const Icon(Icons.account_balance,
-                                            size: 50),
+                                                size: 50),
                                         title: Text(
                                           data['name'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 18,
                                               color: AppColors.pColor,
                                               fontWeight: FontWeight.w500),
@@ -329,8 +328,7 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
                                             Text(data['location']),
                                           ],
                                         ),
-                                        onTap: () =>
-                                            _openDetailsScreen(data),
+                                        onTap: () => _openDetailsScreen(data),
                                         trailing: const Icon(
                                             Icons.arrow_forward_ios_sharp),
                                       ),
@@ -343,8 +341,8 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
                                             child: const Text('Edit'),
                                           ),
                                           TextButton(
-                                            onPressed: () => _deleteBank(
-                                                banks[index].id),
+                                            onPressed: () =>
+                                                _deleteBank(banks[index].id),
                                             child: const Text('Delete',
                                                 style: TextStyle(
                                                     color: Colors.red)),
@@ -378,110 +376,28 @@ class _AdminBankScreenState extends State<AdminBankScreen> {
 class BankDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const BankDetailsScreen({required this.data});
-
-  Future<void> _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  BankDetailsScreen({required this.data});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Bank Details'),
+      appBar: CustomAppBar(data['name']),
       body: Stack(
         children: [
           ScreenBackground(context),
           SingleChildScrollView(
-            padding: const EdgeInsets.all(6.0),
-            child: Card(
-              elevation: 10,
-              margin: const EdgeInsets.only(top: 10, left: 5, right: 5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: data['image'] != null
-                          ? Image.network(
-                        data['image'],
-                        width: double.infinity,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      )
-                          : Container(
-                        height: 200,
-                        color: Colors.grey.shade200,
-                        child: const Center(
-                          child: Icon(
-                            Icons.account_balance,
-                            size: 100,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    buildDetailsTile(
-                      context,
-                      icon: Icons.business_center,
-                      title: 'Bank Name',
-                      subtitle: data['name'] ?? 'Not available',
-                      color: Colors.green,
-                    ),
-                    buildDetailsTile(
-                      context,
-                      icon: Icons.location_on,
-                      title: 'Location',
-                      subtitle: data['location'] ?? 'Not available',
-                      color: Colors.orange,
-                    ),
-                    buildDetailsTile(
-                      context,
-                      icon: Icons.phone,
-                      title: 'Contact',
-                      subtitle: data['contact'] ?? 'Not available',
-                      color: Colors.blue,
-                    ),
-                    buildDetailsTile(
-                      context,
-                      icon: Icons.web,
-                      title: 'Website',
-                      subtitle: data['website'] ?? 'Not available',
-                      color: Colors.lightBlueAccent,
-                      isLink: true,
-                      onTap: () {
-                        final url = data['website'];
-                        if (url != null && url.isNotEmpty) {
-                          _launchURL(url);
-                        }
-                      },
-                    ),
-                    buildDetailsTile(
-                      context,
-                      icon: Icons.email,
-                      title: 'Email',
-                      subtitle: data['email'] ?? 'Not available',
-                      color: Colors.teal,
-                    ),
-                    buildDetailsTile(
-                      context,
-                      icon: Icons.description,
-                      title: 'Description',
-                      subtitle: data['description'] ?? 'Not available',
-                      color: Colors.purple,
-                    ),
-                  ],
-                ),
-              ),
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImageSection(),
+                const SizedBox(height: 15),
+                _buildNameAndLocation(),
+                const SizedBox(height: 15),
+                _buildContactCard(context),
+                const SizedBox(height: 15),
+                _buildDescriptionCard(),
+              ],
             ),
           ),
         ],
@@ -489,46 +405,215 @@ class BankDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildDetailsTile(
-      BuildContext context, {
-        required IconData icon,
-        required String title,
-        required String subtitle,
-        Color color = Colors.black,
-        bool isLink = false,
-        VoidCallback? onTap,
-      }) {
-    return GestureDetector(
-      onTap: isLink ? onTap : null,
+  Widget _buildImageSection() {
+    return Stack(
+      children: [
+        data['image'] != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.network(
+                  data['image'],
+                  width: double.infinity,
+                  height: 250,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Container(
+                height: 250,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Icon(
+                  Icons.comment_bank,
+                  size: 100,
+                  color: Colors.grey[700],
+                ),
+              ),
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.black.withOpacity(0.5), Colors.transparent],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNameAndLocation() {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Row(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color, size: 28),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: isLink ? Colors.blue : Colors.black87,
-                      decoration: isLink ? TextDecoration.underline : null,
-                    ),
-                  ),
-                ],
+            Center(
+              child: Text(
+                data['name'],
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.pColor,
+                ),
               ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const Icon(Icons.location_on, color: Colors.red),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    data['location'],
+                    style: const TextStyle(fontSize: 16, color: Colors.black54),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                const Text(
+                  '       প্রতিষ্ঠাপিত : ',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                Text(
+                  data['establishedYear'],
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContactCard(BuildContext context) {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Center(
+              child: Text(
+                'যোগাযোগের তথ্য',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.pColor,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            _buildContactItem(Icons.phone, 'Phone', data['contact']),
+            const SizedBox(height: 15),
+            _buildContactItem(Icons.email, 'Email', data['email']),
+            const SizedBox(height: 15),
+            GestureDetector(
+              onTap: () => launchWebsite(data['website'], context),
+              child:
+                  _buildContactItem(Icons.language, 'Website', data['website']),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildContactButton(Icons.phone, 'Call', () {
+                  showCallDialog(data['contact'], context);
+                }, Colors.green),
+                _buildContactButton(Icons.email, 'Email', () {
+                  sendEmail(data['email'], context);
+                }, Colors.blue),
+                _buildContactButton(Icons.language, 'Website', () {
+                  launchWebsite(data['website'], context);
+                }, Colors.blueAccent),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContactItem(IconData icon, String label, String content) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.blueAccent),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            '$label: $content',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContactButton(
+      IconData icon, String label, VoidCallback onPressed, Color color) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon),
+      label: Text(label),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      ),
+    );
+  }
+
+  Widget _buildDescriptionCard() {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Center(
+              child: Text(
+                'স্কুল সম্পর্কে',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.pColor,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              data['description'],
+              style: const TextStyle(fontSize: 16, color: Colors.black54),
             ),
           ],
         ),
@@ -536,5 +621,3 @@ class BankDetailsScreen extends StatelessWidget {
     );
   }
 }
-
-

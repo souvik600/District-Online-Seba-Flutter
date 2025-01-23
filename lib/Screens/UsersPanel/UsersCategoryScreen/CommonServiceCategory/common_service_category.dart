@@ -1,4 +1,6 @@
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserBankScreen/user_bank_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserBusCounterScreen/user_bus_counter_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserCurierServiceScreen/user_curier_service_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserParkResortScreen/user_park_resort_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -112,12 +114,12 @@ class CommonServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                   () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           SplashScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              UserBankScreen(),
+                        ));
                   },
                   'assets/icons/bank.png',
                   "ব্যাংক",
@@ -132,12 +134,12 @@ class CommonServiceCategory extends StatelessWidget {
               children: [
                 AllInfromationCategoryList(
                   () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           CourierServiceScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              UserCourierServiceScreen(),
+                        ));
                   },
                   'assets/icons/cargo-truck.png',
                   "কুরিয়ার",

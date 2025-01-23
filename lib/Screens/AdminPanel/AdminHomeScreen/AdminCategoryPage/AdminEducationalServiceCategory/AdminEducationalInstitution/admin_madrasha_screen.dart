@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../../../../Styles/BackGroundStyle.dart';
-
 
 class AdminMadrashaScreen extends StatefulWidget {
   @override
@@ -29,12 +27,11 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _establishedYearController =
-  TextEditingController();
+  final TextEditingController _establishedYearController = TextEditingController();
 
   XFile? _selectedImage;
 
-  // Add madrasha
+  // Add college
   Future<void> _addMadrasha() async {
     final data = {
       'name': _nameController.text.trim(),
@@ -55,7 +52,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
     Navigator.of(context).pop(); // Close bottom sheet
   }
 
-  // Update madrasha
+  // Update college
   Future<void> _updateMadrasha(String id) async {
     final data = {
       'name': _nameController.text.trim(),
@@ -93,12 +90,12 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
     });
   }
 
-  // Delete madrasha
+  // Delete college
   Future<void> _deleteMadrasha(String id) async {
     await _firestore.collection('madrasha').doc(id).delete();
   }
 
-  // Show form for adding/editing madrasha
+  // Show form for adding/editing college
   void _showMadrashaForm({String? id, Map<String, dynamic>? data}) {
     if (data == null) {
       _nameController.clear();
@@ -244,7 +241,7 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Madrasha'),
+      appBar: CustomAppBar('মাদ্রাসা'),
       body: Stack(
         children: [
           ScreenBackground(context),
@@ -283,35 +280,86 @@ class _AdminMadrashaScreenState extends State<AdminMadrashaScreen> {
                         child: CircularProgressIndicator(),
                       );
                     }
-                    final docs = snapshot.data!.docs;
+                    final madrasha = snapshot.data!.docs;
                     return ListView.builder(
-                      itemCount: docs.length,
+                      itemCount: madrasha.length,
                       itemBuilder: (context, index) {
-                        final data = docs[index].data();
-                        return ListTile(
-                          onTap: () => _openDetailsScreen(data),
-                          leading: CircleAvatar(
-                            backgroundImage: data['image'] != null
-                                ? NetworkImage(data['image'])
-                                : const AssetImage(
-                                'assets/images/user.png') as ImageProvider,
-                          ),
-                          title: Text(data['name'] ?? ''),
-                          subtitle: Text(data['location'] ?? ''),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
+                        final data = madrasha[index].data();
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Stack(
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () =>
-                                    _showMadrashaForm(id: docs[index].id, data: data),
+                              // Background Image
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Center(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      image: const DecorationImage(
+                                        image:
+                                        AssetImage('assets/icons/mosque.png'),
+                                        fit: BoxFit.contain,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () => _deleteMadrasha(docs[index].id),
+                              // Card with transparent background
+                              Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                color: Colors.white.withOpacity(0.85), // Semi-transparent background
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.pColor, width: 1.5),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        leading: data['image'] != null
+                                            ? Image.network(
+                                          data['image'],
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        )
+                                            : const Icon(Icons.local_hospital, size: 50),
+                                        title: Text(data['name'],style: TextStyle(fontSize: 18,color: AppColors.pColor,fontWeight: FontWeight.w500),),
+                                        subtitle: Row(
+                                          children: [
+                                            const Icon(Icons.location_on_outlined,color: Colors.red,),
+                                            Text(data['location']),
+                                          ],
+                                        ),
+                                        onTap: () => _openDetailsScreen(data),
+                                        trailing: const Icon(Icons.arrow_forward_ios_sharp),
+                                      ),
+                                      Row(
+                                        children: [
+                                          TextButton(
+                                            onPressed: () => _showMadrashaForm(id: madrasha[index].id, data: data),
+                                            child: const Text('Edit'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () => _deleteMadrasha(madrasha[index].id),
+                                            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),
+
                         );
                       },
                     );

@@ -244,17 +244,11 @@ class _AdminPrimarySchoolScreenState extends State<AdminPrimarySchoolScreen> {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => SchoolDetailsScreen(data: data)));
   }
 
-  // // Search function
-  // void _onSearchChanged(String query) {
-  //   setState(() {
-  //     _searchQuery = query;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('Primary School'),
+      appBar: CustomAppBar('প্রাইমারী-স্কুল'),
       body: Stack(
         children: [
           ScreenBackground(context),

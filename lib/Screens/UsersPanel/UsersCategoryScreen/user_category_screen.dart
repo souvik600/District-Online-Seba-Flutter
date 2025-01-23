@@ -1,5 +1,4 @@
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/common_service_category.dart';
-import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EducationalServiceCategory/educational_service_category.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/emargency_service_category.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/GovtE_ServiceCategory/govt_e_Service_category.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/WorkerServiceCategory/worker_service_category.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../../AppColors/AppColors.dart';
 import '../../../Styles/BackGroundStyle.dart';
+import 'UserEducationalServiceCategory/user_educational_service_category.dart';
 
 class UserCategoryScreen extends StatefulWidget {
   const UserCategoryScreen({super.key});

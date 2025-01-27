@@ -13,7 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../AppColors/AppColors.dart';
 import '../../../../Styles/TextContainerStyle.dart';
 import '../../../../Widgets/information_category_list_widget.dart';
-import '../../../SplashScreen.dart';
 import 'DistrictHistoryScreen/district_history_screen.dart';
 import 'DistrictMapScreen/district_map_screen.dart';
 import 'NewsPaperScreen/news_paper_screen.dart';
@@ -102,7 +101,7 @@ class CommonServiceCategory extends StatelessWidget {
                 ),
                 AllInfromationCategoryList(
                   () {
-                    launch('https://bangladesh-railway.com/');
+                    launchUrl('https://bangladesh-railway.com/' as Uri);
                   },
                   'assets/icons/rail.png',
                   "ট্রেন টিকিট",

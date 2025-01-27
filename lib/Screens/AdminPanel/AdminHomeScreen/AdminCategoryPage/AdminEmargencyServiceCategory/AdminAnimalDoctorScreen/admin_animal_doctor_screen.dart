@@ -255,7 +255,7 @@ class DoctorListItem extends StatelessWidget {
                                   ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
                         ElevatedButton.icon(
@@ -372,7 +372,7 @@ class DoctorListItem extends StatelessWidget {
                                 tooltip: "Edit",
                                 onPressed: onEdit,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 30,
                               ),
                               IconButton(
@@ -549,7 +549,7 @@ class _DoctorFormState extends State<DoctorForm> {
                         )
                       : null,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 TextFormField(
@@ -560,7 +560,7 @@ class _DoctorFormState extends State<DoctorForm> {
                       ? "Name is required"
                       : null,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 6,
                 ),
                 TextFormField(
@@ -571,7 +571,7 @@ class _DoctorFormState extends State<DoctorForm> {
                       ? "Specialization is required"
                       : null,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 6,
                 ),
                 TextFormField(
@@ -582,7 +582,7 @@ class _DoctorFormState extends State<DoctorForm> {
                       ? "Contact is required"
                       : null,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 6,
                 ),
                 TextFormField(
@@ -593,7 +593,7 @@ class _DoctorFormState extends State<DoctorForm> {
                       ? "Email is required"
                       : null,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 6,
                 ),
                 TextFormField(
@@ -606,7 +606,7 @@ class _DoctorFormState extends State<DoctorForm> {
                 ),
                 const SizedBox(height: 20),
                 _isLoading
-                    ? CircularProgressIndicator()
+                    ? const CircularProgressIndicator()
                     : ElevatedButtonStyle(
                         text: "Submit", onPressed: _submitForm),
                 const SizedBox(height: 10),

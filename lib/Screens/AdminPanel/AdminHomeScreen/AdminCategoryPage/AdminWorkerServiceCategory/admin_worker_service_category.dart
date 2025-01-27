@@ -1,3 +1,5 @@
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminWorkerServiceCategory/AdminElectricianServiceScreen/admin_electrition_service_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminWorkerServiceCategory/AdminPlumberServiceScreen/admin_plumber_service_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../../AppColors/AppColors.dart';
 import '../../../../../Styles/TextContainerStyle.dart';
@@ -6,8 +8,8 @@ import '../../../../SplashScreen.dart';
 
 
 
-class WorkerServiceCategory extends StatelessWidget {
-  const WorkerServiceCategory({super.key});
+class AdminWorkerServiceCategory extends StatelessWidget {
+  const AdminWorkerServiceCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class WorkerServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminElectricianServiceScreen(),
                         ));
                   },
                   'assets/icons/electrician(1).png',
@@ -44,7 +46,7 @@ class WorkerServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminPlumberServiceScreen(),
                         ));
                   },
                   'assets/icons/plumber.png',

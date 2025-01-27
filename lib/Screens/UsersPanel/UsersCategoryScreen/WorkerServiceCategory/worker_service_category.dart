@@ -1,4 +1,5 @@
-
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/WorkerServiceCategory/UserElectricianServiceScreen/user_electrician_service_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/WorkerServiceCategory/UserPlumberServiceScreen/user_plumber_service_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../AppColors/AppColors.dart';
@@ -33,7 +34,7 @@ class WorkerServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              UserElectricianServiceScreen(),
                         ));
                   },
                   'assets/icons/electrician(1).png',
@@ -45,7 +46,7 @@ class WorkerServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              UserPlumberServiceScreen(),
                         ));
                   },
                   'assets/icons/plumber.png',

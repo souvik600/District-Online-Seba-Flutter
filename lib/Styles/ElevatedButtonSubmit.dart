@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../AppColors/AppColors.dart';
 
-class ElevatedButtonStyle extends StatelessWidget {
+class ElevatedButtonSubmit extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const ElevatedButtonStyle({required this.text, required this.onPressed, });
+  const ElevatedButtonSubmit({required this.text, required this.onPressed, required Widget child});
 
   @override
   Widget build(BuildContext context) {

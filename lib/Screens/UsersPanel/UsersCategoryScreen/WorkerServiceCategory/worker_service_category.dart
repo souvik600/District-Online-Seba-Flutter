@@ -7,7 +7,6 @@ import '../../../../AppColors/AppColors.dart';
 import '../../../../Styles/TextContainerStyle.dart';
 import '../../../../Widgets/information_category_list_widget.dart';
 
-
 class WorkerServiceCategory extends StatelessWidget {
   const WorkerServiceCategory({super.key});
 
@@ -15,62 +14,56 @@ class WorkerServiceCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border:
-        Border.all(color: AppColors.pColor, width: 1),
+        border: Border.all(color: AppColors.pColor, width: 1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Column(
           children: [
-            TextContainerStyle("মিস্ত্রি/শ্র‌মিক...",AppColors.pColor),
+            TextContainerStyle("মিস্ত্রি/শ্র‌মিক...", AppColors.pColor),
             Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              UserElectricianServiceScreen(),
+                          builder: (context) => UserElectricianServiceScreen(),
                         ));
                   },
                   'assets/icons/electrician(1).png',
                   'ইলেকট্রিশিয়ান',
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              UserPlumberServiceScreen(),
+                          builder: (context) => UserPlumberServiceScreen(),
                         ));
                   },
                   'assets/icons/plumber.png',
                   "প্লাম্বার",
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              UserRajMistriServiceScreen(),
+                          builder: (context) => UserRajMistriServiceScreen(),
                         ));
                   },
                   'assets/icons/bricklayer.png',
                   "রাজ মিস্ত্রি",
                 ),
                 AllInfromationCategoryList(
-                      () {
+                  () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              UserWoodMistriServiceScreen(),
+                          builder: (context) => UserWoodMistriServiceScreen(),
                         ));
                   },
                   'assets/icons/chisel.png',

@@ -1,10 +1,11 @@
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminWorkerServiceCategory/AdminElectricianServiceScreen/admin_electrition_service_screen.dart';
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminWorkerServiceCategory/AdminPlumberServiceScreen/admin_plumber_service_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminWorkerServiceCategory/AdminRajMistriServiceScreen/admin_raj_mistri_service_screen.dart';
+import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/AdminCategoryPage/AdminWorkerServiceCategory/AdminWoodMistriServiceScreen/admin_wood_mistri_service_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../../AppColors/AppColors.dart';
 import '../../../../../Styles/TextContainerStyle.dart';
 import '../../../../../Widgets/information_category_list_widget.dart';
-import '../../../../SplashScreen.dart';
 
 
 
@@ -58,7 +59,7 @@ class AdminWorkerServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminRajMistriServiceScreen(),
                         ));
                   },
                   'assets/icons/bricklayer.png',
@@ -70,7 +71,7 @@ class AdminWorkerServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              AdminWoodMistriServiceScreen(),
                         ));
                   },
                   'assets/icons/chisel.png',

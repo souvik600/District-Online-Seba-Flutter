@@ -1,5 +1,7 @@
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/WorkerServiceCategory/UserElectricianServiceScreen/user_electrician_service_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/WorkerServiceCategory/UserPlumberServiceScreen/user_plumber_service_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/WorkerServiceCategory/UserRajMistryServiceScreen/user_raj_mistry_service_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/WorkerServiceCategory/UserWoodMistriServiceScreen/user_wood_mistri_service_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../AppColors/AppColors.dart';
@@ -58,7 +60,7 @@ class WorkerServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              UserRajMistriServiceScreen(),
                         ));
                   },
                   'assets/icons/bricklayer.png',
@@ -70,7 +72,7 @@ class WorkerServiceCategory extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(),
+                              UserWoodMistriServiceScreen(),
                         ));
                   },
                   'assets/icons/chisel.png',

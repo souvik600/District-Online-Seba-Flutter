@@ -9,24 +9,20 @@ class AdminCommentScreen extends StatefulWidget {
   @override
   _AdminCommentScreenState createState() => _AdminCommentScreenState();
 }
-
 class _AdminCommentScreenState extends State<AdminCommentScreen> {
   final TextEditingController _commentController = TextEditingController();
   final TextEditingController _replyController = TextEditingController();
   String? userImage, userName;
-
   // Fetch user data
   Future<void> _fetchUserData() async {
     var userUid = FirebaseAuth.instance.currentUser!.uid;
-    var userDoc =
-    await FirebaseFirestore.instance.collection('users').doc(userUid).get();
+    var userDoc = await FirebaseFirestore.instance.collection('users').doc(userUid).get();
 
     setState(() {
       userName = userDoc['full_name'];
       userImage = userDoc['avatar_url'];
     });
   }
-
   // Submit a comment
   Future<void> _submitComment() async {
     if (_commentController.text.trim().isEmpty) return;
@@ -165,7 +161,7 @@ class _AdminCommentScreenState extends State<AdminCommentScreen> {
                                       comment['userImage']),
                                 ),
                                 title: Text(comment['userName'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: AppColors.pColor,
                                         fontWeight: FontWeight.bold)),
                                 subtitle: Column(
@@ -214,7 +210,6 @@ class _AdminCommentScreenState extends State<AdminCommentScreen> {
                                         (context, replyIndex) {
                                       final reply =
                                       replies[replyIndex];
-
                                       String replyDate = DateFormat(
                                           'yyyy-MM-dd HH:mm')
                                           .format(reply['timestamp']

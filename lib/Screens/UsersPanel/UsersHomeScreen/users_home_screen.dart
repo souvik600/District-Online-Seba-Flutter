@@ -1,13 +1,12 @@
 import 'package:district_online_service/Screens/AdminPanel/AdminHomeScreen/admin_home_screen.dart';
-import 'package:district_online_service/Screens/SplashScreen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictHistoryScreen/district_history_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/DistrictMapScreen/district_map_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/NewsPaperScreen/news_paper_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/CommonServiceCategory/UserHistoricalPlaceScreen/user_historical_place_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserAnimalDoctorScreen/user_animal_doctor_screen.dart';
-import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserDoctorScreen/user_doctor_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserFireServiceScreen/user_fire_service_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserHospitalScreen/user_hospital_screen.dart';
+import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserHotLineServiceScreen/user_hot_line_service_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserPoliceListScreen/user_police_list_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/UserPolliBiddutListScreen/user_polli_biddut_list_screen.dart';
 import 'package:district_online_service/Screens/UsersPanel/UsersCategoryScreen/EmargencyServiceCategory/userAmbulanceScreen/user_ambulance_screen.dart';
@@ -348,10 +347,10 @@ class UsersHomeScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          UserHospitalScreen(),
+                                          UserHotLineServiceScreen(),
                                     ),
                                   );
-                                }, "assets/images/haspital.jpg", "হাসপাতাল"),
+                                }, "assets/images/helpline.jpeg", "হেল্পলাইন নম্বর"),
                                 const SizedBox(width: 10),
                                 EmergencyServiceList(() {
                                   Navigator.push(
@@ -393,10 +392,11 @@ class UsersHomeScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => UserDoctorScreen(),
+                                      builder: (context) =>
+                                          UserHospitalScreen(),
                                     ),
                                   );
-                                }, "assets/images/doctor1.jpg", "ডাক্তার"),
+                                }, "assets/images/haspital.jpg", "হাসপাতাল"),
                                 const SizedBox(width: 10),
                                 EmergencyServiceList(() {
                                   Navigator.push(
